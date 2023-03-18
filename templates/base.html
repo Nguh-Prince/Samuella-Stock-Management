@@ -56,21 +56,21 @@
   <body class="crm_body_bg">
     <nav class="sidebar">
       <div class="logo d-flex justify-content-between">
-        <a class="large_logo" href="index-2.html"
+        <!-- <a class="large_logo" href="index-2.html"
           ><img src="img/logo.png" alt=""
         /></a>
         <a class="small_logo" href="index-2.html"
           ><img src="img/mini_logo.png" alt=""
-        /></a>
+        /></a> -->
         <div class="sidebar_close_icon d-lg-none">
           <i class="ti-close"></i>
         </div>
       </div>
       <ul id="sidebar_menu">
         <li>
-          <a href="index-2.html" aria-expanded="false">
+          <a href="index-2.html" aria-expanded="false" class="{% block dashboard_classes %}{% endblock %}">
             <div class="nav_icon_small">
-              <img src="img/menu-icon/dashboard.svg" alt="" />
+              <img src="{% static 'img/menu-icon/dashboard.svg' %}" alt="" />
             </div>
             <div class="nav_title">
               <span>Dashboard</span>
@@ -81,9 +81,9 @@
           <span>CUSTOM</span> <i class="fas fa-ellipsis-h"></i>
         </h4> -->
         <li>
-          <a href="#" aria-expanded="false">
+          <a href="#" aria-expanded="false" class="{% block gestion_des_stock_classes %}{% endblock %}">
             <div class="nav_icon_small">
-              <img src="img/menu-icon/product.svg" alt="">
+              <img src="{% static 'img/menu-icon/product.svg' %}" alt="">
             </div>
             <div class="nav_title">
               <span>Gestion des stocks</span>
@@ -92,9 +92,9 @@
         </li>
         
         <li>
-          <a href="#" aria-expanded="false">
+          <a href="#" aria-expanded="false" class="{% block gestion_des_commandes_classes %}{% endblock %}">
             <div class="nav_icon_small">
-              <img src="img/menu-icon/2.svg" alt="">
+              <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
             </div>
             <div class="nav_title">
               <span>Gestion des commandes des structures</span>
@@ -103,9 +103,9 @@
         </li>
 
         <li>
-            <a href="#" aria-expanded="false">
+            <a href="#" aria-expanded="false" class="{% block gestion_des_prestataires_classes %}{% endblock %}">
               <div class="nav_icon_small">
-                <img src="img/menu-icon/2.svg" alt="">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
               </div>
               <div class="nav_title">
                 <span>Gestion des prestataires</span>
@@ -114,9 +114,9 @@
           </li>
 
           <li>
-            <a href="#" aria-expanded="false">
+            <a href="#" aria-expanded="false" class="{% block gestion_des_entrees_classes %}{% endblock %}">
               <div class="nav_icon_small">
-                <img src="img/menu-icon/2.svg" alt="">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
               </div>
               <div class="nav_title">
                 <span>Gestion des Entrees</span>
@@ -125,20 +125,20 @@
           </li>
 
           <li>
-            <a href="#" aria-expanded="false">
+            <a href="#" aria-expanded="false" class="{% block notifications_classes %}{% endblock %}">
               <div class="nav_icon_small">
-                <img src="img/menu-icon/2.svg" alt="">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
               </div>
               <div class="nav_title">
-                <span>Notifictions</span>
+                <span>Notifications</span>
               </div>
             </a>
           </li>
 
           <li>
-            <a href="#" aria-expanded="false">
+            <a href="#" aria-expanded="false" class="{% block rapports_classes %}{% endblock %}">
               <div class="nav_icon_small">
-                <img src="img/menu-icon/2.svg" alt="">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
               </div>
               <div class="nav_title">
                 <span>Rapports</span>
@@ -147,9 +147,9 @@
           </li>
 
           <li>
-            <a href="#" aria-expanded="false">
+            <a href="#" aria-expanded="false" class="{% block prevision_classes %}{% endblock %}">
               <div class="nav_icon_small">
-                <img src="img/menu-icon/2.svg" alt="">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
               </div>
               <div class="nav_title">
                 <span>Prevision</span>
@@ -202,7 +202,7 @@
                   </li>
                   <li>
                     <a class="bell_notification_clicker" href="#">
-                      <img src="img/icon/bell.svg" alt="" />
+                      <img src="{% static 'img/icon/bell.svg' %}" alt="" />
                       <span>2</span>
                     </a>
 
@@ -213,7 +213,7 @@
                       <div class="Notification_body">
                         <div class="single_notify d-flex align-items-center">
                           <div class="notify_thumb">
-                            <a href="#"><img src="img/staf/2.png" alt="" /></a>
+                            <a href="#"><img src="{% static 'img/staf/2.png' %}" alt="" /></a>
                           </div>
                           <div class="notify_content">
                             <a href="#"><h5>Cool Marketing</h5></a>
@@ -223,7 +223,7 @@
 
                         <div class="single_notify d-flex align-items-center">
                           <div class="notify_thumb">
-                            <a href="#"><img src="img/staf/4.png" alt="" /></a>
+                            <a href="#"><img src="{% static 'img/staf/4.png' %}" alt="" /></a>
                           </div>
                           <div class="notify_content">
                             <a href="#"><h5>Awesome packages</h5></a>
@@ -233,7 +233,7 @@
 
                         <div class="single_notify d-flex align-items-center">
                           <div class="notify_thumb">
-                            <a href="#"><img src="img/staf/3.png" alt="" /></a>
+                            <a href="#"><img src="{% static 'img/staf/3.png' %}" alt="" /></a>
                           </div>
                           <div class="notify_content">
                             <a href="#"><h5>what a packages</h5></a>
@@ -243,7 +243,7 @@
 
                         <div class="single_notify d-flex align-items-center">
                           <div class="notify_thumb">
-                            <a href="#"><img src="img/staf/2.png" alt="" /></a>
+                            <a href="#"><img src="{% static 'img/staf/2.png' %}" alt="" /></a>
                           </div>
                           <div class="notify_content">
                             <a href="#"><h5>Cool Marketing</h5></a>
@@ -253,7 +253,7 @@
 
                         <div class="single_notify d-flex align-items-center">
                           <div class="notify_thumb">
-                            <a href="#"><img src="img/staf/4.png" alt="" /></a>
+                            <a href="#"><img src="{% static 'img/staf/4.png' %}" alt="" /></a>
                           </div>
                           <div class="notify_content">
                             <a href="#"><h5>Awesome packages</h5></a>
@@ -263,7 +263,7 @@
 
                         <div class="single_notify d-flex align-items-center">
                           <div class="notify_thumb">
-                            <a href="#"><img src="img/staf/3.png" alt="" /></a>
+                            <a href="#"><img src="{% static 'img/staf/3.png' %}" alt="" /></a>
                           </div>
                           <div class="notify_content">
                             <a href="#"><h5>what a packages</h5></a>
@@ -300,8 +300,10 @@
       </div>
 
       <div class="main_content_iner overly_inner">
-        {% block page_content %}
-        {%endblock%}
+        <div class="container-fluid p-0">
+          {% block page_content %}
+          {%endblock%}
+        </div>
       </div>
     </section>
 
