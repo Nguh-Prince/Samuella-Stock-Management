@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles", 
     "managepurchaseorder",
     "managestock",
-    "manageusers"
-    
+    "manageusers",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
