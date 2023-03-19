@@ -8,7 +8,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Analytic</title>
+    <title>{% block page_title %}CFC Stock Mgt | Dashboard{% endblock %}</title>
     <link rel="icon" href="img/mini_logo.png" type="image/png" />
 
     <link rel="stylesheet" href="{% static 'css/bootstrap1.min.css' %}" />
@@ -52,8 +52,27 @@
 
     <link rel="stylesheet" href="{% static 'css/style1.css'%}" />
     <link rel="stylesheet" href="{% static 'css/colors/default.css'%}" id="colorSkinCSS" />
+
+    <script src="{% static 'js/jquery1-3.4.1.min.js'%}"></script>
+    <script src="{% static 'js/functions.js'%}"></script>
+        
+    <script>
+      var state = {}
+    </script>
+
+    <style>
+      #messages {
+        width: 100%;
+        z-index: 5000;
+      }
+    </style>
+
+    {% block styles %}{% endblock %}
   </head>
   <body class="crm_body_bg">
+    <div id="messages">
+    </div>
+
     <nav class="sidebar">
       <div class="logo d-flex justify-content-between">
         <!-- <a class="large_logo" href="index-2.html"
@@ -68,7 +87,7 @@
       </div>
       <ul id="sidebar_menu">
         <li>
-          <a href="index-2.html" aria-expanded="false" class="{% block dashboard_classes %}{% endblock %}">
+          <a href="{% url 'dashboard' %}" aria-expanded="false" class="{% block dashboard_classes %}{% endblock %}">
             <div class="nav_icon_small">
               <img src="{% static 'img/menu-icon/dashboard.svg' %}" alt="" />
             </div>
@@ -81,7 +100,7 @@
           <span>CUSTOM</span> <i class="fas fa-ellipsis-h"></i>
         </h4> -->
         <li>
-          <a href="#" aria-expanded="false" class="{% block gestion_des_stock_classes %}{% endblock %}">
+          <a href="{% url 'managestock:managestock_home' %}" aria-expanded="false" class="{% block gestion_des_stock_classes %}{% endblock %}">
             <div class="nav_icon_small">
               <img src="{% static 'img/menu-icon/product.svg' %}" alt="">
             </div>
@@ -92,7 +111,7 @@
         </li>
         
         <li>
-          <a href="#" aria-expanded="false" class="{% block gestion_des_commandes_classes %}{% endblock %}">
+          <a href="{% url 'managepurchaseorder:managepurchaseorder_home' %}" aria-expanded="false" class="{% block gestion_des_commandes_classes %}{% endblock %}">
             <div class="nav_icon_small">
               <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
             </div>
@@ -313,7 +332,8 @@
       </a>
     </div>
 
-    <script src="{% static 'js/jquery1-3.4.1.min.js'%}"></script>
+    {% block modals %}
+    {% endblock %}
 
     <script src="{% static 'js/popper1.min.js'%}"></script>
 
@@ -334,12 +354,12 @@
     <script src="{% static 'vendors/datatable/js/jquery.dataTables.min.js'%}"></script>
     <script src="{% static 'vendors/datatable/js/dataTables.responsive.min.js'%}"></script>
     <script src="{% static 'vendors/datatable/js/dataTables.buttons.min.js'%}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.flash.min.js'%}"></script>
+    <!-- <script src="{% static 'vendors/datatable/js/buttons.flash.min.js'%}"></script>
     <script src="{% static 'vendors/datatable/js/jszip.min.js'%}"></script>
     <script src="{% static 'vendors/datatable/js/pdfmake.min.js'%}"></script>
     <script src="{% static 'vendors/datatable/js/vfs_fonts.js'%}"></script>
     <script src="{% static 'vendors/datatable/js/buttons.html5.min.js'%}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.print.min.js'%}"></script>
+    <script src="{% static 'vendors/datatable/js/buttons.print.min.js'%}"></script> -->
 
     <script src="{% static 'vendors/datepicker/datepicker.js'%}"></script>
     <script src="{% static 'vendors/datepicker/datepicker.en.js'%}"></script>
@@ -347,30 +367,15 @@
     <script src="{% static 'js/chart.min.js'%}"></script>
     <script src="{% static 'vendors/chartjs/roundedBar.min.js'%}"></script>
 
-    <script src="{% static 'vendors/progressbar/jquery.barfiller.js'%}"></script>
-
-    <script src="{% static 'vendors/tagsinput/tagsinput.js'%}"></script>
-
-    <script src="{% static 'vendors/text_editor/summernote-bs4.js'%}"></script>
-    <script src="{% static 'vendors/am_chart/amcharts.js'%}"></script>
-
-    <script src="{% static 'vendors/scroll/perfect-scrollbar.min.js'%}"></script>
-    <script src="{% static 'vendors/scroll/scrollable-custom.js'%}"></script>
-
-    <script src="{% static 'vendors/vectormap-home/vectormap-2.0.2.min.js'%}"></script>
-    <script src="{% static 'vendors/vectormap-home/vectormap-world-mill-en.js'%}"></script>
-
-    <script src="{% static 'vendors/apex_chart/apex-chart2.js'%}"></script>
+    <!-- <script src="{% static 'vendors/apex_chart/apex-chart2.js'%}"></script>
     <script src="{% static 'vendors/apex_chart/apex_dashboard.js'%}"></script>
     <script src="{% static 'vendors/echart/echarts.min.js'%}"></script>
     <script src="{% static 'vendors/chart_am/core.js'%}"></script>
     <script src="{% static 'vendors/chart_am/charts.js'%}"></script>
     <script src="{% static 'vendors/chart_am/animated.js'%}"></script>
     <script src="{% static 'vendors/chart_am/kelly.js'%}"></script>
-    <script src="{% static 'vendors/chart_am/chart-custom.js'%}"></script>
-
-    <script src="{% static 'js/dashboard_init.js'%}"></script>
-    <script src="{% static 'js/custom.js'%}"></script>
+    <script src="{% static 'vendors/chart_am/chart-custom.js'%}"></script> -->
+    {% block javascript %}{% endblock %}
   </body>
 
   <!-- Mirrored from demo.dashboardpack.com/analytic-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 13 Mar 2023 11:44:26 GMT -->

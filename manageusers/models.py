@@ -1,10 +1,11 @@
 from django.db import models
 
 class Structure(models.Model):
-    structureId=models.IntegerField(primary_key=True)
+    structureId=models.IntegerField(primary_key=True, blank=True)
     structureName=models.CharField(max_length=8)
     structureAdress=models.IntegerField()
     structureNature=models.CharField(max_length=20)
+    
     def __str__(self):
         return str(self.structureId)
 

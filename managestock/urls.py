@@ -13,6 +13,8 @@ router = NestedDefaultRouter()
 
 equipment_routes = router.register("equipments", views.EquipmentViewSet, basename="equipments")
 
+app_name = "managestock"
+
 urlpatterns=[
-    path("managestock", views.home, name="managestock_home")
+    path("", views.home, name="managestock_home")
 ] + router.urls

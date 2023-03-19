@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}CFC Stock Mgt | Manage Stock{% endblock %}
+
+{% block gestion_des_stock_classes %}active{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap5.min.css' %}">
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap5.min.js' %}"></script>
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/managestock.js' %}"></script>
+{% endblock %}
+
+{% block page_content %}
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+      <div class="white_card card_height_100 mb_30">
+        <div class="white_card_header">
+          <div class="box_header m-0">
+            <div class="main-title">
+              <h3 class="m-0">Equipements</h3>
+            </div>
+          </div>
+        </div>
+        <div class="white_card_body">
+          <div class="QA_section">
+            <div class="white_box_tittle list_header">
+              
+              <div class="box_right d-flex lms_block">
+                <div class="add_button ms-2">
+                  <a
+                    href="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#new-equipment-modal"
+                    class="btn_1"
+                    >Ajouter un nouveau</a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="QA_table mb_30">
+              <table id="equipments-table" class="table table-striped lms_table_active">
+                <thead>
+                  <tr>
+                    <th scope="col"><input type="checkbox"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity left</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">
+                      <input type="checkbox" name="" id="">
+                    </th>
+                    <td>Keyboard</td>
+                    <td>20</td>
+                    <td>
+                        <button class="btn text-primary">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="btn mx-1 text-danger">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      <input type="checkbox" name="" id="">
+                    </th>
+                    <td>Mouse</td>
+                    <td>20</td>
+                    <td>
+                        <button class="btn text-primary">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="btn mx-1 text-danger">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      <input type="checkbox" name="" id="">
+                    </th>
+                    <td>Monitor</td>
+                    <td>20</td>
+                    <td>
+                        <button class="btn text-primary">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="btn mx-1 text-danger">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      <input type="checkbox" name="" id="">
+                    </th>
+                    <td>Power cable</td>
+                    <td>20</td>
+                    <td>
+                        <button class="btn text-primary">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="btn mx-1 text-danger">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12"></div>
+</div>
+{% endblock %}
+
+{% block modals %}
+    <div
+    class="modal fade"
+    id="new-equipment-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Nouvel equipement</h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                      <label class="form-label" for="exampleInputEmail1"
+                        >Nom de l'equipement</label
+                      >
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="new-equipment-name"
+                        aria-describedby="emailHelp"
+                        placeholder="par ex. Clavier"
+                      />
+                      <small id="emailHelp" class="form-text text-muted"
+                        ></small
+                      >
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label" for="exampleInputPassword1"
+                        >Quantite en stock</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="new-equipment-quantity"
+                        placeholder="Quantite"
+                        value="0"
+                        min="0"
+                      />
+                    </div>
+                  </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" id="new-equipment-save" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <input type="hidden" data-bs-toggle="modal" data-bs-target="#equipment-detail-modal" id="equipment-detail-modal-toggle">
+
+    <div
+    class="modal fade"
+    id="equipment-detail-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="equipment-detail-modal-title"></h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                      <label class="form-label" for="exampleInputEmail1"
+                        >Nom de l'equipement</label
+                      >
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="equipment-detail-name"
+                        aria-describedby="emailHelp"
+                        placeholder="par ex. Clavier"
+                      />
+                      <small id="emailHelp" class="form-text text-muted"
+                        ></small
+                      >
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label" for="exampleInputPassword1"
+                        >Quantite en stock</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="equipment-detail-quantity"
+                        placeholder="Quantite"
+                        value="0"
+                        min="0"
+                      />
+                    </div>
+                  </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="equipment-detail-modal-close" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="equipment-detail-modify">Enregistrer</button>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}

@@ -11,10 +11,12 @@ class NestedDefaultRouter(NestedRouterMixin, routers.DefaultRouter):
 
 router = NestedDefaultRouter()
 
-order_routes = router.register("orders", views.OrderViewSet, basename="orders")
+# order_routes = router.register("orders", views.OrderViewSet, basename="orders")
 
 purchaseorder_routes = router.register("purchaseorders", views.PurchaseOrderViewSet, basename="purchaseorders")
 
+app_name = "managepurchaseorder"
+
 urlpatterns=[
-    path("managepurchaseorder", views.home, name="managepurchaseorder_home")
+    path("", views.home, name="managepurchaseorder_home")
 ] + router.urls

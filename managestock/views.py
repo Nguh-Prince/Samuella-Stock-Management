@@ -9,7 +9,7 @@ from . import models, serializers
 
 # Create your views here.
 def home(request):
-    return render(request, "managestock.html")
+    return render(request, "managestock/managestock.html")
 
 class EquipmentViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     serializer_classes = {
@@ -22,8 +22,6 @@ class EquipmentViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
         serializer: serializers.AddEquipmentsSerializer = self.get_serializer(data=request.data, *args, **kwargs)
         serializer.is_valid(raise_exception=True)
         equipments = serializer.create(serializer.validated_data)
-
-        breakpoint()
 
         return Response(data=self.serializer_class(equipments, many=True).data, status=status.HTTP_201_CREATED)
 

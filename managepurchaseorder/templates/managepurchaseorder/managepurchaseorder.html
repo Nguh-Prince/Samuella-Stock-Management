@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}CFC Stock Mgt | Purchase Orderss{% endblock %}
+
+{% block gestion_des_commandes_classes %}active{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap5.min.css' %}">
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap5.min.js' %}"></script>
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/managepurchaseorder.js' %}"></script>
+{% endblock %}
+
+{% block page_content %}
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+      <div class="white_card card_height_100 mb_30">
+        <div class="white_card_header">
+          <div class="box_header m-0">
+            <div class="main-title">
+              <h3 class="m-0">Commandes des structures</h3>
+            </div>
+          </div>
+        </div>
+        <div class="white_card_body">
+          <div class="QA_section">
+            <div class="white_box_tittle list_header">
+              
+              <div class="box_right d-flex lms_block">
+                <div class="add_button ms-2">
+                  <a
+                    href="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#new-purchase-order-modal"
+                    class="btn_1"
+                    id="new-purchase-order-modal-toggle"
+                    >Ajouter un nouveau</a>
+                </div>
+              </div>
+            </div>
+            <div class="QA_table mb_30">
+              <table id="equipments-table" class="table table-striped lms_table_active">
+                <thead>
+                  <tr>
+                    <th scope="col"><input type="checkbox"></th>
+                    <th scope="col">Structure</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Equipements commandes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" name="" id=""></td>
+                        <td>IT</td>
+                        <td>Samedi 23 Mars, 2024</td>
+                        <td>10 claviers, 1 souris, 2 cordons d'alimentation, 5 cables VGA</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="" id=""></td>
+                        <td>IT</td>
+                        <td>Samedi 23 Mars, 2024</td>
+                        <td>10 claviers, 1 souris, 2 cordons d'alimentation, 5 cables VGA</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="" id=""></td>
+                        <td>IT</td>
+                        <td>Samedi 23 Mars, 2024</td>
+                        <td>10 claviers, 1 souris, 2 cordons d'alimentation, 5 cables VGA</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="" id=""></td>
+                        <td>IT</td>
+                        <td>Samedi 23 Mars, 2024</td>
+                        <td>10 claviers, 1 souris, 2 cordons d'alimentation, 5 cables VGA</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="" id=""></td>
+                        <td>IT</td>
+                        <td>Samedi 23 Mars, 2024</td>
+                        <td>10 claviers, 1 souris, 2 cordons d'alimentation, 5 cables VGA</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="" id=""></td>
+                        <td>IT</td>
+                        <td>Samedi 23 Mars, 2024</td>
+                        <td>10 claviers, 1 souris, 2 cordons d'alimentation, 5 cables VGA</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12"></div>
+</div>
+{% endblock %}
+
+{% block modals %}
+<div
+    class="modal fade"
+    id="new-purchase-order-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Nouveau commande d'un structure</h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <label for="new-purchase-order-structure">Structure</label>
+                        <select id="new-purchase-order-structure" class="form-select">
+                            {% for structure in structures %}
+                                <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="new-purchase-order-date">Date</label>
+                        <input type="date" id="new-purchase-order-date" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row my-4">
+                            <div class="row col-md-8 ml-auto">
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control mx-1" id="number-of-rows-to-add-to-new-purchase-order-table" value="3" min="1">
+                                </div>
+                                <div class="col-md-8">
+                                    <button class="btn btn-secondary" id="add-rows-to-new-purchase-order-table">Ajouter des lignes</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-4">
+                            <table id="new-purchase-order-table" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Equipement</th>
+                                        <th>Quantite</th>
+                                    </tr>
+                                </thead>
+            
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" id="new-equipment-save" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}

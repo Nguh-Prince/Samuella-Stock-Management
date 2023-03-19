@@ -23,8 +23,6 @@ class AddEquipmentsSerializer(serializers.Serializer):
 
         equipments = serializer.create(serializer.validated_data)
 
-        breakpoint()
-
         return equipments
 
 class StockSerializer(serializers.ModelSerializer):
