@@ -366,15 +366,11 @@
     <script src="{% static 'vendors/datepicker/datepicker.custom.js'%}"></script>
     <script src="{% static 'js/chart.min.js'%}"></script>
     <script src="{% static 'vendors/chartjs/roundedBar.min.js'%}"></script>
-
-    <!-- <script src="{% static 'vendors/apex_chart/apex-chart2.js'%}"></script>
-    <script src="{% static 'vendors/apex_chart/apex_dashboard.js'%}"></script>
-    <script src="{% static 'vendors/echart/echarts.min.js'%}"></script>
-    <script src="{% static 'vendors/chart_am/core.js'%}"></script>
-    <script src="{% static 'vendors/chart_am/charts.js'%}"></script>
-    <script src="{% static 'vendors/chart_am/animated.js'%}"></script>
-    <script src="{% static 'vendors/chart_am/kelly.js'%}"></script>
-    <script src="{% static 'vendors/chart_am/chart-custom.js'%}"></script> -->
+    
+    <script>
+      updateCurrentDateAndTimeInputs()
+      setInterval( updateCurrentDateAndTimeInputs, 60000 )
+    </script>
     {% block javascript %}{% endblock %}
   </body>
 

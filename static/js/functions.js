@@ -97,3 +97,18 @@ function displayMessage(message, classes = ['alert-danger', 'alert-dismissible']
         }, timeout)
     }
 }
+
+function padStart(number, length=2, padString='0') {
+    return String(number).padStart(length, padString)
+}
+
+function isoDateString(dateObject) {
+    return `${dateObject.getFullYear()}-${padStart(dateObject.getMonth())}-${padStart(dateObject.getDate())}`
+}
+
+function updateCurrentDateAndTimeInputs() {
+    console.log("Updating the values of current date and time inputs")
+    let currentTime = new Date()
+
+    $('input.current[type="date"]').val(isoDateString(currentTime))
+}
