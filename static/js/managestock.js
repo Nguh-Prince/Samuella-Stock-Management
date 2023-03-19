@@ -1,6 +1,10 @@
 var equipmentSelectedForEditing = null
 
 var equipmentsTable = $("#equipments-table").DataTable({
+    columnDefs: [{
+        "defaultContent": "-",
+        "targets": "_all"
+    }],
     "columns": [
         {
             // checkbox
@@ -164,8 +168,6 @@ function displayEquipmentDetailModal(equipment=equipmentSelectedForEditing) {
 }
 
 function equipmentEditButtonClick(equipmentId) {
-    console.log("Clicked the edit equipment button")
-
     for (let equipment of state.equipments) {
         if (equipment.equipmentId == equipmentId && equipment.equipmentId !== null) {
             equipmentSelectedForEditing = equipment

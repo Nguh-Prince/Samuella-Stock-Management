@@ -57,6 +57,7 @@
                     <th scope="col">Structure</th>
                     <th scope="col">Date</th>
                     <th scope="col">Equipements commandes</th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -142,5 +143,81 @@
             </div>
         </div>
         </div>
-    </div>
+</div>
+
+<input type="hidden" id="purchase-order-detail-modal-toggle" 
+data-bs-target="#purchase-order-detail-modal" data-bs-toggle="modal">
+
+<div
+    class="modal fade"
+    id="purchase-order-detail-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="purchase-order-detail-modal-title"></h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <label for="purchase-order-detail-structure">Structure</label>
+                        <select id="purchase-order-detail-structure" class="form-select">
+                            {% for structure in structures %}
+                                <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="purchase-order-detail-date">Date</label>
+                        <input type="date" id="purchase-order-detail-date" class="form-control current">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row my-4">
+                            <div class="row col-md-8 ml-auto">
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control mx-1" id="number-of-rows-to-add-to-purchase-order-detail-table" value="3" min="1">
+                                </div>
+                                <div class="col-md-8">
+                                    <button class="btn btn-secondary" id="add-rows-to-purchase-order-detail-table">Ajouter des lignes</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-4">
+                            <table id="purchase-order-detail-table" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Equipement</th>
+                                        <th>Quantite</th>
+                                    </tr>
+                                </thead>
+            
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="purchase-order-detail-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" id="purchase-order-detail-save" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+        </div>
+</div>
 {% endblock %}

@@ -1,3 +1,5 @@
+var purchaseOrderSelectedForEditing = null
+
 var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
     columnDefs: [{
         "defaultContent": "-",
@@ -33,6 +35,20 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
                     return equipmentsNameAndQuantities.join(', ')
                 }
             }
+        },
+        {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<div class="row">
+                                <button class="btn text-primary" onclick=purchaseOrderEditButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['equipmentId']}>
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button class="btn mx-1 text-danger" onclick=purchaseOrderDeleteButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['purchaseorderId']}>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>`
+                }
+            }
         }
     ]
 })
@@ -56,6 +72,46 @@ var newPurchaseOrderTable = $("#new-purchase-order-table").DataTable({
         },
         {
             "data": "equipmentName",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<input class="form-control" type="text" placeholder="Nom de l'equipement" list="equipments-list" name="equipmentName" value=${data}>`
+                }
+                else 
+                    return data
+            }
+        },
+        {
+            "data": "quantity",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<input class="form-control" type="number" placeholder="Quantite" name="quantity" min=1 value=${data}>`
+                }
+                else
+                    return data
+            }
+        }
+    ]
+})
+
+var purchaseOrderDetailsTable = $("#purchase-order-detail-table").DataTable({
+    columnDefs: [{
+        "defaultContent": "-",
+        "targets": "_all"
+    }],
+    "columns": [
+        {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    try {
+                        return `<i class="delete-row fas fa-trash text-danger"></i>`
+                    } catch (error) {
+                        
+                    }
+                }
+            }
+        },
+        {
+            "data": "equipmentId.equipmentName",
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     return `<input class="form-control" type="text" placeholder="Nom de l'equipement" list="equipments-list" name="equipmentName" value=${data}>`
@@ -122,6 +178,18 @@ $("#add-rows-to-new-purchase-order-table").click( function() {
     }
 } )
 
+$("#add-rows-to-purchase-order-detail-table").click( function() {
+    console.log("Clicked the 'Ajouter des lignes' button")
+
+    try {
+        let numberOfRows = parseInt($("#number-of-rows-to-add-to-purchase-order-detail-table").val())
+
+        addRowsToNewPurchaseOrderTable(numberOfRows)
+    } catch (error) {
+        throw error
+    }
+} )
+
 $("#new-purchase-order-save").click(function() {
     console.log("Saving the new purchase order")
 
@@ -155,7 +223,7 @@ $("#new-purchase-order-save").click(function() {
 
 /* ------------------------ END EVENT LISTENERS SECTION ------------------------ */
 
-function addRowsToNewPurchaseOrderTable(numberOfRows=2) {
+function addRowsToNewPurchaseOrderTable(numberOfRows=2, useNewPurchaseOrderTable=true) {
     console.log(`Adding ${numberOfRows} to the new purchaseOrder table`)
     let emptyEquipmentObject = {
         equipmentName: '',
@@ -168,8 +236,13 @@ function addRowsToNewPurchaseOrderTable(numberOfRows=2) {
         listOfRows.push(emptyEquipmentObject)
     }
 
-    newPurchaseOrderTable.rows.add(listOfRows)
-    newPurchaseOrderTable.draw()
+    if (useNewPurchaseOrderTable) {
+        newPurchaseOrderTable.rows.add(listOfRows)
+        newPurchaseOrderTable.draw()
+    } else {
+        purchaseOrderDetailsTable.rows.add(listOfRows)
+        purchaseOrderDetailsTable.draw()
+    }
 }
 
 function removeRowFromTable(e) {
@@ -203,4 +276,52 @@ function getNewPurchaseOrderFromForm() {
     })
 
     return purchaseOrder
+}
+
+function displayPurchaseOrderDetailModal(purchaseOrder=purchaseOrderSelectedForEditing) {
+    $("#purchase-order-detail-modal-title").text(`${purchaseOrder.structureId}: ${purchaseOrder.dateCreated}`)
+
+    $("#purchase-order-detail-structure").val(purchaseOrder.structureId)
+    $("#purchase-order-detail-date").val(purchaseOrder.dateCreated)
+
+    purchaseOrderDetailsTable.clear()
+    purchaseOrderDetailsTable.rows.add(purchaseOrder.equipments)
+    purchaseOrderDetailsTable.draw()
+
+    $("#purchase-order-detail-modal-toggle").click()
+}
+
+function purchaseOrderEditButtonClick(purchaseOrderId) {
+    for (let purchaseOrder of state.purchaseOrders) {
+        if ( purchaseOrder.purchaseorderId == purchaseOrderId ) {
+            purchaseOrderSelectedForEditing = purchaseOrder
+
+            displayPurchaseOrderDetailModal(purchaseOrderSelectedForEditing)
+        }
+    }
+}
+
+function purchaseOrderDeleteButtonClick(purchaseOrderId) {
+    // display modal to confirm deletion
+    $.ajax({
+        type: "DELETE",
+        url: `/managepurchaseorder/purchaseorders/${purchaseOrderId}`,
+        headers: {
+            "X-CSRFTOKEN": getCookie("csrftoken")
+        },
+        success: function(data) {
+            displayMessage("Le commande a ete supprime avec succes", ["alert-success", "alert-dismissible"])
+
+            state.purchaseOrders.filter( (item) => {
+                return item.purchaseorderId != purchaseOrderId
+            } )
+
+            purchaseOrdersTable.clear()
+            purchaseOrdersTable.rows.add(state.purchaseOrders)
+            purchaseOrdersTable.draw()
+        },
+        error: function(data) {
+            displayMessage("Le commande n'a pas ete supprime avec succes")
+        }
+    })
 }
