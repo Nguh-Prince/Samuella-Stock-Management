@@ -14,6 +14,9 @@ class Supplier(models.Model):
     supplierLocation = models.CharField(max_length=100)
     supplierDescription = models.TextField(null=True, blank=True)
 
+    def __str__(self) -> str:
+        return self.supplierName
+
 class Stock(models.Model):
     stockId = models.AutoField(primary_key=True)
     supplierId = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True)

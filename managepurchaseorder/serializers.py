@@ -86,7 +86,6 @@ class PurchaseOrderSerializer(serializers.ModelSerializer):
         return purchaseOrder
 
     def update(self, instance, validated_data):
-        breakpoint()
         equipments = validated_data.pop("equipments")
         
         instance_modified = False

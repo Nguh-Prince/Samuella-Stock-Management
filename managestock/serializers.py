@@ -13,6 +13,24 @@ class EquipmentSerializer(serializers.ModelSerializer):
             "equipmentId": {"read_only": True}
         }
 
+
+class StockEquipmentEquipmentSerializer(EquipmentSerializer):
+    def validate_equipmentName(self, data):
+        check_query = self.Meta.model.objects.filter(equipmentName=data)
+        if check_query.exists() and not isinstance(self.parent, StockSerializer.StockEquipmentSerializer):
+            print("The equipmentName is not valid")
+            raise serializers.ValidationError("Un objet equipment avec ce champ equipmentName existe déjà.")
+
+        return data
+    
+    class Meta:
+        model = models.Equipment
+        fields = ("equipmentId", "equipmentName", "quantity")
+        extra_kwargs = {
+            "equipmentId": {"read_only": True},
+            "equipmentName": {"validators": []}
+        }
+
 class AddEquipmentsSerializer(serializers.Serializer):
     data = serializers.ListField(child=EquipmentSerializer())
 
@@ -25,20 +43,27 @@ class AddEquipmentsSerializer(serializers.Serializer):
 
         return equipments
 
+class SupplierSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Supplier
+        fields = "__all__"
+
 class StockSerializer(serializers.ModelSerializer):
     class StockEquipmentSerializer(serializers.ModelSerializer):
-        equipment = EquipmentSerializer(source="equipmentId")
+        equipmentId = StockEquipmentEquipmentSerializer()
 
         class Meta:
             model = models.StockEquipment
-            fields = ("equipment", "quantity")
+            fields = ("equipmentId", "quantity")
 
         def validate_quantity(self, data):
             # quantity > 0
             if data <= 0:
                 raise serializers.ValidationError(_("La quantité doit être supérieure à 0"))
 
-        def validate_equipment(self, data):
+            return data
+
+        def validate_equipmentId(self, data):
             # create a new equipment if an equipment with this name 
             # doesn't exist
             name = data['equipmentName']
@@ -58,11 +83,19 @@ class StockSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     class Meta:
-        models = models.Stock
-        fields = ("stockDate", "equipments")
+        model = models.Stock
+        fields = ("supplierId", "stockDate", "equipments")
         extra_kwargs = {
-            'stockDate': { 'required': False }
+            'stockDate': { 'required': False },
+            'supplierId': {  }
         }
 
     def create(self, validated_data):
-        return super().create(validated_data)
+        equipments = validated_data.pop("equipments")
+        
+        stock = self.Meta.model.objects.create(**validated_data)
+
+        for equipment in equipments:
+            models.StockEquipment.objects.create(stockId=stock, **equipment)
+
+        return stock

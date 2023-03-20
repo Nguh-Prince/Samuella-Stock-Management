@@ -9,7 +9,11 @@ from . import models, serializers
 
 # Create your views here.
 def home(request):
-    return render(request, "managestock/managestock.html")
+    context = {
+        'suppliers': models.Supplier.objects.all(),
+        'equipments': models.Equipment.objects.all()
+    }
+    return render(request, "managestock/managestock.html", context=context)
 
 class EquipmentViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     serializer_classes = {
@@ -28,3 +32,7 @@ class EquipmentViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
 class StockViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.StockSerializer
     queryset = models.Stock.objects.all()
+
+class SupplierViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.SupplierSerializer
+    queryset = models.Supplier.objects.all()

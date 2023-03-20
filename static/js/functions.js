@@ -112,3 +112,8 @@ function updateCurrentDateAndTimeInputs() {
 
     $('input.current[type="date"]').val(isoDateString(currentTime))
 }
+
+function addRowsToDataTable(dataTable, listOfRows) {
+    dataTable.rows.add(listOfRows)
+    dataTable.draw()
+}
