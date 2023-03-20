@@ -41,3 +41,5 @@ class StockEquipment(models.Model):
             # add the quantity of the equipment in stock by the quantity delivered
             self.equipmentId.quantity += self.quantity
             self.equipmentId.save()
+
+        return super().save(*args, **kwargs)
