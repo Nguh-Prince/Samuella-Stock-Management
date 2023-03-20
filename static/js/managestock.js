@@ -1,4 +1,5 @@
 var equipmentSelectedForEditing = null
+var stockSelectedForEditing = null
 
 var equipmentsTable = $("#equipments-table").DataTable({
     columnDefs: [{
@@ -129,6 +130,42 @@ var stocksTable = $("#entries-table").DataTable({
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>`
+                }
+            }
+        }
+    ]
+})
+
+var entryDetailEquipmentsTable = $("#stock-detail-table").DataTable({
+    columnDefs: [{
+        "defaultContent": '-',
+        "targets": "_all"
+    }], 
+    "columns": [
+        {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<i class="fas fa-trash text-danger"></i>`
+                }
+            }
+        },
+        {
+            "data": "equipmentId.equipmentName",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<input class="form-control" type="text" list="equipments-list" name="equipmentName" value="${data}" />`
+                } else {
+                    return data
+                }
+            }
+        },
+        {
+            "data": "quantity",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<input class="form-control" type="number" name="quantity" value="${data}" min=1 />`
+                } else {
+                    return data
                 }
             }
         }
@@ -354,11 +391,34 @@ function displayEquipmentDetailModal(equipment=equipmentSelectedForEditing) {
     $("#equipment-detail-modal-toggle").click()
 }
 
+function displayStockDetailModal(stock=stockSelectedForEditing) {
+    $("#stock-detail-modal-title").text(`${stock.supplierId}: ${stock.stockDate}`)
+
+    $("#stock-detail-supplier").val(stock.supplierId)
+    $("#stock-detail-date").val(stock.stockDate)
+
+    entryDetailEquipmentsTable.clear()
+    entryDetailEquipmentsTable.rows.add(stock.equipments)
+    entryDetailEquipmentsTable.draw()
+
+    $("#stock-detail-modal-toggle").click()
+}
+
 function equipmentEditButtonClick(equipmentId) {
     for (let equipment of state.equipments) {
         if (equipment.equipmentId == equipmentId && equipment.equipmentId !== null) {
             equipmentSelectedForEditing = equipment
             displayEquipmentDetailModal(equipmentSelectedForEditing)
+            break;
+        }
+    }
+}
+
+function stockEditButtonClick(stockId) {
+    for (let stock of state.stocks) {
+        if (stock.stockId == stockId && stock.stockId !== null) {
+            stockSelectedForEditing = stock
+            displayStockDetailModal(stockSelectedForEditing)
             break;
         }
     }

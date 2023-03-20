@@ -55,6 +55,8 @@
           <li class="nav-item" role="presentation">
               <button class="nav-link" data-bs-target="#entries" data-bs-toggle="tab" id="entries-tab">Entrees</button>
           </li>
+          <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-target="#discharges" data-bs-toggle="tab" id="discharges-tab">Décharges</button>
           </li>
       </ul>
   </div>
@@ -387,6 +389,81 @@
             <div class="modal-footer">
                 <button type="button" id="new-entry-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                 <button type="button" id="new-entry-save" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div
+    class="modal fade"
+    id="stock-detail-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="stock-detail-modal-title"></h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="stock-detail-purchaseorder-id">
+                <div class="row">
+                    <div class="col-md-7">
+                        <label for="stock-detail-supplier">Prestataire</label>
+                        <select id="stock-detail-supplier" class="form-select">
+                            {% for supplier in suppliers %}
+                                <option value="{{ supplier.supplierId }}">{{ supplier.supplierName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="stock-detail-date">Date</label>
+                        <input type="date" id="stock-detail-date" class="form-control current">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row my-4">
+                            <div class="row col-md-8 ml-auto">
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control mx-1" id="number-of-rows-to-add-to-stock-detail-table" value="3" min="1">
+                                </div>
+                                <div class="col-md-8">
+                                    <button class="btn btn-secondary" id="add-rows-to-stock-detail-table">Ajouter des lignes</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-4">
+                            <table id="stock-detail-table" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Equipement</th>
+                                        <th>Quantite</th>
+                                    </tr>
+                                </thead>
+            
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" data-bs-toggle="modal" data-bs-target="#stock-detail-modal" id="stock-detail-modal-toggle">
+            <div class="modal-footer">
+                <button type="button" id="stock-detail-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" id="stock-detail-save" class="btn btn-primary">Enregistrer</button>
             </div>
         </div>
         </div>
