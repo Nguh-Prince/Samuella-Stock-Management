@@ -312,6 +312,20 @@ $("#add-rows-to-new-entry-table").click(function() {
     }
 })
 
+$("#add-rows-to-stock-detail-table").click(function() {
+    try {
+        let numberOfRows = parseInt($("#number-of-rows-to-add-to-stock-detail-table").val())
+
+        if (numberOfRows > 0) {
+            let listOfRows = getEmptyEquipments(numberOfRows, {equipmentId: {equipmentName: "", quantity: 1}})
+
+            addRowsToDataTable(entryDetailEquipmentsTable, listOfRows)
+        }
+    } catch (error) {
+        throw error   
+    }
+})
+
 $("#new-entry-modal-toggle").click(function() {
     let numberOfRows = parseInt($("#new-entry-table tbody tr i.fas.fa-trash").length)
 
@@ -334,11 +348,51 @@ $("#new-entry-save").click(function() {
         },
         success: function(data) {
             state.stocks.push(data)
+            
+            stocksTable.rows.add([data])
+            stocksTable.draw()
 
             displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
         },
         error: function(data) {
             console.error("Error adding the new entry")
+            console.log(formData)
+            console.log(JSON.stringify(formData))
+            console.log(data.responseText)
+        }
+    })
+})
+
+$("#stock-detail-save").click(function() {
+    let formData = getEntryDetailFromForm()
+
+    $.ajax({
+        type: 'PATCH',
+        url: `/managestock/stocks/${stockSelectedForEditing.stockId}/`,
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        headers: {
+            "X-CSRFTOKEN": getCookie("csrftoken")
+        },
+        success: function(data) {
+            
+            state.stocks.map((item, index) => {
+                if (item.stockId == stockSelectedForEditing.stockId) {
+                    state.stocks[index] = data
+                }
+            })
+
+            stocksTable.clear()
+            stocksTable.rows.add(state.stocks)
+            stocksTable.draw()
+
+            displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
+
+            $("#stock-detail-modal-close").click()
+        },
+        error: function(data) {
+            displayMessage("Error updating the entry")
+            console.error("Error updating the entry")
             console.log(formData)
             console.log(JSON.stringify(formData))
             console.log(data.responseText)
@@ -364,6 +418,32 @@ function getNewEntryFromForm() {
     }
 
     $("#new-entry-table tbody tr").each(function() {
+        let equipmentName = $(this).find("input[name='equipmentName']").first().val()
+        let quantity = $(this).find("input[name='quantity']").first().val()
+
+        // validate the equipmentName and quantity
+
+        let entryEquipment = {
+            equipmentId: {
+                equipmentName: equipmentName
+            },
+            quantity: quantity
+        }
+
+        entry.equipments.push(entryEquipment)
+    })
+
+    return entry
+}
+
+function getEntryDetailFromForm() {
+    let entry = {
+        supplierId: $("#stock-detail-supplier").val(),
+        stockDate: $("#stock-detail-date").val(),
+        equipments: []
+    }
+
+    $("#stock-detail-table tbody tr").each(function() {
         let equipmentName = $(this).find("input[name='equipmentName']").first().val()
         let quantity = $(this).find("input[name='quantity']").first().val()
 

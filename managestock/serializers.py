@@ -84,7 +84,7 @@ class StockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Stock
-        fields = ("supplierId", "stockDate", "equipments")
+        fields = ("stockId", "supplierId", "stockDate", "equipments")
         extra_kwargs = {
             'stockDate': { 'required': False },
             'supplierId': {  }
@@ -99,3 +99,29 @@ class StockSerializer(serializers.ModelSerializer):
             models.StockEquipment.objects.create(stockId=stock, **equipment)
 
         return stock
+
+    def update(self, instance, validated_data):
+        equipments = validated_data.pop("equipments")
+
+        # delete one by one so that the delete method of each instance should be called
+        for equipment in instance.equipments.all():
+            equipment.delete()
+
+        instance_modified = False
+
+        if 'supplierId' in validated_data:
+            instance.supplierId = validated_data['supplierId']
+            instance_modified = True
+
+        if 'stockDate' in validated_data and validated_data['stockDate']:
+            instance.stockDate = validated_data['stockDate']
+            instance_modified = True
+
+        if instance_modified:
+            instance.save()
+
+        for equipment in equipments:
+            models.StockEquipment.objects.create(stockId=instance, **equipment)
+
+        return instance
+        

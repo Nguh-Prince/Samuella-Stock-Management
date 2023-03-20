@@ -43,3 +43,8 @@ class StockEquipment(models.Model):
             self.equipmentId.save()
 
         return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.equipmentId.quantity -= self.quantity
+
+        return super().delete(*args, **kwargs)
