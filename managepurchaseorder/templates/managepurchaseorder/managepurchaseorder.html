@@ -170,6 +170,7 @@ data-bs-target="#purchase-order-detail-modal" data-bs-toggle="modal">
             </button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="purchase-order-detail-purchaseorder-id">
                 <div class="row">
                     <div class="col-md-7">
                         <label for="purchase-order-detail-structure">Structure</label>
@@ -216,6 +217,45 @@ data-bs-target="#purchase-order-detail-modal" data-bs-toggle="modal">
             <div class="modal-footer">
                 <button type="button" id="purchase-order-detail-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                 <button type="button" id="purchase-order-detail-save" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+        </div>
+</div>
+
+<div
+    class="modal fade"
+    id="confirm-purchase-order-deletion-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="confirm-purchase-order-deletion-modal-title">Confirmer la suppression</h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <h2 class="text-danger">Êtes-vous sûr de bien vouloir supprimer cet élément?</h2>
+            </div>
+            <input type="hidden" id="confirm-purchase-order-deletion-purchase-order-id">
+            <div class="modal-footer">
+                <input type="hidden" data-bs-dismiss="modal" id="confirm-purchase-order-deletion-modal-close">
+                
+                <input type="hidden" data-bs-toggle="modal" 
+                data-bs-target="#confirm-purchase-order-deletion-modal" 
+                id="confirm-purchase-order-deletion-modal-open">
+
+                <button type="button" id="confirm-purchase-order-deletion-no" class="btn btn-secondary">Non</button>
+                <button type="button" id="confirm-purchase-order-deletion-yes" class="btn btn-danger">Oui, je suis sur</button>
             </div>
         </div>
         </div>

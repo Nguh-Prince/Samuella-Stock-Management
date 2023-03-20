@@ -84,3 +84,27 @@ class PurchaseOrderSerializer(serializers.ModelSerializer):
             models.PurchaseOrderEquipment.objects.create(**equipment, purchaseOrderId=purchaseOrder)
             
         return purchaseOrder
+
+    def update(self, instance, validated_data):
+        breakpoint()
+        equipments = validated_data.pop("equipments")
+        
+        instance_modified = False
+
+        if 'dateCreated' in validated_data and validated_data['dateCreated']:
+            instance.dateCreated = validated_data['dateCreated']
+            instance_modified = True
+
+        if 'supplierId' in validated_data:
+            instance.supplierId = validated_data['supplierId']
+            instance_modified = True
+
+        if instance_modified:
+            instance.save()
+
+        instance.equipments.all().delete()
+
+        for equipment in equipments:
+            models.PurchaseOrderEquipment.objects.create(**equipment, purchaseOrderId=instance)
+
+        return instance

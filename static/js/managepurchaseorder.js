@@ -184,7 +184,7 @@ $("#add-rows-to-purchase-order-detail-table").click( function() {
     try {
         let numberOfRows = parseInt($("#number-of-rows-to-add-to-purchase-order-detail-table").val())
 
-        addRowsToNewPurchaseOrderTable(numberOfRows)
+        addRowsToNewPurchaseOrderTable(numberOfRows, false)
     } catch (error) {
         throw error
     }
@@ -221,13 +221,66 @@ $("#new-purchase-order-save").click(function() {
     })
 })
 
+$("#confirm-purchase-order-deletion-no").click( function() {
+    $("#confirm-purchase-order-deletion-modal-close").click()
+} )
+
+$("#confirm-purchase-order-deletion-no").click( function() {
+    try {
+        let purchaseOrderId = parseInt($("#confirm-purchase-order-deletion-purchase-order-id").val())
+        purchaseOrderDeleteButtonClick(purchaseOrderId, false)
+
+        $("#confirm-purchase-order-deletion-modal-close").click()
+    } catch (error) {
+        throw error
+    }
+} )
+
+$("#purchase-order-detail-save").click(function() {
+    let formData = getPurchaseOrderDetailsFromForm()
+
+    $.ajax({
+        type: 'PATCH',
+        url: `/managepurchaseorder/purchaseorders/${purchaseOrderSelectedForEditing.purchaseorderId}/`,
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        headers: {
+            "X-CSRFTOKEN": getCookie("csrftoken")
+        },
+        success: function(data) {
+            state.purchaseOrders.map( (item, index) => {
+                if (item.purchaseorderId == purchaseOrderSelectedForEditing.purchaseorderId) {
+                    state.purchaseOrder[index] = data
+                }
+            } )
+        },
+        error: function(data) {
+            console.log("There was an error updating the purchase order")
+            console.log(formData)
+            console.log(data.responseText)
+        }
+    })
+})
+
 /* ------------------------ END EVENT LISTENERS SECTION ------------------------ */
 
 function addRowsToNewPurchaseOrderTable(numberOfRows=2, useNewPurchaseOrderTable=true) {
     console.log(`Adding ${numberOfRows} to the new purchaseOrder table`)
-    let emptyEquipmentObject = {
-        equipmentName: '',
-        quantity: 1
+
+    let emptyEquipmentObject;
+
+    if (useNewPurchaseOrderTable) {
+        emptyEquipmentObject = {
+            equipmentName: '',
+            quantity: 1
+        }
+    } else {
+        emptyEquipmentObject = {
+            equipmentId: {
+                equipmentName: ''
+            },
+            quantity: 1
+        }
     }
 
     let listOfRows = []
@@ -278,9 +331,36 @@ function getNewPurchaseOrderFromForm() {
     return purchaseOrder
 }
 
+function getPurchaseOrderDetailsFromForm() {
+    let purchaseOrder = {
+        purchaseorderId: $("#purchase-order-detail-purchaseorder-id"),
+        structureId: $("#purchase-order-detail-structure").val(),
+        dateCreated: $("#purchase-order-detail-date").val(),
+        equipments: []
+    }
+
+    // validate the structureId and dateCreated fields
+
+    $("#purchase-order-detail-table tbody tr").each(function() {
+        let equipmentName = $(this).find("input[name='equipmentName']").first().val()
+        let quantity = $(this).find("input[name='quantity']").first().val()
+
+        // validate the equipmentName and quantity
+        let purchaseOrderEquipment = {
+            equipmentId: {
+                equipmentName: equipmentName
+            },
+            quantity: quantity
+        }
+
+        purchaseOrder.equipments.push(purchaseOrderEquipment)
+    })
+}
+
 function displayPurchaseOrderDetailModal(purchaseOrder=purchaseOrderSelectedForEditing) {
     $("#purchase-order-detail-modal-title").text(`${purchaseOrder.structureId}: ${purchaseOrder.dateCreated}`)
 
+    $("#purchase-order-detail-purchaseorder-id").val(purchaseOrderSelectedForEditing)
     $("#purchase-order-detail-structure").val(purchaseOrder.structureId)
     $("#purchase-order-detail-date").val(purchaseOrder.dateCreated)
 
@@ -301,27 +381,34 @@ function purchaseOrderEditButtonClick(purchaseOrderId) {
     }
 }
 
-function purchaseOrderDeleteButtonClick(purchaseOrderId) {
-    // display modal to confirm deletion
-    $.ajax({
-        type: "DELETE",
-        url: `/managepurchaseorder/purchaseorders/${purchaseOrderId}`,
-        headers: {
-            "X-CSRFTOKEN": getCookie("csrftoken")
-        },
-        success: function(data) {
-            displayMessage("Le commande a ete supprime avec succes", ["alert-success", "alert-dismissible"])
-
-            state.purchaseOrders.filter( (item) => {
-                return item.purchaseorderId != purchaseOrderId
-            } )
-
-            purchaseOrdersTable.clear()
-            purchaseOrdersTable.rows.add(state.purchaseOrders)
-            purchaseOrdersTable.draw()
-        },
-        error: function(data) {
-            displayMessage("Le commande n'a pas ete supprime avec succes")
-        }
-    })
+function purchaseOrderDeleteButtonClick(purchaseOrderId, displayModal=true) {
+    if (displayModal) {
+        // display modal to confirm deletion
+        $("#confirm-purchase-order-deletion-modal-open").click()
+        $("#confirm-purchase-order-deletion-purchase-order-id").val(purchaseOrderId)
+    }
+    else {
+        // perform deletion
+        $.ajax({
+            type: "DELETE",
+            url: `/managepurchaseorder/purchaseorders/${purchaseOrderId}`,
+            headers: {
+                "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function(data) {
+                displayMessage("Le commande a ete supprime avec succes", ["alert-success", "alert-dismissible"])
+    
+                state.purchaseOrders.filter( (item) => {
+                    return item.purchaseorderId != purchaseOrderId
+                } )
+    
+                purchaseOrdersTable.clear()
+                purchaseOrdersTable.rows.add(state.purchaseOrders)
+                purchaseOrdersTable.draw()
+            },
+            error: function(data) {
+                displayMessage("Le commande n'a pas ete supprime avec succes")
+            }
+        })
+    }
 }

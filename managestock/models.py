@@ -2,22 +2,28 @@ from django.db import models
 from django.utils.translation import gettext as _
 
 class Equipment(models.Model):
-    equipmentId = models.IntegerField(primary_key=True)
+    equipmentId = models.AutoField(primary_key=True)
     equipmentName = models.CharField(max_length=100, unique=True)
     quantity = models.IntegerField(default=0)
     def __str__(self):
         return str(self.equipmentId)
 
+class Supplier(models.Model):
+    supplierId = models.AutoField(primary_key=True)
+    supplierName = models.CharField(max_length=50)
+    supplierLocation = models.CharField(max_length=100)
+    supplierDescription = models.TextField(null=True, blank=True)
 
 class Stock(models.Model):
-    stockId = models.IntegerField(primary_key=True)
+    stockId = models.AutoField(primary_key=True)
+    supplierId = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True)
     # stockEquipmentId = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     stockDate = models.DateField(max_length=20)
     def __str__(self):
         return str(self.stockId)
 
 class StockEquipment(models.Model):
-    stockEquipmentId = models.IntegerField(primary_key=True)
+    stockEquipmentId = models.AutoField(primary_key=True)
     equipmentId = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     stockId = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="equipments")
