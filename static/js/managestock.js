@@ -82,7 +82,7 @@ var newEntryEquipmentsTable = $("#new-entry-table").DataTable({
     ]
 })
 
-var stocksTable = $("#purchase-orders-table").DataTable({
+var stocksTable = $("#entries-table").DataTable({
     columnDefs: [{
         "defaultContent": "-",
         "targets": "_all"
