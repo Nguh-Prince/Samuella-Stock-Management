@@ -33,6 +33,15 @@ class StockViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.StockSerializer
     queryset = models.Stock.objects.all()
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # delete the equipments one by one to trigger the delete method of each instance
+        for equipment in instance.equipments.all():
+            equipment.delete()
+
+        return super().destroy(request, *args, **kwargs)
+
 class SupplierViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SupplierSerializer
     queryset = models.Supplier.objects.all()

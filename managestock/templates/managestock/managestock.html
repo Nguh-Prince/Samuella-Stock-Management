@@ -468,4 +468,43 @@
         </div>
         </div>
     </div>
+
+  <div
+  class="modal fade"
+  id="confirm-stock-deletion-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLongTitle"
+  aria-hidden="true"
+  >
+      <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title" id="confirm-stock-deletion-modal-title">Confirmer la suppression</h5>
+          <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+          >
+              <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+              <h2 class="text-danger">Êtes-vous sûr de bien vouloir supprimer cet entree?</h2>
+          </div>
+          <input type="hidden" id="confirm-stock-deletion-stock-id">
+          <div class="modal-footer">
+              <input type="hidden" data-bs-dismiss="modal" id="confirm-stock-deletion-modal-close">
+              
+              <input type="hidden" data-bs-toggle="modal" 
+              data-bs-target="#confirm-stock-deletion-modal" 
+              id="confirm-stock-deletion-modal-open">
+
+              <button type="button" id="confirm-stock-deletion-no" class="btn btn-secondary">Non</button>
+              <button type="button" id="confirm-stock-deletion-yes" class="btn btn-danger">Oui, je suis sur</button>
+          </div>
+      </div>
+      </div>
+  </div>
 {% endblock %}

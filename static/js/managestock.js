@@ -400,6 +400,17 @@ $("#stock-detail-save").click(function() {
     })
 })
 
+$("#confirm-stock-deletion-yes").click(function() {
+    try {
+        let stockId = parseInt($("#confirm-stock-deletion-stock-id").val())
+        stockDeleteButtonClick(stockId, false)
+
+        $("#confirm-stock-deletion-modal-close").click()
+    } catch (error) {
+        throw error
+    }
+})
+
 function getNewEquipmentsFromForm() {
     // returns a list of equipments to be added based on the user's     input
     equipment = {
@@ -501,5 +512,37 @@ function stockEditButtonClick(stockId) {
             displayStockDetailModal(stockSelectedForEditing)
             break;
         }
+    }
+}
+
+function stockDeleteButtonClick(stockId, displayModal=true) {
+    if (displayModal) {
+        // display modal to confirm deletion
+        $("#confirm-stock-deletion-modal-open").click()
+        $("#confirm-stock-deletion-stock-id").val(stockId)
+    }
+    else {
+        // perform deletion
+        $.ajax({
+            type: "DELETE",
+            url: `/managestock/stocks/${stockId}`,
+            headers: {
+                "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function(data) {
+                displayMessage("Le commande a ete supprime avec succes", ["alert-success", "alert-dismissible"])
+    
+                state.stocks = state.stocks.filter( (item) => {
+                    return item.stockId != stockId
+                } )
+    
+                stocksTable.clear()
+                stocksTable.rows.add(state.stocks)
+                stocksTable.draw()
+            },
+            error: function(data) {
+                displayMessage("Le commande n'a pas ete supprime avec succes")
+            }
+        })
     }
 }

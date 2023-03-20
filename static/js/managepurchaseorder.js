@@ -398,7 +398,7 @@ function purchaseOrderDeleteButtonClick(purchaseOrderId, displayModal=true) {
             success: function(data) {
                 displayMessage("Le commande a ete supprime avec succes", ["alert-success", "alert-dismissible"])
     
-                state.purchaseOrders.filter( (item) => {
+                state.purchaseOrders = state.purchaseOrders.filter( (item) => {
                     return item.purchaseorderId != purchaseOrderId
                 } )
     
