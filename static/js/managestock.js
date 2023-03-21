@@ -631,7 +631,7 @@ $("#discharge-detail-save").click(function() {
             dischargesTable.rows.add(state.discharges)
             dischargesTable.draw()
 
-            displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
+            displayMessage("Discharge modified successfully", ["alert-success", "alert-dismissible"])
 
             $("#discharge-detail-modal-close").click()
         },
@@ -803,7 +803,7 @@ function displayDischargeDetailModal(discharge=dischargeSelectedForEditing) {
     $("#discharge-detail-modal-title").text(`${discharge.structureId}: ${discharge.dateCreated}`)
 
     $("#discharge-detail-structure").val(discharge.structureId)
-    $("#discharge-detail-date").val(discharge.dischargeDate)
+    $("#discharge-detail-date").val(discharge.dateCreated)
 
     dischargeDetailEquipmentsTable.clear()
     dischargeDetailEquipmentsTable.rows.add(discharge.equipments)
