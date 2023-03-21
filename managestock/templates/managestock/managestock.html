@@ -614,10 +614,10 @@
                 <input type="hidden" id="discharge-detail-purchaseorder-id">
                 <div class="row">
                     <div class="col-md-7">
-                        <label for="discharge-detail-supplier">Prestataire</label>
-                        <select id="discharge-detail-supplier" class="form-select">
-                            {% for supplier in suppliers %}
-                                <option value="{{ supplier.supplierId }}">{{ supplier.supplierName }}</option>
+                        <label for="discharge-detail-structure">Structure</label>
+                        <select id="discharge-detail-structure" class="form-select">
+                            {% for structure in structures %}
+                                <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -632,7 +632,7 @@
                         <div class="row my-4">
                             <div class="row col-md-8 ml-auto">
                                 <div class="col-md-4">
-                                    <input type="number" class="form-control mx-1" id="number-of-rows-to-add-to-discharge-detail-table" value="3" min="1">
+                                    <input type="number" class="form-control mx-1" id="number-of-rows-to-add-to-discharge-detail-table" value="1" min="1">
                                 </div>
                                 <div class="col-md-8">
                                     <button class="btn btn-secondary" id="add-rows-to-discharge-detail-table">Ajouter des lignes</button>

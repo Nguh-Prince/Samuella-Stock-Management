@@ -248,7 +248,7 @@ var dischargeDetailEquipmentsTable = $("#discharge-detail-table").DataTable({
                     state.equipments.map( (item, index) => {
                         options.push(`<option ${item.equipmentName == data ? 'selected': ''} value=${item.equipmentName}>${item.equipmentName}</option>`)
                     } )
-                    return `<select class="form-select" value="${data}">${options.join('')}</select>`
+                    return `<select name='equipmentName' class="form-select" value="${data}">${options.join('')}</select>`
                 } else {
                     return data
                 }
@@ -437,6 +437,23 @@ $("#add-rows-to-stock-detail-table").click(function() {
     }
 })
 
+$("#add-rows-to-discharge-detail-table").click(function() {
+    console.log("Clicked the add rows to discharge table button")
+
+    try {
+        let numberOfRows = parseInt($("#number-of-rows-to-add-to-discharge-detail-table").val())
+
+        if (numberOfRows > 0) {
+            let listOfRows = getEmptyEquipments(numberOfRows, {equipmentId: {equipmentName: ""}, quantity: 1})
+            
+            console.log(`Adding ${numberOfRows} rows to discharge table`)
+            addRowsToDataTable(dischargeDetailEquipmentsTable, listOfRows)
+        }
+    } catch (error) {
+        throw error   
+    }
+})
+
 $("#new-entry-modal-toggle").click(function() {
     let numberOfRows = parseInt($("#new-entry-table tbody tr i.fas.fa-trash").length)
 
@@ -500,6 +517,43 @@ $("#stock-detail-save").click(function() {
             displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
 
             $("#stock-detail-modal-close").click()
+        },
+        error: function(data) {
+            displayMessage("Error updating the entry")
+            console.error("Error updating the entry")
+            console.log(formData)
+            console.log(JSON.stringify(formData))
+            console.log(data.responseText)
+        }
+    })
+})
+
+$("#discharge-detail-save").click(function() {
+    let formData = getDischargeDetailFromForm()
+
+    $.ajax({
+        type: 'PATCH',
+        url: `/managestock/discharges/${dischargeSelectedForEditing.dischargeId}/`,
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        headers: {
+            "X-CSRFTOKEN": getCookie("csrftoken")
+        },
+        success: function(data) {
+            
+            state.discharges.map((item, index) => {
+                if (item.dischargeId == dischargeSelectedForEditing.dischargeId) {
+                    state.discharges[index] = data
+                }
+            })
+
+            dischargesTable.clear()
+            dischargesTable.rows.add(state.discharges)
+            dischargesTable.draw()
+
+            displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
+
+            $("#discharge-detail-modal-close").click()
         },
         error: function(data) {
             displayMessage("Error updating the entry")
@@ -584,6 +638,30 @@ function getEntryDetailFromForm() {
     return entry
 }
 
+function getDischargeDetailFromForm() {
+    let discharge = {
+        structureId: $("#discharge-detail-structure").val(),
+        dateCreated: $("#discharge-detail-date").val(),
+        equipments: []
+    }
+
+    $("#discharge-detail-table tbody tr").each(function() {
+        let equipmentName = $(this).find("select[name='equipmentName']").first().val()
+        let quantity = $(this).find("input[name='quantity']").first().val()
+
+        let dischargedEquipment = {
+            equipmentId: {
+                equipmentName: equipmentName
+            },
+            quantity: quantity
+        }
+
+        discharge.equipments.push(dischargedEquipment)
+    })
+
+    return discharge
+}
+
 function displayEquipmentDetailModal(equipment=equipmentSelectedForEditing) {
     $("#equipment-detail-modal-title").text(equipment.equipmentName)
 
@@ -609,7 +687,7 @@ function displayStockDetailModal(stock=stockSelectedForEditing) {
 function displayDischargeDetailModal(discharge=dischargeSelectedForEditing) {
     $("#discharge-detail-modal-title").text(`${discharge.structureId}: ${discharge.dateCreated}`)
 
-    $("#discharge-detail-structure").val(discharge.supplierId)
+    $("#discharge-detail-structure").val(discharge.structureId)
     $("#discharge-detail-date").val(discharge.dischargeDate)
 
     dischargeDetailEquipmentsTable.clear()
