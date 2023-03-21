@@ -7,6 +7,7 @@ class Equipment(models.Model):
     equipmentId = models.AutoField(primary_key=True)
     equipmentName = models.CharField(max_length=100, unique=True)
     quantity = models.IntegerField(default=0)
+
     def __str__(self):
         return str(self.equipmentId)
 

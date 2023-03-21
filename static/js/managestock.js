@@ -226,6 +226,47 @@ var dischargesTable = $("#discharges-table").DataTable({
     ]
 })
 
+var newDischargeEquipmentsTable = $("#new-discharge-table").DataTable({
+    columnDefs: [{
+        "defaultContent": '-',
+        "targets": "_all"
+    }], 
+    "columns": [
+        {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<i class="fas fa-trash text-danger"></i>`
+                }
+            }
+        },
+        {
+            "data": "equipmentName",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    let options = []
+
+                    state.equipments.map( (item, index) => {
+                        options.push(`<option ${item.equipmentName == data ? 'selected': ''} value=${item.equipmentName}>${item.equipmentName}</option>`)
+                    } )
+                    return `<select name='equipmentName' class="form-select" value="${data}">${options.join('')}</select>`
+                } else {
+                    return data
+                }
+            }
+        },
+        {
+            "data": "quantity",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<input class="form-control" type="number" name="quantity" value="${data}" min=1 />`
+                } else {
+                    return data
+                }
+            }
+        }
+    ]
+})
+
 var dischargeDetailEquipmentsTable = $("#discharge-detail-table").DataTable({
     columnDefs: [{
         "defaultContent": '-',
@@ -463,6 +504,16 @@ $("#new-entry-modal-toggle").click(function() {
     }
 })
 
+$("#new-discharge-modal-toggle").click(function() {
+    console.log("Clicked the new-discharge-modal-toggle button")
+    let numberOfRows = parseInt($("#new-discharge-table tbody tr i.fas.fa-trash").length)
+
+    if (numberOfRows < 1) {
+        let listOfRows = getEmptyEquipments(2)
+        addRowsToDataTable(newDischargeEquipmentsTable, listOfRows)
+    }
+})
+
 $("#new-entry-save").click(function() {
     let formData = getNewEntryFromForm()
 
@@ -521,6 +572,35 @@ $("#stock-detail-save").click(function() {
         error: function(data) {
             displayMessage("Error updating the entry")
             console.error("Error updating the entry")
+            console.log(formData)
+            console.log(JSON.stringify(formData))
+            console.log(data.responseText)
+        }
+    })
+})
+
+$("#new-discharge-save").click(function() {
+    console.log("Clicked the new-discharge-save button")
+    let formData = getNewDischargeFromForm()
+
+    $.ajax({
+        type: 'POST',
+        url: '/managestock/discharges/',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        headers: {
+            "X-CSRFTOKEN": getCookie("csrftoken")
+        },
+        success: function(data) {
+            state.discharges.push(data)
+            
+            dischargesTable.rows.add([data])
+            dischargesTable.draw()
+
+            displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
+        },
+        error: function(data) {
+            console.error("Error adding the new entry")
             console.log(formData)
             console.log(JSON.stringify(formData))
             console.log(data.responseText)
@@ -636,6 +716,30 @@ function getEntryDetailFromForm() {
     })
 
     return entry
+}
+
+function getNewDischargeFromForm() {
+    let discharge = {
+        structureId: $("#new-discharge-structure").val(),
+        dateCreated: $("#new-discharge-date").val(),
+        equipments: []
+    }
+
+    $("#new-discharge-table tbody tr").each(function() {
+        let equipmentName = $(this).find("select[name='equipmentName']").first().val()
+        let quantity = $(this).find("input[name='quantity']").first().val()
+
+        let dischargedEquipment = {
+            equipmentId: {
+                equipmentName: equipmentName
+            },
+            quantity: quantity
+        }
+
+        discharge.equipments.push(dischargedEquipment)
+    })
+
+    return discharge
 }
 
 function getDischargeDetailFromForm() {
