@@ -124,4 +124,74 @@ class StockSerializer(serializers.ModelSerializer):
             models.StockEquipment.objects.create(stockId=instance, **equipment)
 
         return instance
+
+class DischargeSerializer(serializers.ModelSerializer):
+    class DischargeEquipmentSerializer(StockSerializer.StockEquipmentSerializer):
+        equipmentId = StockEquipmentEquipmentSerializer()
+
+        class Meta:
+            model = models.EquipmentDischarged
+            fields = ("equipmentId", "quantity")
+
+        def validate_quantity(self, data):
+            # quantity > 0
+            if data <= 0:
+                raise serializers.ValidationError(_("La quantité doit être supérieure à 0"))
+
+            return data
+
+        def validate_equipmentId(self, data):
+            # create a new equipment if an equipment with this name 
+            # doesn't exist
+            name = data['equipmentName']
+
+            query = models.Equipment.objects.filter(equipmentName=name)
+            
+            if not query.exists():
+                raise serializers.ValidationError(f"No equipment exists with the name {name}")
+
+            return query.first()
+
+    equipments = DischargeEquipmentSerializer(many=True)
+
+    class Meta:
+        model = models.Discharge
+        fields = ("dischargeId", "structureId", "dateCreated", "equipments")
+        extra_kwargs = {
+            'dischargeId': {'read_only': True}
+        }
+
+    def create(self, validated_data):
+        equipments = validated_data.pop("equipments")
+
+        discharge = self.Meta.model.objects.create(**validated_data)
+
+        for equipment in equipments:
+            self.DischargeEquipmentSerializer.Meta.model.objects.create(dischargeId=discharge, **equipment)
+
+        return discharge
+
+    def update(self, instance, validated_data):
+        equipments = validated_data.pop("equipments")
+
+        for equipment in instance.equipments.all():
+            equipment.delete()
+
+        instance_modified = False
+
+        if 'structureId' in validated_data:
+            instance.structureId = validated_data['structureId']
+            instance_modified = True
         
+        if 'dateCreated' in validated_data and validated_data['dateCreated']:
+            instance.dateCreated = validated_data['dateCreated']
+            instance_modified = True
+
+        if instance_modified:
+            instance.save()
+
+        for equipment in equipments:
+            self.DischargeEquipmentSerializer.Meta.model.objects.create(dischargeId=instance, **equipment)
+
+        return instance
+

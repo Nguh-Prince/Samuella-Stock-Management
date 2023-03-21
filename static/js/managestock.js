@@ -1,5 +1,6 @@
 var equipmentSelectedForEditing = null
 var stockSelectedForEditing = null
+var dischargeSelectedForEditing = null
 
 var equipmentsTable = $("#equipments-table").DataTable({
     columnDefs: [{
@@ -172,6 +173,100 @@ var entryDetailEquipmentsTable = $("#stock-detail-table").DataTable({
     ]
 })
 
+var dischargesTable = $("#discharges-table").DataTable({
+    columnDefs: [{
+        "defaultContent": "-",
+        "targets": "_all"
+    }],
+    "columns": [
+        {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    try {
+                        return `<input type='checkbox' class='select-row' value=${row['dischargeId']}>`
+                    } catch (error) {
+                        
+                    }
+                }
+            }
+        },
+        {
+            "data": "structureId"
+        },
+        {
+            "data": "dateCreated"
+        },
+        {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    let equipmentsNameAndQuantities = []
+
+                    for ( let equipment of row['equipments'] ) {
+                        equipmentsNameAndQuantities.push(`${equipment.quantity} ${equipment.equipmentId.equipmentName}`)
+                    }
+
+                    return equipmentsNameAndQuantities.join(', ')
+                }
+            }
+        },
+        {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<div class="row">
+                                <button class="btn text-primary" onclick=dischargeEditButtonClick(${row['dischargeId']}) data-discharge-id=${row['dischargeId']}>
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button class="btn mx-1 text-danger" onclick=dischargeDeleteButtonClick(${row['dischargeId']}) data-discharge-id=${row['dischargeId']}>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>`
+                }
+            }
+        }
+    ]
+})
+
+var dischargeDetailEquipmentsTable = $("#discharge-detail-table").DataTable({
+    columnDefs: [{
+        "defaultContent": '-',
+        "targets": "_all"
+    }], 
+    "columns": [
+        {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<i class="fas fa-trash text-danger"></i>`
+                }
+            }
+        },
+        {
+            "data": "equipmentId.equipmentName",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    let options = []
+
+                    state.equipments.map( (item, index) => {
+                        options.push(`<option ${item.equipmentName == data ? 'selected': ''} value=${item.equipmentName}>${item.equipmentName}</option>`)
+                    } )
+                    return `<select class="form-select" value="${data}">${options.join('')}</select>`
+                } else {
+                    return data
+                }
+            }
+        },
+        {
+            "data": "quantity",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<input class="form-control" type="number" name="quantity" value="${data}" min=1 max=${row['equipmentId']['quantity']} />`
+                } else {
+                    return data
+                }
+            }
+        }
+    ]
+})
+
 $.ajax({
     type: 'GET', 
     url: `/managestock/equipments/`,
@@ -197,6 +292,22 @@ $.ajax({
         stocksTable.clear()
         stocksTable.rows.add(data)
         stocksTable.draw()
+    },
+    error: function(data) {
+        console.log("Error getting the equipments from the API")
+        console.log(data.responseText)
+    }
+})
+
+$.ajax({
+    type: 'GET', 
+    url: `/managestock/discharges/`,
+    success: function(data) {
+        state.discharges = data
+        
+        dischargesTable.clear()
+        dischargesTable.rows.add(data)
+        dischargesTable.draw()
     },
     error: function(data) {
         console.log("Error getting the equipments from the API")
@@ -254,7 +365,7 @@ $("#equipment-detail-modify").click(function() {
 
                 for (let equipment of state.equipments) {
                     if (equipment.equipmentId == equipmentSelectedForEditing.equipmentId) {
-                        equipment.equipmentName = data.name
+                        equipment.equipmentName = data.equipmentName
                         equipment.quantity = data.quantity
 
                         break
@@ -495,6 +606,19 @@ function displayStockDetailModal(stock=stockSelectedForEditing) {
     $("#stock-detail-modal-toggle").click()
 }
 
+function displayDischargeDetailModal(discharge=dischargeSelectedForEditing) {
+    $("#discharge-detail-modal-title").text(`${discharge.structureId}: ${discharge.dateCreated}`)
+
+    $("#discharge-detail-structure").val(discharge.supplierId)
+    $("#discharge-detail-date").val(discharge.dischargeDate)
+
+    dischargeDetailEquipmentsTable.clear()
+    dischargeDetailEquipmentsTable.rows.add(discharge.equipments)
+    dischargeDetailEquipmentsTable.draw()
+
+    $("#discharge-detail-modal-toggle").click()
+}
+
 function equipmentEditButtonClick(equipmentId) {
     for (let equipment of state.equipments) {
         if (equipment.equipmentId == equipmentId && equipment.equipmentId !== null) {
@@ -510,6 +634,16 @@ function stockEditButtonClick(stockId) {
         if (stock.stockId == stockId && stock.stockId !== null) {
             stockSelectedForEditing = stock
             displayStockDetailModal(stockSelectedForEditing)
+            break;
+        }
+    }
+}
+
+function dischargeEditButtonClick(dischargeId) {
+    for (let discharge of state.discharges) {
+        if (discharge.dischargeId == dischargeId && discharge.dischargeId !== null) {
+            dischargeSelectedForEditing = discharge
+            displayDischargeDetailModal(dischargeSelectedForEditing)
             break;
         }
     }

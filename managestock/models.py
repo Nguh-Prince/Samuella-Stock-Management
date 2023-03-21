@@ -59,7 +59,7 @@ class Discharge(models.Model):
 class EquipmentDischarged(models.Model):
     equipmentDischargedId = models.AutoField(primary_key=True)
     equipmentId = models.ForeignKey(Equipment, on_delete=models.CASCADE)
-    dischargeId = models.ForeignKey(Discharge, on_delete=models.CASCADE)
+    dischargeId = models.ForeignKey(Discharge, on_delete=models.CASCADE, related_name="equipments")
     quantity = models.IntegerField()
 
     def save(self, *args, **kwargs):

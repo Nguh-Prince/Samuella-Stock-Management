@@ -4,6 +4,7 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 from common.viewsets import MultipleSerializerViewSet
+from manageusers.models import Structure
 
 from . import models, serializers
 
@@ -11,7 +12,8 @@ from . import models, serializers
 def home(request):
     context = {
         'suppliers': models.Supplier.objects.all(),
-        'equipments': models.Equipment.objects.all()
+        'equipments': models.Equipment.objects.all(),
+        'structures': Structure.objects.all()
     }
     return render(request, "managestock/managestock.html", context=context)
 
@@ -37,6 +39,18 @@ class StockViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
 
         # delete the equipments one by one to trigger the delete method of each instance
+        for equipment in instance.equipments.all():
+            equipment.delete()
+
+        return super().destroy(request, *args, **kwargs)
+
+class DischargeViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.DischargeSerializer
+    queryset = models.Discharge.objects.all()
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+
         for equipment in instance.equipments.all():
             equipment.delete()
 
