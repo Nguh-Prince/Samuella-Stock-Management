@@ -117,3 +117,138 @@ function addRowsToDataTable(dataTable, listOfRows) {
     dataTable.rows.add(listOfRows)
     dataTable.draw()
 }
+
+function validateObject(object) {
+    // object must have the following attributes
+    // selector: a valid css selector for the input
+    // type: string representing the accepted data type for this attribute
+    // required: boolean 
+    // in: css selector for a datalist or select where this input's value must come from
+    // notIn: css selector for a datalist or select where this input'value should not be found
+    // errorContainer: a css selector for where to append the error message, if not provided parent is used
+
+    let value = $(object.selector).val()
+    let flag = true
+    let messages = []
+
+    if ( $(object.selector).length < 1 ) {
+        displayMessage(`Element with selector: '${object.selector}' does not exist`)
+    }
+
+    if (object.in && object.notIn && $(`${object.in}`)[0] == $(`${object.notIn}`)[0]) {
+        alert(gettext("The in and notIn selectors of this object are the same"))
+    }
+
+    if (!value && object.required) {
+        messages.push(gettext("This field is required"))
+
+        flag = false
+    } else {
+        object.type == "number" ? value = parseFloat(value) : 1
+
+        if (object.type == "number" && value) {
+            if (isNaN(parseFloat(value))) {
+                let message = gettext("Expected a number")
+
+                messages.push(message)
+                flag = false
+            }
+            else if ("min" in object && value < object.min) {
+                let message = gettext("The value of this field must be greater than %s")
+                message = interpolate(message, [object.min])
+
+                messages.push(message)
+                flag = false
+            }
+        }
+
+        if (object.type == "date" && value) {
+            if (!isDate(value)) {
+                let message = gettext("This is not a valid date ")
+
+                messages.push(message)
+                flag = false
+            }
+        }
+        else if (value && object.type == "name") {
+            names = splitName(value)
+
+            if (!names[0] || !names[2]) {
+                let message = gettext("At least two names are required")
+
+                messages.push(message)
+
+                flag = false
+            }
+        }
+        else if (value && typeof value !== object.type) {
+            let message = gettext("Expected %s, got a value of %s")
+            message = interpolate(message, [object.type, typeof value])
+
+            messages.push(message)
+
+            flag = false
+        }
+
+        if (object.in) {
+            if (value && !$(`${object.in} option[value='${value}']`).val()) {
+                message = gettext("This value does not exist on the list %s")
+                message = interpolate(message, [object.in])
+
+                messages.push(message)
+                flag = false
+            }
+        }
+        if (object.notIn) {
+            if (value && $(`${object.notIn} option[value='${value}']`).val()) {
+                message = gettext("This value already exists in the list %s")
+                message = interpolate(message, [object.notIn])
+
+                messages.push(message)
+                flag = false
+            }
+        }
+    }
+
+    // removing other error messages from the container
+    "errorContainer" in object ? $(object.errorContainer).children('.help-block').remove() : $(object.selector).parent().children('.help-block').remove()
+
+    if (!flag) {
+        for (let message of messages) {
+            let helpBlock = createElement("span", ['help-block'])
+            helpBlock.textContent = message
+
+            if ("errorContainer" in object) {
+                $(object.errorContainer).append(helpBlock)
+                $(object.errorContainer).addClass('has-error')
+            } else {
+                $(object.selector).parent().append(helpBlock)
+                $(object.selector).parent().addClass('has-error')
+            }
+        }
+    }
+
+    return flag
+}
+
+function validateObjects(objectList) {
+    // a list of objects to be validated
+    // each object must have the following attributes
+    // selector: a valid css selector for the input
+    // type: string representing the accepted data type for this attribute
+    // required: boolean 
+    // in: css selector for a datalist or select where this input's value must come from
+    // errorContainer: a css selector for where to append the error message, if not provided parent is used
+
+    let flag = true
+
+    for (let object of objectList) {
+        (validateObject(object)) == false ? flag = false : 1
+    }
+
+    return flag
+}
+
+function selectAllRows(tableSelector, select=true) {
+    $(`${tableSelector} tbody tr input.select-row`).prop(select)
+}

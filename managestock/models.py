@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext as _
 
+from manageusers.models import Structure
+
 class Equipment(models.Model):
     equipmentId = models.AutoField(primary_key=True)
     equipmentName = models.CharField(max_length=100, unique=True)
@@ -46,5 +48,28 @@ class StockEquipment(models.Model):
 
     def delete(self, *args, **kwargs):
         self.equipmentId.quantity -= self.quantity
+
+        return super().delete(*args, **kwargs)
+
+class Discharge(models.Model):
+    dischargeId = models.AutoField(primary_key=True)
+    structureId = models.ForeignKey(Structure, on_delete=models.PROTECT, related_name="discharges")
+    dateCreated = models.DateTimeField(auto_created=True)
+
+class EquipmentDischarged(models.Model):
+    equipmentDischargedId = models.AutoField(primary_key=True)
+    equipmentId = models.ForeignKey(Equipment, on_delete=models.CASCADE)
+    dischargeId = models.ForeignKey(Discharge, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    def save(self, *args, **kwargs):
+        self.equipmentId.quantity -= self.quantity
+        self.equipmentId.save()
+
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.equipmentId.quantity += self.quantity
+        self.equipmentId.save()
 
         return super().delete(*args, **kwargs)
