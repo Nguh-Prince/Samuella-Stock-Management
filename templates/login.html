@@ -1,0 +1,154 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+  <!-- Mirrored from demo.dashboardpack.com/analytic-html/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 13 Mar 2023 11:44:30 GMT -->
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Login</title>
+    <link rel="icon" href="{% static 'img/mini_logo.png' %}" type="image/png" />
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap1.min.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/themefy_icon/themify-icons.css' %}" />
+    <link rel="stylesheet" href="{% static 'vendors/font_awesome/css/all.min.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/scroll/scrollable.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'css/metisMenu.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/colors/default.css' %}" id="colorSkinCSS" />
+
+    <style>
+        #main {
+            background-color: #f5f2ea;
+            position: fixed;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        #form-container {
+            padding: 24px;
+            border-radius: 32px;
+        }
+        #logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            margin-top: 2rem;
+            margin-left: 2rem;
+        }
+
+        #logo img {
+            height: 48px;
+            width: 48px;
+            border-radius: 50%;
+            z-index: 200;
+        }
+        .btn-primary {
+            background-color: #bf6363;
+            border-color: #bf6363;
+        }
+
+        @media screen and (max-width: 768px) {
+            #logo {
+                display: none;
+            }
+            #form-container {
+                height: 100%;
+                width: 100%;
+                border-radius: 0;
+            }
+        }
+    </style>
+  </head>
+  <body class="crm_body_bg">
+    <div class="d-flex container-fluid justify-content-center align-items-center h-100" id="main">
+        <div class="col-md-6 my-4 bg-white" id="form-container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2>Login</h2>
+                </div>
+
+                <div class="col-md-12 text-center my-4">
+                    <h4>Enter your credentials to sign into your account</h4>
+                </div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="row my-4">
+                    <div class="mb-3">
+                        <label for="username" class="form-label f_w_500">Nom d'utilisateur</label>
+                        <input type="text" name="username" id="username" class="form-control" placeholder="Entrez un nom d'utilisateur">
+                    </div>
+                    
+                    <label for="password" class="form-label f_w_500">Mot de passe</label>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" id="password" class="form-control" placeholder="Mot de passe"
+                            aria-label="Password"
+                        >
+                        <div class="input-group-text">
+                            <span id="toggle-password-visibility">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row my-4">
+                    <a class="f_w_700">Having trouble signing in?</a>
+                </div>
+    
+                <div class="row my-4 justify-content-center">
+                    <button type="submit" class="btn btn-primary py-2">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="logo">
+        <img src="{% static 'img/cfc_logo.png' %}" alt="" srcset="">
+    </div>
+
+    <div id="messages" class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="alert text-white bg-danger" role="alert">
+                <div class="alert-text">
+                    A simple danger alert -- check it out
+                </div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            {% for error in errors %}
+            <div class="alert text-white danger">
+                <div class="alert-text">
+                    {{ error.message }}
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="js/jquery1-3.4.1.min.js"></script>
+
+    <script src="js/popper1.min.js"></script>
+
+    <script src="js/bootstrap1.min.js"></script>
+
+    <script src="js/metisMenu.js"></script>
+
+    <script src="vendors/scroll/perfect-scrollbar.min.js"></script>
+    <script src="vendors/scroll/scrollable-custom.js"></script>
+
+    <script src="js/custom.js"></script>
+  </body>
+
+  <!-- Mirrored from demo.dashboardpack.com/analytic-html/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 13 Mar 2023 11:44:30 GMT -->
+</html>

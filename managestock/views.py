@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from rest_framework import status, viewsets
@@ -8,7 +9,6 @@ from manageusers.models import Structure
 
 from . import models, serializers
 
-# Create your views here.
 def home(request):
     context = {
         'suppliers': models.Supplier.objects.all(),
