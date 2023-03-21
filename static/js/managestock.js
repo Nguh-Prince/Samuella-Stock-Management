@@ -656,6 +656,17 @@ $("#confirm-stock-deletion-yes").click(function() {
     }
 })
 
+$("#confirm-discharge-deletion-yes").click(function() {
+    try {
+        let dischargeId = parseInt($("#confirm-discharge-deletion-discharge-id").val())
+        dischargeDeleteButtonClick(dischargeId, false)
+
+        $("#confirm-discharge-deletion-modal-close").click()
+    } catch (error) {
+        throw error
+    }
+})
+
 function getNewEquipmentsFromForm() {
     // returns a list of equipments to be added based on the user's     input
     equipment = {
@@ -858,6 +869,39 @@ function stockDeleteButtonClick(stockId, displayModal=true) {
             },
             error: function(data) {
                 displayMessage("Le commande n'a pas ete supprime avec succes")
+            }
+        })
+    }
+}
+
+function dischargeDeleteButtonClick(dischargeId, displayModal=true) {
+    if (displayModal) {
+        // display modal to confirm deletion
+        $("#confirm-discharge-deletion-modal-open").click()
+        $("#confirm-discharge-deletion-discharge-id").val(dischargeId)
+    }
+    else {
+        // perform deletion
+        $.ajax({
+            type: "DELETE",
+            url: `/managestock/discharges/${dischargeId}/`,
+            headers: {
+                "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function(data) {
+                displayMessage("Le decharge a ete supprime avec succes", ["alert-success", "alert-dismissible"])
+    
+                state.discharges = state.discharges.filter( (item) => {
+                    return item.dischargeId != dischargeId
+                } )
+    
+                dischargesTable.clear()
+                dischargesTable.rows.add(state.discharges)
+                dischargesTable.draw()
+            },
+            error: function(data) {
+                displayMessage("Le decharge n'a pas ete supprime avec succes")
+                console.log(data.responseText)
             }
         })
     }
