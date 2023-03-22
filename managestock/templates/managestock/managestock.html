@@ -877,4 +877,43 @@
       </div>
       </div>
   </div>
+
+    <div
+  class="modal fade"
+  id="confirm-supplier-deletion-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLongTitle"
+  aria-hidden="true"
+  >
+      <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title" id="confirm-supplier-deletion-modal-title">Confirmer la suppression</h5>
+          <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+          >
+              <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+              <h2 class="text-danger">Êtes-vous sûr de bien vouloir supprimer ce decharge?</h2>
+          </div>
+          <input type="hidden" id="confirm-supplier-deletion-supplier-id">
+          <div class="modal-footer">
+              <input type="hidden" data-bs-dismiss="modal" id="confirm-supplier-deletion-modal-close">
+              
+              <input type="hidden" data-bs-toggle="modal" 
+              data-bs-target="#confirm-supplier-deletion-modal" 
+              id="confirm-supplier-deletion-modal-open">
+
+              <button type="button" id="confirm-supplier-deletion-no" class="btn btn-secondary">Non</button>
+              <button type="button" id="confirm-supplier-deletion-yes" class="btn btn-danger">Oui, je suis sur</button>
+          </div>
+      </div>
+      </div>
+  </div>
 {% endblock %}

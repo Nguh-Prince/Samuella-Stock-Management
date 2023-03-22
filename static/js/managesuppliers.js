@@ -27,7 +27,7 @@ var suppliersTable = $("#suppliers-table").DataTable({
                         return `<button class="btn text-primary" onclick=supplierEditButtonClick(${row['supplierId']}) data-supplier-id=${row['supplierId']}>
                                     <i class="fas fa-pen"></i>
                                 </button>
-                                <button class="btn mx-1 text-danger" data-supplier-id=${row['supplierId']}>
+                                <button class="btn mx-1 text-danger" onclick=supplierDeleteButtonClick(${row['supplierId']}) data-supplier-id=${row['supplierId']}>
                                     <i class="fas fa-trash"></i>
                                 </button>`
                     else 
@@ -128,6 +128,17 @@ $("#supplier-detail-save").click(function() {
     })
 })
 
+$("#confirm-supplier-deletion-yes").click(function() {
+    try {
+        let supplierId = parseInt( $("#confirm-supplier-deletion-supplier-id").val() )
+        supplierDeleteButtonClick(supplierId, false)
+
+        $("#confirm-supplier-deletion-modal-close").click()
+    } catch (error) {
+        throw error
+    }
+})
+
 /* ------------------------- END EVENT LISTENERS -------------------------  */
 
 function getNewSuppliersFromForm() {
@@ -157,5 +168,34 @@ function supplierEditButtonClick(supplierId) {
             displaySupplierDetailModal(supplierSelectedForEditing)
             break;
         }
+    }
+}
+
+function supplierDeleteButtonClick(supplierId, displayModal=true) {
+    if (displayModal) {
+        // display modal to confirm deletion
+        $("#confirm-supplier-deletion-modal-open").click()
+        $("#confirm-supplier-deletion-supplier-id").val(supplierId)
+    } else {
+        $.ajax({
+            type: "DELETE",
+            url: `/managestock/suppliers/${supplierId}/`,
+            headers: getCsrfTokenHeader(),
+            success: function(data) {
+                displayMessage("Le prestataire a ete supprime avec succes", ['alert-success', 'alert-dismissible'])
+
+                state.suppliers = state.suppliers.filter( (item) => {
+                    return item.supplierId != supplierId
+                } )
+
+                suppliersTable.clear()
+                suppliersTable.rows.add(state.suppliers)
+                suppliersTable.draw()
+            },
+            error: function(data) {
+                displayMessage("Un erreur est produite pendant la suppression du prestataire")
+                console.log(data.responseText)
+            }
+        })
     }
 }
