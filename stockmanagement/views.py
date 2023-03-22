@@ -4,6 +4,18 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+from rest_framework.response import Response
+
+from managestock.models import Discharge, Equipment
+from managestock.serializers import DischargeSerializer
+
+from manageusers.models import Structure
+
+from managepurchaseorder.models import PurchaseOrder
+from managepurchaseorder.serializers import PurchaseOrderSerializer
+
 @login_required
 def dashboard(request):
     return render(request, "dashboard.html")
@@ -45,3 +57,23 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("login")
+
+@login_required
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
+def statistics(request):
+    equipments = Equipment.objects.all()
+    departments = Structure.objects.all()
+    purchase_orders = PurchaseOrder.objects.all()
+    discharges = Discharge.objects.all()
+
+    stats_dictionary = {
+        "number_of_equipments": equipments.count(),
+        "number_of_departments": departments.count(),
+        "number_of_purchase_orders": purchase_orders.count(),
+        "number_of_discharges": discharges.count(),
+        "recent_discharges": DischargeSerializer(discharges.order_by("-dateCreated", "-dischargeId")[:5], many=True).data,
+        "recent_purchase_orders": PurchaseOrderSerializer(purchase_orders.order_by("-dateCreated", 'purchaseorderId'), many=True).data
+    }
+
+    return Response(data=stats_dictionary)

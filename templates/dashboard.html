@@ -4,6 +4,10 @@
 <!-- Mark the dashboard menu item as the active class -->
 {% block dashboard_classes %}active{% endblock %}
 
+{% block javascript %}
+    <script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}
+
 {% block page_content %}
     <div class="row">
     <div class="col-12">
@@ -12,40 +16,7 @@
         >
         <div class="page_title_left">
             <h3 class="f_s_25 f_w_700 dark_text">Tableau de bord</h3>
-            <!-- <ol class="breadcrumb page_bradcam mb-0">
-            <li class="breadcrumb-item">
-                <a href="javascript:void(0);">Home</a>
-            </li>
-            <li class="breadcrumb-item active">Analytic</li>
-            </ol> -->
         </div>
-        <!-- Uncomment if you have added date filtering methods -->
-        <!-- <div class="page_title_right">
-            <div class="page_date_button">
-            August 1, 2020 - August 31, 2020
-            </div>
-            <div class="dropdown common_bootstrap_button">
-            <span
-                class="dropdown-toggle"
-                id="dropdownMenuButton"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-            >
-                action
-            </span>
-            <div
-                class="dropdown-menu dropdown-menu-right"
-                aria-labelledby="dropdownMenuButton"
-            >
-                <a class="dropdown-item f_s_16 f_w_600" href="#">
-                Download</a
-                >
-                <a class="dropdown-item f_s_16 f_w_600" href="#">
-                Print</a
-                >
-            </div>
-            </div>
-        </div> -->
         </div>
     </div>
     </div>
@@ -63,21 +34,21 @@
               </div>
               <div class="media_card_body">
                 <div class="media_card_list">
-                  <div class="single_media_card">
+                  <div class="single_media_card" id="overview-1">
                     <span>Equipements</span>
-                    <h3>500</h3>
+                    <h3 id="overview-1-text">500</h3>
                   </div>
-                  <div class="single_media_card">
+                  <div class="single_media_card" id="overview-2">
                     <span>Departements</span>
-                    <h3>8</h3>
+                    <h3 id="overview-2-text">8</h3>
                   </div>
-                  <div class="single_media_card">
+                  <div class="single_media_card" id="overview-3">
                     <span>Commandes des structures</span>
-                    <h3>25</h3>
+                    <h3 id="overview-3-text">25</h3>
                   </div>
-                  <div class="single_media_card">
-                    <span>Prestataires</span>
-                    <h3>10</h3>
+                  <div class="single_media_card" id="overview-4">
+                    <span>Decharges</span>
+                    <h3 id="overview-4-text">5</h3>
                   </div>
                 </div>
               </div>
@@ -130,53 +101,7 @@
               </div>
               <div class="white_card_body">
                 <div class="Activity_timeline">
-                  <ul>
-                    <li>
-                      <div class="activity_bell"></div>
-                      <div class="timeLine_inner d-flex align-items-center">
-                        <div class="activity_wrap">
-                          <h6>IT, 5 min ago</h6>
-                          <p>
-                            5 keyboards, 2 mouses, 3 monitors
-                          </p>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="activity_bell"></div>
-                      <div class="timeLine_inner d-flex align-items-center">
-                        <div class="activity_wrap">
-                          <h6>HR, 1 day ago</h6>
-                          <p>
-                                3 monitors, 1 projector
-                          </p>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="activity_bell bell_lite"></div>
-                      <div class="timeLine_inner d-flex align-items-center">
-                        <div class="activity_wrap">
-                          <h6>Public Relations, 1 month ago</h6>
-                          <p>
-                                4 power cables, 2 staplers, 3 reams of paper
-                          </p>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="activity_bell bell_lite"></div>
-                      <div class="timeLine_inner d-flex align-items-center">
-                        <div class="activity_wrap">
-                          <h6>Marketing, 2 months ago</h6>
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Quisque scelerisque
-                          </p>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
+                  <ul id="recent-discharges-list"></ul>
                 </div>
               </div>
             </div>
@@ -192,138 +117,7 @@
                 </div>
               </div>
               <div class="white_card_body QA_section">
-                <div class="todo_wrapper">
-                  <div
-                    class="single_todo d-flex justify-content-between align-items-center"
-                  >
-                    <div class="lodo_left d-flex align-items-center">
-                      <div class="bar_line mr_10"></div>
-                      <div class="todo_box">
-                        <label
-                          class="form-label primary_checkbox d-flex mr_10"
-                        >
-                          <input type="checkbox" />
-                          <span class="checkmark"></span>
-                        </label>
-                      </div>
-                      <div class="todo_head">
-                        <h5 class="f_s_18 f_w_900 mb-0">
-                            5 keyboards, 2 mouses, 1 projector
-                        </h5>
-                        <p class="f_s_12 f_w_400 mb-0 text_color_8">
-                          HR, 1 week ago
-                        </p>
-                      </div>
-                    </div>
-                    <div class="lodo_right">
-                      <a href="#" class="badge_complete">Complete</a>
-                    </div>
-                  </div>
-                  <div
-                    class="single_todo d-flex justify-content-between align-items-center"
-                  >
-                    <div class="lodo_left d-flex align-items-center">
-                      <div class="bar_line red_line mr_10"></div>
-                      <div class="todo_box">
-                        <label
-                          class="form-label primary_checkbox d-flex mr_10"
-                        >
-                          <input type="checkbox" />
-                          <span class="checkmark red_check"></span>
-                        </label>
-                      </div>
-                      <div class="todo_head">
-                        <h5 class="f_s_18 f_w_900 mb-0">
-                          HR
-                        </h5>
-                        <p class="f_s_12 f_w_400 mb-0 text_color_8">
-                          Due 5 Days
-                        </p>
-                      </div>
-                    </div>
-                    <div class="lodo_right">
-                      <a href="#" class="mark_complete">Mark as completed</a>
-                    </div>
-                  </div>
-                  <div
-                    class="single_todo d-flex justify-content-between align-items-center"
-                  >
-                    <div class="lodo_left d-flex align-items-center">
-                      <div class="bar_line red_line mr_10"></div>
-                      <div class="todo_box">
-                        <label
-                          class="form-label primary_checkbox d-flex mr_10"
-                        >
-                          <input type="checkbox" />
-                          <span class="checkmark red_check"></span>
-                        </label>
-                      </div>
-                      <div class="todo_head">
-                        <h5 class="f_s_18 f_w_900 mb-0">
-                          Assign market analysis
-                        </h5>
-                        <p class="f_s_12 f_w_400 mb-0 text_color_8">
-                          Due 5 Days
-                        </p>
-                      </div>
-                    </div>
-                    <div class="lodo_right">
-                      <a href="#" class="mark_complete">Mark as completed</a>
-                    </div>
-                  </div>
-                  <div
-                    class="single_todo d-flex justify-content-between align-items-center"
-                  >
-                    <div class="lodo_left d-flex align-items-center">
-                      <div class="bar_line mr_10"></div>
-                      <div class="todo_box">
-                        <label
-                          class="form-label primary_checkbox d-flex mr_10"
-                        >
-                          <input type="checkbox" />
-                          <span class="checkmark"></span>
-                        </label>
-                      </div>
-                      <div class="todo_head">
-                        <h5 class="f_s_18 f_w_900 mb-0">
-                          Assign market analysis
-                        </h5>
-                        <p class="f_s_12 f_w_400 mb-0 text_color_8">
-                          Due 5 Days
-                        </p>
-                      </div>
-                    </div>
-                    <div class="lodo_right">
-                      <a href="#" class="badge_complete">Complete</a>
-                    </div>
-                  </div>
-                  <div
-                    class="single_todo d-flex justify-content-between align-items-center"
-                  >
-                    <div class="lodo_left d-flex align-items-center">
-                      <div class="bar_line mr_10"></div>
-                      <div class="todo_box">
-                        <label
-                          class="form-label primary_checkbox d-flex mr_10"
-                        >
-                          <input type="checkbox" />
-                          <span class="checkmark"></span>
-                        </label>
-                      </div>
-                      <div class="todo_head">
-                        <h5 class="f_s_18 f_w_900 mb-0">
-                          Assign market analysis
-                        </h5>
-                        <p class="f_s_12 f_w_400 mb-0 text_color_8">
-                          Due 5 Days
-                        </p>
-                      </div>
-                    </div>
-                    <div class="lodo_right">
-                      <a href="#" class="badge_complete">Complete</a>
-                    </div>
-                  </div>
-                </div>
+                <div class="todo_wrapper" id="recent-purchase-orders"></div>
               </div>
             </div>
         </div>
