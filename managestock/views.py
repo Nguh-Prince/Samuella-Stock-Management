@@ -9,6 +9,7 @@ from manageusers.models import Structure
 
 from . import models, serializers
 
+@login_required
 def home(request):
     context = {
         'suppliers': models.Supplier.objects.all(),

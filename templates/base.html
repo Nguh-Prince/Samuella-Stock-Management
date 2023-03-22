@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
-  <!-- Mirrored from demo.dashboardpack.com/analytic-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 13 Mar 2023 11:44:26 GMT -->
   <head>
     <meta charset="utf-8" />
     <meta
@@ -203,26 +202,6 @@
               >
                 <div class="header_notification_warp d-flex align-items-center">
                   <li>
-                    <div class="serach_button">
-                      <i class="ti-search"></i>
-                      <div class="serach_field-area d-flex align-items-center">
-                        <div class="search_inner">
-                          <form action="#">
-                            <div class="search_field">
-                              <input type="text" placeholder="Search here..." />
-                            </div>
-                            <button class="close_search">
-                              <i class="ti-search"></i>
-                            </button>
-                          </form>
-                        </div>
-                        <span class="f_s_14 f_w_400 ml_25 white_text text_white"
-                          >Apps</span
-                        >
-                      </div>
-                    </div>
-                  </li>
-                  <li>
                     <a class="bell_notification_clicker" href="#">
                       <img src="{% static 'img/icon/bell.svg' %}" alt="" />
                       <span>2</span>
@@ -305,13 +284,13 @@
                   <img src="img/client_img.png" alt="#" />
                   <div class="profile_info_iner">
                     <div class="profile_author_name">
-                      <p>Neurologist</p>
-                      <h5>Dr. Robar Smith</h5>
+                      <p>Stock manager</p>
+                      <h5>{{request.user.username}}</h5>
                     </div>
                     <div class="profile_info_details">
-                      <a href="#">My Profile </a>
-                      <a href="#">Settings</a>
-                      <a href="#">Log Out </a>
+                      <!-- <a href="#">My Profile </a>
+                      <a href="#">Settings</a> -->
+                      <a href="{% url 'logout' %}">Log Out </a>
                     </div>
                   </div>
                 </div>

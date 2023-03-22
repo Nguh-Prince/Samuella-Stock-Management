@@ -17,6 +17,8 @@ stock_routes = router.register("stocks", views.StockViewSet, basename="stocks")
 
 discharge_routes = router.register("discharges", views.DischargeViewSet, basename="discharges")
 
+supplier_routes = router.register("suppliers", views.SupplierViewSet, basename="suppliers")
+
 app_name = "managestock"
 
 urlpatterns=[

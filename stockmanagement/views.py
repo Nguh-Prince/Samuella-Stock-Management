@@ -1,8 +1,10 @@
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 
+@login_required
 def dashboard(request):
     return render(request, "dashboard.html")
 
@@ -38,3 +40,8 @@ def login_view(request):
             return render(request, "login.html", context=context)
         
     return render(request, "login.html")
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect("login")
