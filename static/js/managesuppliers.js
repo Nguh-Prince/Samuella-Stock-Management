@@ -85,7 +85,7 @@ $("#new-supplier-save").click( function() {
     })
 } )
 
-$("#supplier-detail-modify").click(function() {
+$("#supplier-detail-save").click(function() {
     let formData = {
         supplierName: $("#supplier-detail-name").val(),
         supplierLocation: $("#supplier-detail-location").val(),
@@ -94,7 +94,7 @@ $("#supplier-detail-modify").click(function() {
 
     $.ajax({
         type: "PATCH",
-        url: `/managestock/suppliers/${supplierSelectedForEditing}/`,
+        url: `/managestock/suppliers/${supplierSelectedForEditing.supplierId}/`,
         data: JSON.stringify(formData),
         contentType: "application/json",
         headers: getCsrfTokenHeader(),
@@ -138,4 +138,24 @@ function getNewSuppliersFromForm() {
     }   
 
     return [supplier]
+}
+
+function displaySupplierDetailModal(supplier=supplierSelectedForEditing) {
+    $("#supplier-detail-modal-title").text(`${supplier.supplierName}, ${supplier.supplierLocation}`)
+
+    $("#supplier-detail-name").val(supplier.supplierName)
+    $("#supplier-detail-location").val(supplier.supplierLocation)
+    $("#supplier-detail-description").val(supplier.supplierDescription)
+
+    $("#supplier-detail-modal-open").click()
+}
+
+function supplierEditButtonClick(supplierId) {
+    for (let supplier of state.suppliers) {
+        if (supplier.supplierId == supplierId && supplier.supplierId !== null) {
+            supplierSelectedForEditing = supplier
+            displaySupplierDetailModal(supplierSelectedForEditing)
+            break;
+        }
+    }
 }

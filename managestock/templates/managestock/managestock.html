@@ -726,6 +726,80 @@
         </div>
     </div>
 
+    <div
+    class="modal fade"
+    id="supplier-detail-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <input type="hidden" id="supplier-detail-modal-open" 
+        data-bs-target="#supplier-detail-modal" data-bs-toggle="modal">
+
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="supplier-detail-modal-title"></h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                      <label class="form-label" for="supplier-detail-name"
+                        >Nom</label
+                      >
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="supplier-detail-name"
+                        aria-describedby="emailHelp"
+                        placeholder="par ex. Fanta et fils"
+                      />
+                      <small id="emailHelp" class="form-text text-muted"
+                        ></small
+                      >
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label" for="supplier-detail-location"
+                        >Location</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="supplier-detail-location"
+                        placeholder="par ex. Nsimeyong, Yaounde"
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label" for="supplier-detail-location"
+                        >Description</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="supplier-detail-location"
+                        placeholder="par ex. ordinateurs et appareils electronique"
+                      />
+                    </div>
+                  </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="supplier-detail-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" id="supplier-detail-save" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
   <div
   class="modal fade"
   id="confirm-stock-deletion-modal"
