@@ -8,6 +8,20 @@
     <script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}
 
+{% block styles %}
+<style>
+  .social_media_card {
+    background-color: #fea402;
+  }
+  .Activity_timeline ul li .activity_wrap h6 {
+    color: var(--accent-color);
+  } 
+  .Activity_timeline ul li .activity_bell {
+    background-color: var(--accent-color);
+  }
+</style>
+{% endblock %}
+
 {% block page_content %}
     <div class="row">
     <div class="col-12">
@@ -30,7 +44,7 @@
                 </div>
               </div>
               <div class="media_thumb ml_25">
-                <img src="{% static 'img/media.svg' %}" alt="" />
+                <!-- <img src="{% static 'img/media.svg' %}" alt="" /> -->
               </div>
               <div class="media_card_body">
                 <div class="media_card_list">

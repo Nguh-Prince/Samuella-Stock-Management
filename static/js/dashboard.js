@@ -32,7 +32,7 @@ function populateStatistics() {
     $("#overview-1-text").text(statistics['number_of_equipments'])
     $("#overview-2-text").text(statistics['number_of_departments'])
     $("#overview-3-text").text(statistics['number_of_purchase_orders'])
-    $("#overview-2-text").text(statistics['number_of_discharges'])
+    $("#overview-4-text").text(statistics['number_of_discharges'])
 
     for ( let discharge of statistics['recent_discharges'] ) {
         let timeHeader = createElement('h6')

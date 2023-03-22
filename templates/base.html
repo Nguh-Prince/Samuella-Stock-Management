@@ -60,12 +60,28 @@
     </script>
 
     <style>
+      :root {
+        /* --accent-color: #fea402; */
+        --accent-color: #bf6363;
+        --menu-active-color: #bf6363;
+      }
+
       #messages {
         width: 100%;
         z-index: 5000;
       }
       .btn-primary {
-        background-color: #bf6363;
+        background-color: var(--accent-color);
+      }
+      .sidebar #sidebar_menu > li a.active {
+        color: var(--menu-active-color);
+      }
+      .sidebar #sidebar_menu > li a:hover {
+        color: var(--menu-active-color) !important;
+      }
+      .btn_1, .btn_1:hover, .btn_1:active {
+        background-color: var(--accent-color) !important;
+        border-color: var(--accent-color);
       }
     </style>
 
@@ -281,10 +297,10 @@
                   </li>
                 </div>
                 <div class="profile_info">
-                  <img src="img/client_img.png" alt="#" />
+                  <img src="{% static 'img/blank-profile-picture.png' %}" alt="#" />
                   <div class="profile_info_iner">
                     <div class="profile_author_name">
-                      <p>Stock manager</p>
+                      <p>User</p>
                       <h5>{{request.user.username}}</h5>
                     </div>
                     <div class="profile_info_details">
