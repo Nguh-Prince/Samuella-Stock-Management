@@ -63,6 +63,7 @@
       :root {
         /* --accent-color: #fea402; */
         --accent-color: #bf6363;
+        --highlight-color: #970000;
         --menu-active-color: #bf6363;
         --link-color: #bf6363;
         --light-background: #f5f2ea;
@@ -75,6 +76,11 @@
       }
       .btn-primary {
         background-color: var(--accent-color);
+        border-color: var(--accent-color);
+      }
+      .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+        background-color: var(--highlight-color);
+        border-color: var(--highlight-color);
       }
       .sidebar #sidebar_menu > li a.active {
         color: var(--menu-active-color);
@@ -85,9 +91,12 @@
       .sidebar .logo {
         background: var(--white);
       }
-      .btn_1, .btn_1:hover, .btn_1:active, .btn_1:active:focus {
+      .btn_1 {
         background-color: var(--accent-color) !important;
         border-color: var(--accent-color);
+      }
+      .btn_1:hover, .btn_1:active, .btn_1:active:focus {
+        background-color: var(--highlight-color) !important;
       }
 
       .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
@@ -391,6 +400,15 @@
 
       $(".sidebar_close_icon").click(function() {
         $('.sidebar').removeClass('active_sidebar')
+      })
+
+      $(".select-all-rows").change(function() {
+          let checked = $(this).prop('checked')
+          console.log(`Select all rows changed, checked: ${checked}`)
+
+          let table = this.parentNode.parentNode.parentNode.parentNode
+
+          $(table).find('tbody tr input.select-row').prop('checked', checked)
       })
     </script>
     {% block javascript %}{% endblock %}

@@ -57,6 +57,17 @@ class DischargeViewSet(viewsets.ModelViewSet):
 
         return super().destroy(request, *args, **kwargs)
 
-class SupplierViewSet(viewsets.ModelViewSet):
+class SupplierViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
+    serializer_classes = {
+        'create': serializers.AddSuppliersSerializer
+    }
     serializer_class = serializers.SupplierSerializer
     queryset = models.Supplier.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, *args, **kwargs)
+        serializer.is_valid(raise_exception=True)
+
+        suppliers = serializer.create(serializer.validated_data)
+
+        return Response(data=self.serializer_class(suppliers, many=True).data, status=status.HTTP_201_CREATED)

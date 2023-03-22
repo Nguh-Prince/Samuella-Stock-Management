@@ -48,6 +48,18 @@ class SupplierSerializer(serializers.ModelSerializer):
         model = models.Supplier
         fields = "__all__"
 
+class AddSuppliersSerializer(serializers.Serializer):
+    data = serializers.ListField(child=SupplierSerializer())
+
+    def create(self, validated_data):
+        serializer = SupplierSerializer(data=validated_data['data'], many=True)
+
+        serializer.is_valid(raise_exception=True)
+
+        suppliers = serializer.create(serializer.validated_data)
+
+        return suppliers
+
 class StockSerializer(serializers.ModelSerializer):
     class StockEquipmentSerializer(serializers.ModelSerializer):
         equipmentId = StockEquipmentEquipmentSerializer()

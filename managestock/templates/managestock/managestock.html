@@ -57,6 +57,17 @@
       >Ajouter un decharge</a
     >
   </div>
+
+  <div class="add_button ms-2">
+    <a
+      href="#"
+      data-bs-toggle="modal"
+      data-bs-target="#new-supplier-modal"
+      class="btn_1"
+      id="new-supplier-modal-toggle"
+      >Ajouter un prestataire</a
+    >
+  </div>
 </div>
 
 <div class="row py-3">
@@ -639,6 +650,77 @@
             <div class="modal-footer">
                 <button type="button" id="discharge-detail-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                 <button type="button" id="discharge-detail-save" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div
+    class="modal fade"
+    id="new-supplier-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Nouveau prestataire</h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                      <label class="form-label" for="new-supplier-name"
+                        >Nom</label
+                      >
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="new-supplier-name"
+                        aria-describedby="emailHelp"
+                        placeholder="par ex. Fanta et fils"
+                      />
+                      <small id="emailHelp" class="form-text text-muted"
+                        ></small
+                      >
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label" for="new-supplier-location"
+                        >Location</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="new-supplier-location"
+                        placeholder="par ex. Nsimeyong, Yaounde"
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label" for="new-supplier-location"
+                        >Description</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="new-supplier-location"
+                        placeholder="par ex. ordinateurs et appareils electronique"
+                      />
+                    </div>
+                  </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="new-supplier-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" id="new-supplier-save" class="btn btn-primary">Enregistrer</button>
             </div>
         </div>
         </div>

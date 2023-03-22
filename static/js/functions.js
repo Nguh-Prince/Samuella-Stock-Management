@@ -262,3 +262,9 @@ const getEmptyEquipments = function(number, object={equipmentName: "", quantity:
 
     return list
 }
+
+function getCsrfTokenHeader() {
+    return {
+        "X-CSRFTOKEN": getCookie("csrftoken")
+    }
+}
