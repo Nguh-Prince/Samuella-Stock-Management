@@ -34,12 +34,12 @@ var equipmentsTable = $("#equipments-table").DataTable({
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     if (row['equipmentId'] !== null) 
-                        return `<button class="btn text-primary" onclick=equipmentEditButtonClick(${row['equipmentId']}) data-equipment-id=${row['equipmentId']}>
+                        return `<div class="row"><button class="btn text-primary" onclick=equipmentEditButtonClick(${row['equipmentId']}) data-equipment-id=${row['equipmentId']}>
                                     <i class="fas fa-pen"></i>
                                 </button>
                                 <button class="btn mx-1 text-danger" data-equipment-id=${row['equipmentId']}>
                                     <i class="fas fa-trash"></i>
-                                </button>`
+                                </button></div>`
                     else 
                         return '---'
                 }
@@ -440,16 +440,6 @@ $("#equipment-detail-modify").click(function() {
     }
 })
 
-const getEmptyEquipments = function(number, object={equipmentName: "", quantity: 1}) {
-    let list = []
-
-    for (let i=0; i<number; i++) {
-        list.push(object)
-    }
-
-    return list
-}
-
 $("#add-rows-to-new-entry-table").click(function() {
     try {
         let numberOfRows = parseInt($("#number-of-rows-to-add-to-new-entry-table").val())
@@ -665,6 +655,15 @@ $("#confirm-discharge-deletion-yes").click(function() {
     } catch (error) {
         throw error
     }
+})
+
+$(".select-all-rows").change(function() {
+    let checked = $(this).prop('checked')
+    console.log(`Select all rows changed, checked: ${checked}`)
+
+    let table = this.parentNode.parentNode.parentNode.parentNode
+
+    $(table).find('tbody tr input.select-row').prop('checked', checked)
 })
 
 function getNewEquipmentsFromForm() {

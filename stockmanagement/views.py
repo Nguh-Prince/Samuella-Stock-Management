@@ -40,6 +40,8 @@ def login_view(request):
 
             login(request, user)
 
+            if 'next' in request.GET:
+                return redirect(request.GET['next'])
             return redirect("dashboard")
 
         except User.DoesNotExist as e:

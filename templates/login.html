@@ -10,7 +10,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <title>Login</title>
-    <link rel="icon" href="{% static 'img/mini_logo.png' %}" type="image/png" />
+    <link rel="icon" href="{% static 'img/mini_cfc_logo.png' %}" type="image/png" />
 
     <link rel="stylesheet" href="{% static 'css/bootstrap1.min.css' %}" />
 
@@ -25,6 +25,10 @@
     <link rel="stylesheet" href="{% static 'css/colors/default.css' %}" id="colorSkinCSS" />
 
     <style>
+        :root {
+            --accent-color: #bf6363;
+            --light-background: #f5f2ea;
+        }
         #main {
             background-color: #f5f2ea;
             position: fixed;
@@ -50,9 +54,9 @@
             border-radius: 50%;
             z-index: 200;
         }
-        .btn-primary {
-            background-color: #bf6363;
-            border-color: #bf6363;
+        .btn-primary, .btn-primary:hover, .btn-primary:active {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
         @media screen and (max-width: 768px) {

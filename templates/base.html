@@ -8,7 +8,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <title>{% block page_title %}CFC Stock Mgt | Dashboard{% endblock %}</title>
-    <link rel="icon" href="img/mini_logo.png" type="image/png" />
+    <link rel="icon" href="{% static 'img/mini_cfc_logo.png' %}" type="image/png" />
 
     <link rel="stylesheet" href="{% static 'css/bootstrap1.min.css' %}" />
 
@@ -64,6 +64,9 @@
         /* --accent-color: #fea402; */
         --accent-color: #bf6363;
         --menu-active-color: #bf6363;
+        --link-color: #bf6363;
+        --light-background: #f5f2ea;
+        --white: white;
       }
 
       #messages {
@@ -79,9 +82,20 @@
       .sidebar #sidebar_menu > li a:hover {
         color: var(--menu-active-color) !important;
       }
-      .btn_1, .btn_1:hover, .btn_1:active {
+      .sidebar .logo {
+        background: var(--white);
+      }
+      .btn_1, .btn_1:hover, .btn_1:active, .btn_1:active:focus {
         background-color: var(--accent-color) !important;
         border-color: var(--accent-color);
+      }
+
+      .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        background-color: var(--accent-color) !important;
+      }
+
+      .nav-link, .nav-link:hover, .nav-link:focus, .nav-link:active {
+        color: var(--link-color);
       }
     </style>
 
@@ -92,13 +106,13 @@
     </div>
 
     <nav class="sidebar">
-      <div class="logo d-flex justify-content-between">
-        <!-- <a class="large_logo" href="index-2.html"
-          ><img src="img/logo.png" alt=""
+      <div class="logo d-flex justify-content-center">
+        <a class="large_logo" href="{% url 'dashboard' %}"
+          ><img src="{% static 'img/cfc_logo.png' %}" alt=""
         /></a>
-        <a class="small_logo" href="index-2.html"
-          ><img src="img/mini_logo.png" alt=""
-        /></a> -->
+        <a class="small_logo" href="{% url 'dashboard' %}"
+          ><img src="{% static 'img/mini_cfc_logo.png' %}" alt=""
+        /></a>
         <div class="sidebar_close_icon d-lg-none">
           <i class="ti-close"></i>
         </div>
@@ -368,6 +382,16 @@
     <script>
       updateCurrentDateAndTimeInputs()
       setInterval( updateCurrentDateAndTimeInputs, 60000 )
+
+      $('.sidebar_icon').click(function() {
+        console.log("Clicked sidebar icon")
+
+        $('.sidebar').addClass('active_sidebar')
+      })
+
+      $(".sidebar_close_icon").click(function() {
+        $('.sidebar').removeClass('active_sidebar')
+      })
     </script>
     {% block javascript %}{% endblock %}
   </body>

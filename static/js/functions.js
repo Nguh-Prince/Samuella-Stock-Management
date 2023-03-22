@@ -250,5 +250,15 @@ function validateObjects(objectList) {
 }
 
 function selectAllRows(tableSelector, select=true) {
-    $(`${tableSelector} tbody tr input.select-row`).prop(select)
+    $(`${tableSelector} tbody tr input.select-row`).prop('checked', select)
+}
+
+const getEmptyEquipments = function(number, object={equipmentName: "", quantity: 1}) {
+    let list = []
+
+    for (let i=0; i<number; i++) {
+        list.push(object)
+    }
+
+    return list
 }

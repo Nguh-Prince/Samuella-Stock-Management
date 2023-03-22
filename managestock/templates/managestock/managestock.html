@@ -15,6 +15,7 @@
 {% block javascript %}
     <script src="{% static 'js/managestock.js' %}"></script>
     <script src="{% static 'js/managesuppliers.js' %}"></script>
+    <script src="{% static 'js/manageentries.js' %}"></script>
 {% endblock %}
 
 {% block page_content %}
@@ -29,7 +30,7 @@
     <a
       href="#"
       data-bs-toggle="modal"
-      data-bs-targe4t="#new-equipment-modal"
+      data-bs-target="#new-equipment-modal"
       class="btn_1"
       >Ajouter un equipement</a
     >
@@ -97,74 +98,13 @@
                 <table id="equipments-table" class="table table-striped lms_table_active">
                   <thead>
                     <tr>
-                      <th scope="col"><input type="checkbox"></th>
+                      <th scope="col"><input class="select-all-rows" type="checkbox"></th>
                       <th scope="col">Name</th>
                       <th scope="col">Quantity left</th>
                       <th scope="col"></th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">
-                        <input type="checkbox" name="" id="">
-                      </th>
-                      <td>Keyboard</td>
-                      <td>20</td>
-                      <td>
-                          <button class="btn text-primary">
-                              <i class="fas fa-pen"></i>
-                          </button>
-                          <button class="btn mx-1 text-danger">
-                              <i class="fas fa-trash"></i>
-                          </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">
-                        <input type="checkbox" name="" id="">
-                      </th>
-                      <td>Mouse</td>
-                      <td>20</td>
-                      <td>
-                          <button class="btn text-primary">
-                              <i class="fas fa-pen"></i>
-                          </button>
-                          <button class="btn mx-1 text-danger">
-                              <i class="fas fa-trash"></i>
-                          </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">
-                        <input type="checkbox" name="" id="">
-                      </th>
-                      <td>Monitor</td>
-                      <td>20</td>
-                      <td>
-                          <button class="btn text-primary">
-                              <i class="fas fa-pen"></i>
-                          </button>
-                          <button class="btn mx-1 text-danger">
-                              <i class="fas fa-trash"></i>
-                          </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">
-                        <input type="checkbox" name="" id="">
-                      </th>
-                      <td>Power cable</td>
-                      <td>20</td>
-                      <td>
-                          <button class="btn text-primary">
-                              <i class="fas fa-pen"></i>
-                          </button>
-                          <button class="btn mx-1 text-danger">
-                              <i class="fas fa-trash"></i>
-                          </button>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <tbody></tbody>
                 </table>
               </div>
             </div>
@@ -192,7 +132,7 @@
                 <table id="entries-table" class="table table-striped lms_table_active">
                   <thead>
                     <tr>
-                      <th scope="col"><input type="checkbox"></th>
+                      <th scope="col"><input class="select-all-rows" type="checkbox"></th>
                       <th scope="col">Prestataire</th>
                       <th scope="col">Date entrees</th>
                       <th scope="col">Equipements</th>
@@ -227,7 +167,7 @@
                 <table id="discharges-table" class="table table-striped lms_table_active">
                   <thead>
                     <tr>
-                      <th scope="col"><input type="checkbox"></th>
+                      <th scope="col"><input class="select-all-rows" type="checkbox"></th>
                       <th scope="col">Structure</th>
                       <th scope="col">Date sortie</th>
                       <th scope="col">Equipements</th>
@@ -262,7 +202,7 @@
                 <table id="suppliers-table" class="table table-striped lms_table_active">
                   <thead>
                     <tr>
-                      <th scope="col"><input type="checkbox"></th>
+                      <th scope="col"><input class="select-all-rows" type="checkbox"></th>
                       <th scope="col">Nom</th>
                       <th scope="col">Location</th>
                       <th scope="col"></th>
