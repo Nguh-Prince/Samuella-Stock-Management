@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}CFC Stock | Prestataires{% endblock %}
+
+{% block gestion_des_prestataires_classes %}active{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap5.min.css' %}">
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap5.min.js' %}"></script>
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/managesuppliers.js' %}"></script>
+{% endblock %}
+
+{% block page_content %}
+<div class="box_right d-flex lms_block justify-content-end my-3">
+    <div class="add_button ms-2">
+        <a
+          href="#"
+          data-bs-toggle="modal"
+          data-bs-target="#new-supplier-modal"
+          class="btn_1"
+          id="new-supplier-modal-toggle"
+          >Ajouter un prestataire</a
+        >
+      </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+      <div class="white_card card_height_100 mb_30">
+        <div class="white_card_header">
+          <div class="box_header m-0">
+            <div class="main-title">
+              <h3 class="m-0">Prestataires</h3>
+            </div>
+          </div>
+        </div>
+        <div class="white_card_body">
+          <div class="QA_section">
+            <div class="QA_table mb_30">
+              <table id="suppliers-table" class="table table-striped lms_table_active">
+                <thead>
+                  <tr>
+                    <th scope="col"><input class="select-all-rows" type="checkbox"></th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Location</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modals %}
+<div
+class="modal fade"
+id="new-supplier-modal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="exampleModalLongTitle"
+aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Nouveau prestataire</h5>
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="mb-3">
+                  <label class="form-label" for="new-supplier-name"
+                    >Nom</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="new-supplier-name"
+                    aria-describedby="emailHelp"
+                    placeholder="par ex. Fanta et fils"
+                  />
+                  <small id="emailHelp" class="form-text text-muted"
+                    ></small
+                  >
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="new-supplier-location"
+                    >Location</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="new-supplier-location"
+                    placeholder="par ex. Nsimeyong, Yaounde"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label" for="new-supplier-location"
+                    >Description</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="new-supplier-location"
+                    placeholder="par ex. ordinateurs et appareils electronique"
+                  />
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="new-supplier-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            <button type="button" id="new-supplier-save" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div
+class="modal fade"
+id="supplier-detail-modal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="exampleModalLongTitle"
+aria-hidden="true"
+>
+    <input type="hidden" id="supplier-detail-modal-open" 
+    data-bs-target="#supplier-detail-modal" data-bs-toggle="modal">
+
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="supplier-detail-modal-title"></h5>
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="mb-3">
+                  <label class="form-label" for="supplier-detail-name"
+                    >Nom</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="supplier-detail-name"
+                    aria-describedby="emailHelp"
+                    placeholder="par ex. Fanta et fils"
+                  />
+                  <small id="emailHelp" class="form-text text-muted"
+                    ></small
+                  >
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="supplier-detail-location"
+                    >Location</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="supplier-detail-location"
+                    placeholder="par ex. Nsimeyong, Yaounde"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label" for="supplier-detail-location"
+                    >Description</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="supplier-detail-location"
+                    placeholder="par ex. ordinateurs et appareils electronique"
+                  />
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="supplier-detail-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            <button type="button" id="supplier-detail-save" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div
+class="modal fade"
+id="confirm-supplier-deletion-modal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="exampleModalLongTitle"
+aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="confirm-supplier-deletion-modal-title">Confirmer la suppression</h5>
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <h2 class="text-danger">Êtes-vous sûr de bien vouloir supprimer ce decharge?</h2>
+        </div>
+        <input type="hidden" id="confirm-supplier-deletion-supplier-id">
+        <div class="modal-footer">
+            <input type="hidden" data-bs-dismiss="modal" id="confirm-supplier-deletion-modal-close">
+            
+            <input type="hidden" data-bs-toggle="modal" 
+            data-bs-target="#confirm-supplier-deletion-modal" 
+            id="confirm-supplier-deletion-modal-open">
+
+            <button type="button" id="confirm-supplier-deletion-no" class="btn btn-secondary">Non</button>
+            <button type="button" id="confirm-supplier-deletion-yes" class="btn btn-danger">Oui, je suis sur</button>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

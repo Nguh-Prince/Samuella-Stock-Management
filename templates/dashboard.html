@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% load static %}
+<!-- Mark the dashboard menu item as the active class -->
+{% block dashboard_classes %}active{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}
+
+{% block styles %}
+<style>
+  .social_media_card {
+    background-color: #fea402;
+  }
+  .Activity_timeline ul li .activity_wrap h6 {
+    color: var(--accent-color);
+  } 
+  .Activity_timeline ul li .activity_bell {
+    background-color: var(--accent-color);
+  }
+</style>
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+    <div class="col-12">
+        <div
+        class="page_title_box d-flex flex-wrap align-items-center justify-content-between"
+        >
+        <div class="page_title_left">
+            <h3 class="f_s_25 f_w_700 dark_text">Tableau de bord</h3>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="white_card card_height_100 mb_30 social_media_card">
+              <div class="white_card_header">
+                <div class="main-title">
+                  <h3 class="m-0">Overview</h3>
+                </div>
+              </div>
+              <div class="media_thumb ml_25">
+                <!-- <img src="{% static 'img/media.svg' %}" alt="" /> -->
+              </div>
+              <div class="media_card_body">
+                <div class="media_card_list">
+                  <div class="single_media_card" id="overview-1">
+                    <span>Equipements</span>
+                    <h3 id="overview-1-text">500</h3>
+                  </div>
+                  <div class="single_media_card" id="overview-2">
+                    <span>Departements</span>
+                    <h3 id="overview-2-text">8</h3>
+                  </div>
+                  <div class="single_media_card" id="overview-3">
+                    <span>Commandes des structures</span>
+                    <h3 id="overview-3-text">25</h3>
+                  </div>
+                  <div class="single_media_card" id="overview-4">
+                    <span>Decharges</span>
+                    <h3 id="overview-4-text">5</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12">
+        <div class="white_card mb_30 card_height_100">
+            <div class="white_card_header">
+            <div class="box_header m-0">
+                <div class="main-title">
+                <h3 class="m-0">Flux</h3>
+                </div>
+                <div
+                class="float-lg-right float-none common_tab_btn2 justify-content-end"
+                >
+                <ul class="nav align-items-center">
+                  <li class="nav-item">
+                    <select class="form-select" name="select-equipments" id="select-equipments" multiple>
+                      <option value="">All</option>
+                      {% for equipment in equipments %}
+                      <option value="{{ equipment.equipmentId }}">{{ equipment.equipmentName }}</option>
+                      {% endfor %}
+                    </select>
+                  </li>
+
+                  <!-- <li class="nav-item mx-2">
+                    <button class="btn btn-primary">Show</button>
+                  </li> -->
+                </ul>
+                <!-- Uncomment this if you have found a method to filter the dashboard based on time intervals -->
+                <!-- <ul class="nav">
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">Month</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link active" href="#">Week</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">Day</a>
+                    </li>
+                </ul> -->
+                </div>
+            </div>
+            </div>
+            <div class="white_card_body">
+            <div id="marketchart">
+              <canvas id="chart-1"></canvas>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-7">
+            <div class="white_card card_height_100 mb_30">
+              <div class="white_card_header">
+                <div class="box_header m-0">
+                  <div class="main-title">
+                    <h3 class="m-0">Recent Discharges</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="white_card_body">
+                <div class="Activity_timeline">
+                  <ul id="recent-discharges-list"></ul>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="col-xl-5">
+            <div class="white_card card_height_100 mb_30">
+              <div class="white_card_header">
+                <div class="box_header m-0">
+                  <div class="main-title">
+                    <h3 class="m-0">Recent Purchase Orders</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="white_card_body QA_section">
+                <div class="todo_wrapper" id="recent-purchase-orders"></div>
+              </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

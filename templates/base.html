@@ -1,0 +1,435 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>{% block page_title %}CFC Stock Mgt | Dashboard{% endblock %}</title>
+    <link rel="icon" href="{% static 'img/mini_cfc_logo.png' %}" type="image/png" />
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap1.min.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/themefy_icon/themify-icons.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/niceselect/css/nice-select.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/owl_carousel/css/owl.carousel.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/gijgo/gijgo.min.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/font_awesome/css/all.min.css'%}" />
+    <link rel="stylesheet" href="{% static 'vendors/tagsinput/tagsinput.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/datepicker/date-picker.css'%}" />
+    <link rel="stylesheet" href="{% static 'vendors/vectormap-home/vectormap-2.0.2.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/scroll/scrollable.css'%}" />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors/datatable/css/jquery.dataTables.min.css'%}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors/datatable/css/responsive.dataTables.min.css'%}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors/datatable/css/buttons.dataTables.min.css'%}"
+    />
+
+    <link rel="stylesheet" href="{% static 'vendors/text_editor/summernote-bs4.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/morris/morris.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'vendors/material_icon/material-icons.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'css/metisMenu.css'%}" />
+
+    <link rel="stylesheet" href="{% static 'css/style1.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/colors/default.css'%}" id="colorSkinCSS" />
+
+    <script src="{% static 'js/jquery1-3.4.1.min.js'%}"></script>
+    <script src="{% static 'js/functions.js'%}"></script>
+        
+    <script>
+      var state = {}
+    </script>
+
+    <style>
+      :root {
+        /* --accent-color: #fea402; */
+        --accent-color: #bf6363;
+        --accent-color: #7c2e06;
+        --accent-color: #fe5a00;
+        --highlight-color: #970000;
+        --highlight-color: #7c2e06;
+        --menu-active-color: #fe5a00;
+        --link-color: #bf6363;
+        --light-background: #e6ddc6;
+        --white: white;
+      }
+
+      #messages {
+        width: 100%;
+        z-index: 5000;
+      }
+      .btn-primary {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+      }
+      .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+        background-color: var(--highlight-color);
+        border-color: var(--highlight-color);
+      }
+      .sidebar #sidebar_menu > li a.active {
+        color: var(--menu-active-color);
+      }
+      .sidebar #sidebar_menu > li a:hover {
+        color: var(--menu-active-color) !important;
+      }
+      .sidebar .logo {
+        background: var(--light-background);
+      }
+      .btn_1 {
+        background-color: var(--accent-color) !important;
+        border-color: var(--accent-color);
+      }
+      .btn_1:hover, .btn_1:active, .btn_1:active:focus {
+        background-color: var(--highlight-color) !important;
+      }
+
+      .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        background-color: var(--accent-color) !important;
+      }
+
+      .nav-link, .nav-link:hover, .nav-link:focus, .nav-link:active {
+        color: var(--link-color);
+      }
+    </style>
+
+    {% block styles %}{% endblock %}
+  </head>
+  <body class="crm_body_bg">
+    <div id="messages">
+    </div>
+
+    <nav class="sidebar">
+      <div class="logo d-flex justify-content-center">
+        <a class="large_logo" href="{% url 'dashboard' %}"
+          ><img src="{% static 'img/cfc_logo.png' %}" alt=""
+        /></a>
+        <a class="small_logo" href="{% url 'dashboard' %}"
+          ><img src="{% static 'img/mini_cfc_logo.png' %}" alt=""
+        /></a>
+        <div class="sidebar_close_icon d-lg-none">
+          <i class="ti-close"></i>
+        </div>
+      </div>
+      <ul id="sidebar_menu">
+        <li>
+          <a href="{% url 'dashboard' %}" aria-expanded="false" class="{% block dashboard_classes %}{% endblock %}">
+            <div class="nav_icon_small">
+              <img src="{% static 'img/menu-icon/dashboard.svg' %}" alt="" />
+            </div>
+            <div class="nav_title">
+              <span>Dashboard</span>
+            </div>
+          </a>
+        </li>
+        <!-- <h4 class="menu-text">
+          <span>CUSTOM</span> <i class="fas fa-ellipsis-h"></i>
+        </h4> -->
+        <li>
+          <a href="{% url 'managestock:managestock_home' %}" aria-expanded="false" class="{% block gestion_des_stock_classes %}{% endblock %}">
+            <div class="nav_icon_small">
+              <img src="{% static 'img/menu-icon/product.svg' %}" alt="">
+            </div>
+            <div class="nav_title">
+              <span>Gestion des stocks</span>
+            </div>
+          </a>
+        </li>
+        
+        <li>
+          <a href="{% url 'managepurchaseorder:managepurchaseorder_home' %}" aria-expanded="false" class="{% block gestion_des_commandes_classes %}{% endblock %}">
+            <div class="nav_icon_small">
+              <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
+            </div>
+            <div class="nav_title">
+              <span>Gestion des commandes des structures</span>
+            </div>
+          </a>
+        </li>
+
+        <li>
+            <a href="{% url 'managestock:managestock_suppliers' %}" aria-expanded="false" class="{% block gestion_des_prestataires_classes %}{% endblock %}">
+              <div class="nav_icon_small">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
+              </div>
+              <div class="nav_title">
+                <span>Gestion des prestataires</span>
+              </div>
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'managestock:managestock_entries' %}" aria-expanded="false" class="{% block gestion_des_entrees_classes %}{% endblock %}">
+              <div class="nav_icon_small">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
+              </div>
+              <div class="nav_title">
+                <span>Gestion des Entrees</span>
+              </div>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" aria-expanded="false" class="{% block notifications_classes %}{% endblock %}">
+              <div class="nav_icon_small">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
+              </div>
+              <div class="nav_title">
+                <span>Notifications</span>
+              </div>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" aria-expanded="false" class="{% block rapports_classes %}{% endblock %}">
+              <div class="nav_icon_small">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
+              </div>
+              <div class="nav_title">
+                <span>Rapports</span>
+              </div>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" aria-expanded="false" class="{% block prevision_classes %}{% endblock %}">
+              <div class="nav_icon_small">
+                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
+              </div>
+              <div class="nav_title">
+                <span>Prevision</span>
+              </div>
+            </a>
+          </li>
+      </ul>
+    </nav>
+
+    <section class="main_content dashboard_part large_header_bg">
+      <div class="container-fluid g-0">
+        <div class="row">
+          <div class="col-lg-12 p-0">
+            <div
+              class="header_iner d-flex justify-content-between align-items-center"
+            >
+              <div class="sidebar_icon d-lg-none">
+                <i class="ti-menu"></i>
+              </div>
+              <label
+                class="form-label switch_toggle d-none d-lg-block"
+                for="checkbox"
+              >
+                <input type="checkbox" id="checkbox" />
+                <!-- <div class="slider round open_miniSide"></div> -->
+              </label>
+              <div
+                class="header_right d-flex justify-content-between align-items-center"
+              >
+                <div class="header_notification_warp d-flex align-items-center">
+                  <li>
+                    <a class="bell_notification_clicker" href="#">
+                      <img src="{% static 'img/icon/bell.svg' %}" alt="" />
+                      <span>2</span>
+                    </a>
+
+                    <div class="Menu_NOtification_Wrap">
+                      <div class="notification_Header">
+                        <h4>Notifications</h4>
+                      </div>
+                      <div class="Notification_body">
+                        <div class="single_notify d-flex align-items-center">
+                          <div class="notify_thumb">
+                            <a href="#"><img src="{% static 'img/staf/2.png' %}" alt="" /></a>
+                          </div>
+                          <div class="notify_content">
+                            <a href="#"><h5>Cool Marketing</h5></a>
+                            <p>Lorem ipsum dolor sit amet</p>
+                          </div>
+                        </div>
+
+                        <div class="single_notify d-flex align-items-center">
+                          <div class="notify_thumb">
+                            <a href="#"><img src="{% static 'img/staf/4.png' %}" alt="" /></a>
+                          </div>
+                          <div class="notify_content">
+                            <a href="#"><h5>Awesome packages</h5></a>
+                            <p>Lorem ipsum dolor sit amet</p>
+                          </div>
+                        </div>
+
+                        <div class="single_notify d-flex align-items-center">
+                          <div class="notify_thumb">
+                            <a href="#"><img src="{% static 'img/staf/3.png' %}" alt="" /></a>
+                          </div>
+                          <div class="notify_content">
+                            <a href="#"><h5>what a packages</h5></a>
+                            <p>Lorem ipsum dolor sit amet</p>
+                          </div>
+                        </div>
+
+                        <div class="single_notify d-flex align-items-center">
+                          <div class="notify_thumb">
+                            <a href="#"><img src="{% static 'img/staf/2.png' %}" alt="" /></a>
+                          </div>
+                          <div class="notify_content">
+                            <a href="#"><h5>Cool Marketing</h5></a>
+                            <p>Lorem ipsum dolor sit amet</p>
+                          </div>
+                        </div>
+
+                        <div class="single_notify d-flex align-items-center">
+                          <div class="notify_thumb">
+                            <a href="#"><img src="{% static 'img/staf/4.png' %}" alt="" /></a>
+                          </div>
+                          <div class="notify_content">
+                            <a href="#"><h5>Awesome packages</h5></a>
+                            <p>Lorem ipsum dolor sit amet</p>
+                          </div>
+                        </div>
+
+                        <div class="single_notify d-flex align-items-center">
+                          <div class="notify_thumb">
+                            <a href="#"><img src="{% static 'img/staf/3.png' %}" alt="" /></a>
+                          </div>
+                          <div class="notify_content">
+                            <a href="#"><h5>what a packages</h5></a>
+                            <p>Lorem ipsum dolor sit amet</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="nofity_footer">
+                        <div class="submit_button text-center pt_20">
+                          <a href="#" class="btn_1">See More</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+                <div class="profile_info">
+                  <img src="{% static 'img/blank-profile-picture.png' %}" alt="#" />
+                  <div class="profile_info_iner">
+                    <div class="profile_author_name">
+                      <p>User</p>
+                      <h5>{{request.user.username}}</h5>
+                    </div>
+                    <div class="profile_info_details">
+                      <!-- <a href="#">My Profile </a>
+                      <a href="#">Settings</a> -->
+                      <a href="{% url 'logout' %}">Log Out </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main_content_iner overly_inner">
+        <div class="container-fluid p-0">
+          {% block page_content %}
+          {%endblock%}
+        </div>
+      </div>
+    </section>
+
+    <div id="back-top" style="display: none">
+      <a title="Go to Top" href="#">
+        <i class="ti-angle-up"></i>
+      </a>
+    </div>
+
+    <div class="footer_part">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="footer_iner text-center">
+              <p>
+                © CFC 2023
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% block modals %}
+    {% endblock %}
+
+    <script src="{% static 'js/popper1.min.js'%}"></script>
+
+    <script src="{% static 'js/bootstrap1.min.js'%}"></script>
+
+    <script src="{% static 'js/metisMenu.js'%}"></script>
+
+    <script src="{% static 'vendors/count_up/jquery.waypoints.min.js'%}"></script>
+
+    <script src="{% static 'vendors/chartlist/Chart.min.js'%}"></script>
+
+    <script src="{% static 'vendors/count_up/jquery.counterup.min.js'%}"></script>
+
+    <script src="{% static 'vendors/niceselect/js/jquery.nice-select.min.js'%}"></script>
+
+    <script src="{% static 'vendors/owl_carousel/js/owl.carousel.min.js'%}"></script>
+
+    <script src="{% static 'vendors/datatable/js/jquery.dataTables.min.js'%}"></script>
+    <script src="{% static 'vendors/datatable/js/dataTables.responsive.min.js'%}"></script>
+    <script src="{% static 'vendors/datatable/js/dataTables.buttons.min.js'%}"></script>
+    <!-- <script src="{% static 'vendors/datatable/js/buttons.flash.min.js'%}"></script>
+    <script src="{% static 'vendors/datatable/js/jszip.min.js'%}"></script>
+    <script src="{% static 'vendors/datatable/js/pdfmake.min.js'%}"></script>
+    <script src="{% static 'vendors/datatable/js/vfs_fonts.js'%}"></script>
+    <script src="{% static 'vendors/datatable/js/buttons.html5.min.js'%}"></script>
+    <script src="{% static 'vendors/datatable/js/buttons.print.min.js'%}"></script> -->
+
+    <script src="{% static 'vendors/datepicker/datepicker.js'%}"></script>
+    <script src="{% static 'vendors/datepicker/datepicker.en.js'%}"></script>
+    <script src="{% static 'vendors/datepicker/datepicker.custom.js'%}"></script>
+    <script src="{% static 'js/chart.min.js'%}"></script>
+    <script src="{% static 'vendors/chartjs/roundedBar.min.js'%}"></script>
+    
+    <script>
+      updateCurrentDateAndTimeInputs()
+      setInterval( updateCurrentDateAndTimeInputs, 60000 )
+
+      $('.sidebar_icon').click(function() {
+        console.log("Clicked sidebar icon")
+
+        $('.sidebar').addClass('active_sidebar')
+      })
+
+      $(".sidebar_close_icon").click(function() {
+        $('.sidebar').removeClass('active_sidebar')
+      })
+
+      $(".select-all-rows").change(function() {
+          let checked = $(this).prop('checked')
+          console.log(`Select all rows changed, checked: ${checked}`)
+
+          let table = this.parentNode.parentNode.parentNode.parentNode
+
+          $(table).find('tbody tr input.select-row').prop('checked', checked)
+      })
+    </script>
+    {% block javascript %}{% endblock %}
+  </body>
+
+  <!-- Mirrored from demo.dashboardpack.com/analytic-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 13 Mar 2023 11:44:26 GMT -->
+</html>
