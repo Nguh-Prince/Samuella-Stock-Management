@@ -5,6 +5,8 @@ from managestock.models import Equipment
 
 from manageusers.models import Structure
 
+from common.viewsets import MultipleSerializerViewSet
+
 from . import models, serializers
 
 # Create your views here.
@@ -12,6 +14,10 @@ def home(request):
     context = {'structures': Structure.objects.all(), 'equipments': Equipment.objects.all()}
     return render(request, "managepurchaseorder/managepurchaseorder.html", context=context)
 
-class PurchaseOrderViewSet(viewsets.ModelViewSet):
+class PurchaseOrderViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     serializer_class = serializers.PurchaseOrderSerializer
     queryset = models.PurchaseOrder.objects.all()
+
+    serializer_classes = {
+        'list': serializers.PurchaseOrderListSerializer
+    }

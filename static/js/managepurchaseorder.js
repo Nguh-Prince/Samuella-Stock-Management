@@ -18,7 +18,7 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
             }
         },
         {
-            "data": "structureId"
+            "data": "structureId.structureName"
         },
         {
             "data": "dateCreated"
