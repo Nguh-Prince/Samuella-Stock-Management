@@ -6,7 +6,7 @@ from managestock.models import Equipment
 
 from manageusers.models import Structure
 
-from common.viewsets import MultipleSerializerViewSet
+from common.viewsets import DepartmentSpecificViewSet, MultipleSerializerViewSet
 
 from . import models, serializers
 
@@ -15,7 +15,7 @@ def home(request):
     context = {'structures': Structure.objects.all(), 'equipments': Equipment.objects.all()}
     return render(request, "managepurchaseorder/managepurchaseorder.html", context=context)
 
-class PurchaseOrderViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
+class PurchaseOrderViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, DepartmentSpecificViewSet):
     serializer_class = serializers.PurchaseOrderSerializer
     queryset = models.PurchaseOrder.objects.all()
     permission_classes = [IsHeadOfDepartmentOrIsStockManagerOrNotAllowed,]

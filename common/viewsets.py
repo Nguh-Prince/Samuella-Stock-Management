@@ -17,3 +17,12 @@ class MultipleSerializerViewSet(viewsets.GenericViewSet):
             return self.serializer_classes[self.action]
         
         return super().get_serializer_class()
+
+class DepartmentSpecificViewSet(viewsets.GenericViewSet):
+    def get_queryset(self):
+        queryset = self.queryset
+
+        if not self.request.user.is_superuser and not self.request.user.employee.isStockManager and self.request.user.employee.is_structure_head():
+            queryset = queryset.filter(structureId=self.request.user.employee.structureId)
+
+        return queryset

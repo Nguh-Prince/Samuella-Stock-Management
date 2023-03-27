@@ -3,8 +3,9 @@ from django.shortcuts import render
 
 from rest_framework import status, viewsets
 from rest_framework.response import Response
+from common.permissions import IsStockManagerOrIsHeadOfDepartmentReadOnlyOrNotAllowed, IsStockManagerOrNotAllowed
 
-from common.viewsets import MultipleSerializerViewSet
+from common.viewsets import DepartmentSpecificViewSet, MultipleSerializerViewSet
 from manageusers.models import Structure
 
 from . import models, serializers
@@ -45,6 +46,7 @@ class StockViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     serializer_classes = {
         'list': serializers.StockDetailSerializer
     }
+    permission_classes = [IsStockManagerOrNotAllowed, ]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -55,12 +57,18 @@ class StockViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
 
         return super().destroy(request, *args, **kwargs)
 
-class DischargeViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
+class DischargeViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, DepartmentSpecificViewSet):
     serializer_class = serializers.DischargeSerializer
     queryset = models.Discharge.objects.all()
     serializer_classes = {
         'list': serializers.DischargeListSerializer
     }
+    
+    permission_classes = [IsStockManagerOrIsHeadOfDepartmentReadOnlyOrNotAllowed, ]
+
+    def get_queryset(self):
+
+        return super().get_queryset()
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -69,6 +77,7 @@ class DischargeViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
             equipment.delete()
 
         return super().destroy(request, *args, **kwargs)
+
 
 class SupplierViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     serializer_classes = {
