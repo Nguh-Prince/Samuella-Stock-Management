@@ -28,3 +28,8 @@ class IsEmployeeReadOnlyOrNotAllowed(permissions.IsAuthenticated):
     """
     def has_permission(self, request, view):
         return Employee.objects.filter(user=request.user).exists() and request.method in permissions.SAFE_METHODS
+
+class IsHeadOfDepartmentOrIsStockManagerOrNotAllowed(permissions.IsAuthenticated):
+    def has_permission(self, request, view):
+        
+        return super().has_permission(request, view)

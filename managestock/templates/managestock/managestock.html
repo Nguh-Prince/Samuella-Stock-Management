@@ -75,7 +75,7 @@
 
           {% if request.user.is_superuser or request.user.employee.isStockManager or request.user.employee.is_structure_head %}
           <li class="nav-item" role="presentation">
-              <button class="nav-link" data-bs-target="#discharges" data-bs-toggle="tab" id="discharges-tab">Décharges</button>
+              <button class="nav-link {% if request.user.employee.is_structure_head %}active{% endif %}" data-bs-target="#discharges" data-bs-toggle="tab" id="discharges-tab">Décharges</button>
           </li>
           {% endif %}
       </ul>
@@ -157,7 +157,7 @@
   {% endif %}
 
   {% if request.user.is_superuser or request.user.employee.isStockManager or request.user.employee.is_structure_head %}
-  <div class="tab-pane fade show my-2" id="discharges" role="tabpanel" aria-labelledby="discharges-tab">
+  <div class="tab-pane fade show my-2 {% if request.user.employee.is_structure_head %}active{% endif %}" id="discharges" role="tabpanel" aria-labelledby="discharges-tab">
     <div class="row justify-content-center">
       <div class="col-lg-12">
         <div class="white_card card_height_100 mb_30">
@@ -502,7 +502,9 @@
                         <label for="new-discharge-structure">Structure</label>
                         <select id="new-discharge-structure" class="form-select">
                             {% for structure in structures %}
+                                {% if request.user.employee.is_structure_head and request.user.employee.structure == structure %}
                                 <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
