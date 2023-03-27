@@ -1,3 +1,16 @@
+const DateTime = luxon.DateTime
+
+const isDate = (date) => {
+    return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date))
+}
+
+function getLocaleTime(dateTimeISO, dateOnly=false) {
+    // returns time in the format Mmm dd, yyyy, h:mm when passed an ISO string
+    dt = DateTime.fromISO(dateTimeISO)
+    let format = dateOnly ? DateTime.DATE_MED_WITH_WEEKDAY : DateTime.DATETIME_MED_WITH_WEEKDAY
+    return dt.setLocale(LOCALE).toLocaleString(format)
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -267,4 +280,29 @@ function getCsrfTokenHeader() {
     return {
         "X-CSRFTOKEN": getCookie("csrftoken")
     }
+}
+
+function toast(message) {
+    let toast = createElement('div', ['toast', 'show', 'toast-container', 'p-3'], {
+        role: "alert",
+        "aria-live": "assertive",
+        "aria-atomic": "true"
+    })
+    let toastHeader = createElement('div', ['toast-header']);
+    toast.appendChild(toastHeader)
+    let strong = createElement('strong', ['me-auto']);
+    strong.textContent = "LFD"
+    let btnClose = createElement('button', ['btn-close'], {
+        'data-bs-dismiss': "toast",
+        "aria-label": "Close"
+    })
+    toastHeader.appendChild(strong);
+    toastHeader.appendChild(btnClose)
+
+    toastBody = createElement('div', ['toast-body'])
+    toastBody.textContent = message;
+    toast.appendChild(toastBody)
+
+    $("#toasts").append(toast)
+    return toast
 }

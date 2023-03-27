@@ -21,7 +21,10 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
             "data": "structureId.structureName"
         },
         {
-            "data": "dateCreated"
+            "data": "dateCreated",
+            render: function(data, type, row, meta) {
+                return getLocaleTime(data, true)
+            }
         },
         {
             render: function(data, type, row, meta) {
