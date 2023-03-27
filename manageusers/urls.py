@@ -12,6 +12,14 @@ class NestedDefaultRouter(NestedRouterMixin, routers.DefaultRouter):
 router = NestedDefaultRouter()
 
 structure_routes = router.register("structures", views.StructureViewSet, basename="structures")
+structure_routes.register(
+    "employees", 
+    views.EmployeeViewSet,
+    basename="structure-employees",
+    parents_query_lookups=["structure"]
+)
+
+employee_routes = router.register("employees", views.EmployeeViewSet, basename="employees")
 
 app_name = "manageusers"
 

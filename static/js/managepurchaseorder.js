@@ -53,6 +53,11 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
     ]
 })
 
+function deleteRow(e) {
+    console.log("Deleting the row containing: ")
+    console.log(e.target)
+}
+
 var newPurchaseOrderTable = $("#new-purchase-order-table").DataTable({
     columnDefs: [{
         "defaultContent": "-",
@@ -63,7 +68,7 @@ var newPurchaseOrderTable = $("#new-purchase-order-table").DataTable({
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     try {
-                        return `<i class="delete-row fas fa-trash text-danger"></i>`
+                        return `<i class="delete-row fas fa-trash text-danger" onclick='(e) => deleteRow(e)'></i>`
                     } catch (error) {
                         
                     }

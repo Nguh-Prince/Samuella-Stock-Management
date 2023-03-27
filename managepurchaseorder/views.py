@@ -21,3 +21,5 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     serializer_classes = {
         'list': serializers.PurchaseOrderListSerializer
     }
+
+    STRUCTURE_LOOKUP_KWARG = "parent_lookup_structure"

@@ -143,6 +143,7 @@
         <!-- <h4 class="menu-text">
           <span>CUSTOM</span> <i class="fas fa-ellipsis-h"></i>
         </h4> -->
+        {% if request.user.is_superuser or request.user.employee.isStockManager or request.user.employee.is_structure_head %}
         <li>
           <a href="{% url 'managestock:managestock_home' %}" aria-expanded="false" class="{% block gestion_des_stock_classes %}{% endblock %}">
             <div class="nav_icon_small">
@@ -153,7 +154,9 @@
             </div>
           </a>
         </li>
-        
+        {% endif %}
+
+        {% if request.user.is_superuser or request.user.employee.isStockManager or request.user.employee.is_structure_head %}
         <li>
           <a href="{% url 'managepurchaseorder:managepurchaseorder_home' %}" aria-expanded="false" class="{% block gestion_des_commandes_classes %}{% endblock %}">
             <div class="nav_icon_small">
@@ -164,7 +167,9 @@
             </div>
           </a>
         </li>
+        {% endif %}
 
+        {% if request.user.employee.isStockManager %}
         <li>
             <a href="{% url 'managestock:managestock_suppliers' %}" aria-expanded="false" class="{% block gestion_des_prestataires_classes %}{% endblock %}">
               <div class="nav_icon_small">
@@ -175,7 +180,9 @@
               </div>
             </a>
           </li>
+          {% endif %}
 
+          {% if request.user.is_superuser or request.user.employee.isStockManager %}
           <li>
             <a href="{% url 'managestock:managestock_entries' %}" aria-expanded="false" class="{% block gestion_des_entrees_classes %}{% endblock %}">
               <div class="nav_icon_small">
@@ -186,6 +193,7 @@
               </div>
             </a>
           </li>
+          {% endif %}
 
           <!-- <li>
             <a href="#" aria-expanded="false" class="{% block notifications_classes %}{% endblock %}">

@@ -25,6 +25,7 @@
   {% endfor %}
 </datalist>
 
+{% if request.user.is_superuser or request.user.employee.isStockManager %}
 <div class="box_right d-flex lms_block justify-content-end">
   <div class="add_button ms-2">
     <a
@@ -58,24 +59,31 @@
     >
   </div>
 </div>
+{% endif %}
 
 <div class="row py-3">
   <div class="col-sm-12 col-9 m-b-20">
       <ul class="nav nav-tabs" role="tablist">
+          {% if request.user.is_superuser or request.user.employee.isStockManager %}
           <li class="nav-item" role="presentation">
-              <button class="nav-link active" data-bs-target="#equipments" data-bs-toggle="tab" id="equipments-tab">Stock</button>
+            <button class="nav-link active" data-bs-target="#equipments" data-bs-toggle="tab" id="equipments-tab">Stock</button>
           </li>
           <li class="nav-item" role="presentation">
               <button class="nav-link" data-bs-target="#entries" data-bs-toggle="tab" id="entries-tab">Entrees</button>
           </li>
+          {% endif %}
+
+          {% if request.user.is_superuser or request.user.employee.isStockManager or request.user.employee.is_structure_head %}
           <li class="nav-item" role="presentation">
               <button class="nav-link" data-bs-target="#discharges" data-bs-toggle="tab" id="discharges-tab">Décharges</button>
           </li>
+          {% endif %}
       </ul>
   </div>
 </div>
 
 <div class="row tab-content" id="stock-tab-content">
+  {% if request.user.is_superuser or request.user.employee.isStockManager %}
   <div class="tab-pane fade show active my-2" id="equipments" role="tabpanel" aria-labelledby="equipments-tab">
     <div class="row justify-content-center">
       <div class="col-lg-12">
@@ -109,7 +117,9 @@
       <div class="col-12"></div>
     </div>
   </div>
+  {% endif %}
 
+  {% if request.user.is_superuser or request.user.employee.isStockManager %}
   <div class="tab-pane fade show my-2" id="entries" role="tabpanel" aria-labelledby="entries-tab">
     <div class="row justify-content-center">
       <div class="col-lg-12">
@@ -144,7 +154,9 @@
       <!-- <div class="col-12"></div> -->
     </div>
   </div>
+  {% endif %}
 
+  {% if request.user.is_superuser or request.user.employee.isStockManager or request.user.employee.is_structure_head %}
   <div class="tab-pane fade show my-2" id="discharges" role="tabpanel" aria-labelledby="discharges-tab">
     <div class="row justify-content-center">
       <div class="col-lg-12">
@@ -179,10 +191,12 @@
       <!-- <div class="col-12"></div> -->
     </div>
   </div>
+  {% endif %}
 </div>
 {% endblock %}
 
 {% block modals %}
+    {% if request.user.is_superuser or request.user.employee.isStockManager %}
     <div
     class="modal fade"
     id="new-equipment-modal"
@@ -306,7 +320,9 @@
         </div>
         </div>
     </div>
+    {% endif %}
 
+    {% if request.user.is_superuser or request.user.employee.isStockManager or request.user.employee.is_structure_head %}
     <div
     class="modal fade"
     id="new-entry-modal"
@@ -455,7 +471,9 @@
         </div>
         </div>
     </div>
+    {% endif %}
 
+    {% if request.user.is_superuser or request.user.employee.isStockManager %}
     <div
     class="modal fade"
     id="new-discharge-modal"
@@ -604,7 +622,9 @@
         </div>
         </div>
     </div>
+    {% endif %}
 
+    {% if request.user.is_superuser or request.user.employee.isStockManager %}
     <div
     class="modal fade"
     id="confirm-stock-deletion-modal"
@@ -666,7 +686,7 @@
             </button>
             </div>
             <div class="modal-body">
-                <h2 class="text-danger">Êtes-vous sûr de bien vouloir supprimer ce decharge?</h2>
+                <h2 class="text-danger">Êtes-vous sûr de bien vouloir supprimer cette decharge?</h2>
             </div>
             <input type="hidden" id="confirm-discharge-deletion-discharge-id">
             <div class="modal-footer">
@@ -682,4 +702,5 @@
         </div>
         </div>
     </div>
+    {% endif %}
 {% endblock %}

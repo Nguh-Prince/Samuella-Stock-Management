@@ -1,6 +1,9 @@
+import logging
 from django.shortcuts import render
 
 from rest_framework import viewsets
+
+from common.permissions import IsEmployeeReadOnlyOrNotAllowed, ModelPermission
 
 from . import models, serializers
 
@@ -11,3 +14,32 @@ def home(request):
 class StructureViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.StructureSerializer
     queryset = models.Structure.objects.all()
+    permission_classes = [ModelPermission, ]
+
+class EmployeeViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.EmployeeSerializer
+    queryset = models.Structure.objects.all()
+    permission_classes = [ModelPermission, IsEmployeeReadOnlyOrNotAllowed, ]
+
+    STRUCTURE_LOOKUP_KWARG = "parent_lookup_structure"
+
+    @property
+    def structure(self) -> models.Structure:
+        if self.STRUCTURE_LOOKUP_KWARG in self.kwargs:
+            structureId = self.kwargs[self.STRUCTURE_LOOKUP_KWARG]
+
+            try:
+                return models.Structure.objects.get(id=structureId)
+            except models.Structure.DoesNotExist as e:
+                logging.error(f"No structure exists with id {structureId}")
+                return None
+        
+        return None
+
+    def get_queryset(self):
+        if self.STRUCTURE_LOOKUP_KWARG in self.kwargs and self.structure:
+            return self.structure.employees.all()
+
+        return super().get_queryset()
+
+    
