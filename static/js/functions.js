@@ -11,6 +11,10 @@ function getLocaleTime(dateTimeISO, dateOnly=false) {
     return dt.setLocale(LOCALE).toLocaleString(format)
 }
 
+function deleteTableRow(hiddenInputId) {
+    $(`#${hiddenInputId}`).parent().parent().remove()
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

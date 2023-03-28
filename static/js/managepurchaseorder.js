@@ -71,7 +71,9 @@ var newPurchaseOrderTable = $("#new-purchase-order-table").DataTable({
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     try {
-                        return `<i class="delete-row fas fa-trash text-danger" onclick='(e) => deleteRow(e)'></i>`
+                        let rowId = generateRandomId()
+                        
+                        return `<i class="delete-row fas fa-trash text-danger" onclick=deleteTableRow('${rowId}')></i><input type='hidden' id='${rowId}'>`
                     } catch (error) {
                         
                     }
@@ -111,7 +113,9 @@ var purchaseOrderDetailsTable = $("#purchase-order-detail-table").DataTable({
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     try {
-                        return `<i class="delete-row fas fa-trash text-danger"></i>`
+                        let rowId = generateRandomId()
+
+                        return `<i class="delete-row fas fa-trash text-danger" onclick=deleteTableRow('${rowId}')></i><input type='hidden' id='${rowId}'>`
                     } catch (error) {
                         
                     }
