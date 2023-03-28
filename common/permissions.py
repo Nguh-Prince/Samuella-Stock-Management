@@ -14,10 +14,16 @@ class ModelPermission(permissions.DjangoModelPermissions):
 
 class IsEmployee(permissions.IsAuthenticated):
     def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+            
         return Employee.objects.filter(user=request.user)
 
 class IsStockManagerOrNotAllowed(IsEmployee):
     def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
         is_employee = super().has_permission(request, view)
 
         if not is_employee:
@@ -27,6 +33,9 @@ class IsStockManagerOrNotAllowed(IsEmployee):
 
 class IsHeadOfDepartmentOrNotAllowed(IsEmployee):
     def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
         is_employee = super().has_permission(request, view)
 
         if not is_employee:
@@ -42,10 +51,16 @@ class IsEmployeeReadOnlyOrNotAllowed(IsEmployee):
     Provides read-only permissions for employees and denies access to non-employees
     """
     def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
         return Employee.objects.filter(user=request.user).exists() and request.method in permissions.SAFE_METHODS
 
 class IsHeadOfDepartmentOrIsStockManagerOrNotAllowed(IsEmployee):
     def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
         is_employee = super().has_permission(request, view)
 
         if not is_employee:
@@ -58,6 +73,9 @@ class IsStockManagerOrIsHeadOfDepartmentReadOnlyOrNotAllowed(IsEmployee):
     Stock manager has full access, department head can only read, everyone else is unauthorized
     """
     def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
         is_employee = super().has_permission(request, view)
 
         if not is_employee:
@@ -78,6 +96,9 @@ class IsStockManagerOrIsHeadOfDepartmentReadOnlyOrNotAllowed(IsEmployee):
         Stock manager can read all discharges
         HODs can only read discharges given to their departments
         """
+        if request.user.is_superuser:
+            return True
+
         employee = request.user.employee
 
         if employee.isStockManager:

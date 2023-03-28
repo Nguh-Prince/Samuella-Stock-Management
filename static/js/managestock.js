@@ -1,5 +1,4 @@
 var equipmentSelectedForEditing = null
-// var stockSelectedForEditing = null
 var dischargeSelectedForEditing = null
 
 var equipmentsTable = $("#equipments-table").DataTable({
@@ -34,12 +33,12 @@ var equipmentsTable = $("#equipments-table").DataTable({
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     if (row['equipmentId'] !== null) 
-                        return `<div class="row"><button class="btn text-primary" onclick=equipmentEditButtonClick(${row['equipmentId']}) data-equipment-id=${row['equipmentId']}>
+                        return `<button class="btn text-primary" onclick=equipmentEditButtonClick(${row['equipmentId']}) data-equipment-id=${row['equipmentId']}>
                                     <i class="fas fa-pen"></i>
                                 </button>
                                 <button class="btn mx-1 text-danger" data-equipment-id=${row['equipmentId']}>
                                     <i class="fas fa-trash"></i>
-                                </button></div>`
+                                </button>`
                     else 
                         return '---'
                 }
@@ -69,7 +68,8 @@ var dischargesTable = $("#discharges-table").DataTable({
             "data": "structureId.structureName"
         },
         {
-            "data": "dateCreated"
+            "data": "dateCreated",
+            render: renderDatesInDataTable
         },
         {
             render: function(data, type, row, meta) {
@@ -87,14 +87,10 @@ var dischargesTable = $("#discharges-table").DataTable({
         {
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    return `<div class="row">
-                                <button class="btn text-primary" onclick=dischargeEditButtonClick(${row['dischargeId']}) data-discharge-id=${row['dischargeId']}>
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn mx-1 text-danger" onclick=dischargeDeleteButtonClick(${row['dischargeId']}) data-discharge-id=${row['dischargeId']}>
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>`
+                    let viewButtonClick = `dischargeEditButtonClick(${row['dischargeId']})`
+                    let deleteButtonClick = `dischargeDeleteButtonClick(${row['dischargeId']})`
+
+                    return renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)
                 }
             }
         }
@@ -156,7 +152,7 @@ var dischargeDetailEquipmentsTable = $("#discharge-detail-table").DataTable({
         {
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    return `<i class="fas fa-trash text-danger" onclick=deleteRow(e)></i>`
+                    return IS_STOCK_MANAGER ? `<i class="fas fa-trash text-danger" onclick=deleteRow></i>` : "---"
                 }
             }
         },
@@ -164,12 +160,17 @@ var dischargeDetailEquipmentsTable = $("#discharge-detail-table").DataTable({
             "data": "equipmentId.equipmentName",
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    let options = []
+                    if (IS_STOCK_MANAGER) {
+                        let options = []
 
-                    state.equipments.map( (item, index) => {
-                        options.push(`<option ${item.equipmentName == data ? 'selected': ''} value=${item.equipmentName}>${item.equipmentName}</option>`)
-                    } )
-                    return `<select name='equipmentName' class="form-select" value="${data}">${options.join('')}</select>`
+                        state.equipments.map( (item, index) => {
+                            options.push(`<option ${item.equipmentName == data ? 'selected': ''} value=${item.equipmentName}>${item.equipmentName}</option>`)
+                        } )
+                        return `<select name='equipmentName' class="form-select" value="${data}">${options.join('')}</select>`
+                    }
+                    else {
+                        return `<input type='text' name='equipmentName' class='form-control' value='${data}' readonly>`
+                    }
                 } else {
                     return data
                 }
@@ -179,7 +180,7 @@ var dischargeDetailEquipmentsTable = $("#discharge-detail-table").DataTable({
             "data": "quantity",
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    return `<input class="form-control" type="number" name="quantity" value="${data}" min=1 max=${row['equipmentId']['quantity']} />`
+                    return `<input class="form-control" type="number" name="quantity" value="${data}" min=1 max=${row['equipmentId']['quantity']} ${!IS_STOCK_MANAGER ? 'readonly' : ''} />`
                 } else {
                     return data
                 }
@@ -470,7 +471,7 @@ function displayEquipmentDetailModal(equipment=equipmentSelectedForEditing) {
 }
 
 function displayDischargeDetailModal(discharge=dischargeSelectedForEditing) {
-    $("#discharge-detail-modal-title").text(`${discharge.structureId}: ${discharge.dateCreated}`)
+    $("#discharge-detail-modal-title").text(`${discharge.structureId.structureName}: ${getLocaleTime(discharge.dateCreated, true)}`)
 
     $("#discharge-detail-structure").val(discharge.structureId)
     $("#discharge-detail-date").val(discharge.dateCreated)

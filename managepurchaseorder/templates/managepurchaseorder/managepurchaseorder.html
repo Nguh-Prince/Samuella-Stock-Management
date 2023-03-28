@@ -97,7 +97,11 @@
                         <label for="new-purchase-order-structure">Structure</label>
                         <select id="new-purchase-order-structure" class="form-select">
                             {% for structure in structures %}
-                                <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
+                                {% if request.user.employee.is_structure_head and request.user.employee.structureId == structure %}
+                                    <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
+                                {% elif request.user.employee.isStockManager or request.user.is_superuser %}
+                                    <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>

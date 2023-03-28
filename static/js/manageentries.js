@@ -57,7 +57,8 @@ var stocksTable = $("#entries-table").DataTable({
             "data": "supplierId.supplierName"
         },
         {
-            "data": "stockDate"
+            "data": "stockDate",
+            render: renderDatesInDataTable
         },
         {
             render: function(data, type, row, meta) {

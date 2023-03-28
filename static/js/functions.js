@@ -291,7 +291,7 @@ function toast(message) {
     let toastHeader = createElement('div', ['toast-header']);
     toast.appendChild(toastHeader)
     let strong = createElement('strong', ['me-auto']);
-    strong.textContent = "LFD"
+    strong.textContent = "CFC"
     let btnClose = createElement('button', ['btn-close'], {
         'data-bs-dismiss': "toast",
         "aria-label": "Close"
@@ -303,6 +303,27 @@ function toast(message) {
     toastBody.textContent = message;
     toast.appendChild(toastBody)
 
-    $("#toasts").append(toast)
+    $("#messages").append(toast)
     return toast
+}
+
+function renderDatesInDataTable(data, type, row, meta) {
+    return getLocaleTime(data, true)
+}
+
+function renderActionButtonsInDataTable(row, canRead, canUpdate, canDelete, viewButtonClick, deleteButtonClick) {
+    let buttons = []
+
+    let viewOrEditButton = `<button class="btn text-primary" onclick=${viewButtonClick}><i class="fas fa-${ canRead && canUpdate ? 'pen' : 'eye'}"></i></button>`
+    let deleteButton = `<button class="btn mx-1 text-danger" onclick=${deleteButtonClick}><i class="fas fa-trash"></i></button>`
+
+    if (canRead || canUpdate) {
+        buttons.push(viewOrEditButton)
+    } 
+
+    if (canDelete) {
+        buttons.push(deleteButton)
+    }
+
+    return buttons.join('')
 }

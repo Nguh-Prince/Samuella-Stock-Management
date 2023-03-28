@@ -54,6 +54,19 @@
 
     <script>
       LOCALE = "fr"
+
+      {% if request.user.employee.isStockManager or request.user.is_superuser %}
+        IS_STOCK_MANAGER = true
+      {% else %}
+        IS_STOCK_MANAGER = false
+      {% endif %}
+
+      {% if request.user.employee.is_structure_head  or request.user.is_superuser %}
+        IS_STRUCTURE_HEAD = true
+      {% else %}
+        IS_STRUCTURE_HEAD = false
+      {% endif %}
+
     </script>
 
     <script src="{% static 'js/jquery1-3.4.1.min.js'%}"></script>
