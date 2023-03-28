@@ -12,6 +12,10 @@ class ModelPermission(permissions.DjangoModelPermissions):
         self.perms_map = copy.deepcopy(self.perms_map)
         self.perms_map["GET"] = ["%(app_label)s.view_%(model_name)s"]
 
+class IsAuthenticatedAndReadOnly(permissions.IsAuthenticated):
+    def has_permission(self, request, view):
+        return request.method in permissions.SAFE_METHODS
+
 class IsEmployee(permissions.IsAuthenticated):
     def has_permission(self, request, view):
         if request.user.is_superuser:

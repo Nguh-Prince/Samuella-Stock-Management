@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
-from rest_framework import viewsets
+from rest_framework import status, viewsets
+from rest_framework.response import Response
+
 from common.permissions import IsHeadOfDepartmentOrIsStockManagerOrNotAllowed
 from managestock.models import Equipment
 
@@ -33,3 +35,11 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, Dep
             queryset = queryset.filter(structureId=self.request.user.employee.structureId)
 
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        serializer: serializers.PurchaseOrderSerializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        purchase_order = serializer.create(serializer.validated_data)
+
+        return Response( serializers.PurchaseOrderListSerializer(purchase_order).data, status=status.HTTP_201_CREATED )
