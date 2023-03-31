@@ -10,6 +10,20 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = models.Notification
         fields = ("notificationId", "notificationTimeCreated", "notificationMessage")
 
+class DetailedNotificationSerializer(serializers.ModelSerializer):
+    class NotificationRecipients(serializers.ModelSerializer):
+        recipientId = serializers.CharField(source="recipientId.username")
+
+        class Meta:
+            models.NotificationRecipient
+            fields = ("recipientId", "notificationSeen", "notificationTimeSeen", "notificationRead", "notificationTimeRead")
+
+    recipients = NotificationRecipients(many=True, read_only=True)
+    
+    class Meta:
+        model = models.Notification
+        fields = ("notificationId", "notificationTimeCreated", "notificationMessage", "recipients")
+
 class ListOfNotificationIdsSerializer(serializers.Serializer):
     notifications = serializers.ListField(child=serializers.IntegerField())
 
@@ -36,3 +50,10 @@ class ListOfNotificationIdsSerializer(serializers.Serializer):
             raise serializers.ValidationError(ValidationError)
 
         return notifications
+
+class NotificationRecipientSerializer(serializers.ModelSerializer):
+    notificationTimeCreated = serializers.DateTimeField(source="notificationId.notificationTimeCreated")
+    class Meta:
+        model = models.NotificationRecipient
+        fields = ("notificationId", "notificationTimeCreated", "notificationMessage", 
+        "notificationSeen", "notificationTimeSeen", "notificationRead", "notificationTimeRead", "model", "instance")

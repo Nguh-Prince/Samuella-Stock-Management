@@ -11,22 +11,37 @@ from . import models, serializers
 from .permissions import IsAuthenticatedAndReadOnly
 
 class NotificationViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
-    serializer_class = serializers.NotificationSerializer
+    serializer_class = serializers.NotificationRecipientSerializer
     permission_classes = [IsAuthenticatedAndReadOnly, ]
-    queryset = models.Notification.objects.all()
+    queryset = models.NotificationRecipient.objects.all()
     serializer_classes = {
         "mark_as_read": serializers.ListOfNotificationIdsSerializer,
         "mark_as_received": serializers.ListOfNotificationIdsSerializer
     }
 
     def get_queryset(self):
+        queryset = self.queryset
+
         user = self.request.user
 
         if not user.is_authenticated:
             return None
 
         if not user.is_superuser:
-            return models.Notification.objects.filter(notificationrecipient__recipientId=user)
+            queryset = queryset.filter(recipientId=user)
+
+            if 'unread' in self.request.GET:
+                queryset = queryset.filter(notificationRead=False)
+
+        return queryset
+
+    def get_serializer_class(self):
+        user = self.request.user
+
+        if not user.is_superuser:
+            return super().get_serializer_class()
+        
+        
 
     @action(
         methods=["POST", ],

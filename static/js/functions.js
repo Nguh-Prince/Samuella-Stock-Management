@@ -44,7 +44,10 @@ function createElement(htmlTag, classes = null, attributes = null) {
 
     if (attributes && typeof attributes === 'object') {
         for (let key in attributes) {
-            node.setAttribute(key, attributes[key])
+            if (key !== "textContent")
+                node.setAttribute(key, attributes[key])
+            else 
+                node.textContent = attributes[key]
         }
     }
 
@@ -67,20 +70,13 @@ function createElementsRecursively(object) {
     let element = createElementFromObject(object)
 
     if (!object.elements) {
-        console.log("Creating element with object ")
-        console.log(object)
         return element
     } else {
-        console.log("Element has children ")
-        console.log(object)
         for (let i = 0; i < object.elements.length; i++) {
             childObject = object.elements[i]
-            console.log("Creating a child out of object: ")
-            console.log(childObject)
 
             childElement = createElementsRecursively(childObject)
 
-            console.log("The recursion cycle has ended")
             element.appendChild(childElement)
         }
 

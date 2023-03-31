@@ -7,12 +7,12 @@ from manageusers.models import Structure
 
 class PurchaseOrder(models.Model):
     purchaseorderId = models.AutoField(primary_key=True)
-    structureId = models.ForeignKey(Structure, on_delete=models.CASCADE, related_name="purchase_orders")
+    structureId: Structure = models.ForeignKey(Structure, on_delete=models.CASCADE, related_name="purchase_orders")
     dateCreated = models.DateField(max_length=10)
     # history = HistoricalRecords()
 
     def __str__(self):
-        return str(self.purchaseorderId)
+        return f"{self.structureId.structureName}: {str(self.dateCreated)}"
 
 class PurchaseOrderEquipment(models.Model):
     purchaseOrderEquipmentId = models.AutoField(primary_key=True)

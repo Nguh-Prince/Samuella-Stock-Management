@@ -10,5 +10,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('managepurchaseorder/', include("managepurchaseorder.urls")),
     path('managestock/', include("managestock.urls")),
-    path('manageusers/', include("manageusers.urls"))
+    path('manageusers/', include("manageusers.urls")),
+    path('managenotifications/', include("managenotifications.urls")),
 ]

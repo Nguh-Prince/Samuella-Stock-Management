@@ -127,6 +127,17 @@
       .nav-link, .nav-link:hover, .nav-link:focus, .nav-link:active {
         color: var(--link-color);
       }
+
+      .Menu_NOtification_Wrap .notification_Header {
+        background: var(--accent-color);
+      }
+
+      .Menu_NOtification_Wrap .unread_bell {
+        background: var(--accent-color);
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+      }
     </style>
 
     {% block styles %}{% endblock %}
@@ -272,7 +283,7 @@
                   <li>
                     <a class="bell_notification_clicker" href="#">
                       <img src="{% static 'img/icon/bell.svg' %}" alt="" />
-                      <span>2</span>
+                      <!-- <span>2</span> -->
                     </a>
 
                     <div class="Menu_NOtification_Wrap">
@@ -280,65 +291,6 @@
                         <h4>Notifications</h4>
                       </div>
                       <div class="Notification_body">
-                        <div class="single_notify d-flex align-items-center">
-                          <div class="notify_thumb">
-                            <a href="#"><img src="{% static 'img/staf/2.png' %}" alt="" /></a>
-                          </div>
-                          <div class="notify_content">
-                            <a href="#"><h5>Cool Marketing</h5></a>
-                            <p>Lorem ipsum dolor sit amet</p>
-                          </div>
-                        </div>
-
-                        <div class="single_notify d-flex align-items-center">
-                          <div class="notify_thumb">
-                            <a href="#"><img src="{% static 'img/staf/4.png' %}" alt="" /></a>
-                          </div>
-                          <div class="notify_content">
-                            <a href="#"><h5>Awesome packages</h5></a>
-                            <p>Lorem ipsum dolor sit amet</p>
-                          </div>
-                        </div>
-
-                        <div class="single_notify d-flex align-items-center">
-                          <div class="notify_thumb">
-                            <a href="#"><img src="{% static 'img/staf/3.png' %}" alt="" /></a>
-                          </div>
-                          <div class="notify_content">
-                            <a href="#"><h5>what a packages</h5></a>
-                            <p>Lorem ipsum dolor sit amet</p>
-                          </div>
-                        </div>
-
-                        <div class="single_notify d-flex align-items-center">
-                          <div class="notify_thumb">
-                            <a href="#"><img src="{% static 'img/staf/2.png' %}" alt="" /></a>
-                          </div>
-                          <div class="notify_content">
-                            <a href="#"><h5>Cool Marketing</h5></a>
-                            <p>Lorem ipsum dolor sit amet</p>
-                          </div>
-                        </div>
-
-                        <div class="single_notify d-flex align-items-center">
-                          <div class="notify_thumb">
-                            <a href="#"><img src="{% static 'img/staf/4.png' %}" alt="" /></a>
-                          </div>
-                          <div class="notify_content">
-                            <a href="#"><h5>Awesome packages</h5></a>
-                            <p>Lorem ipsum dolor sit amet</p>
-                          </div>
-                        </div>
-
-                        <div class="single_notify d-flex align-items-center">
-                          <div class="notify_thumb">
-                            <a href="#"><img src="{% static 'img/staf/3.png' %}" alt="" /></a>
-                          </div>
-                          <div class="notify_content">
-                            <a href="#"><h5>what a packages</h5></a>
-                            <p>Lorem ipsum dolor sit amet</p>
-                          </div>
-                        </div>
                       </div>
                       <div class="nofity_footer">
                         <div class="submit_button text-center pt_20">
@@ -418,18 +370,14 @@
     <script src="{% static 'vendors/datatable/js/jquery.dataTables.min.js'%}"></script>
     <script src="{% static 'vendors/datatable/js/dataTables.responsive.min.js'%}"></script>
     <script src="{% static 'vendors/datatable/js/dataTables.buttons.min.js'%}"></script>
-    <!-- <script src="{% static 'vendors/datatable/js/buttons.flash.min.js'%}"></script>
-    <script src="{% static 'vendors/datatable/js/jszip.min.js'%}"></script>
-    <script src="{% static 'vendors/datatable/js/pdfmake.min.js'%}"></script>
-    <script src="{% static 'vendors/datatable/js/vfs_fonts.js'%}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.html5.min.js'%}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.print.min.js'%}"></script> -->
 
     <script src="{% static 'vendors/datepicker/datepicker.js'%}"></script>
     <script src="{% static 'vendors/datepicker/datepicker.en.js'%}"></script>
     <script src="{% static 'vendors/datepicker/datepicker.custom.js'%}"></script>
     <script src="{% static 'js/chart.min.js'%}"></script>
     <script src="{% static 'vendors/chartjs/roundedBar.min.js'%}"></script>
+
+    <script src="{% static 'js/managenotifications.js'%}"></script>
     
     <script>
       updateCurrentDateAndTimeInputs()
@@ -443,6 +391,12 @@
 
       $(".sidebar_close_icon").click(function() {
         $('.sidebar').removeClass('active_sidebar')
+      })
+
+      $(".bell_notification_clicker").click(function() {
+        let notificationMenu = $('.Menu_NOtification_Wrap')
+
+        notificationMenu.hasClass('active') ? notificationMenu.removeClass('active') : notificationMenu.addClass('active')
       })
 
       $(".select-all-rows").change(function() {
