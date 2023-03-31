@@ -159,16 +159,18 @@
         </div>
       </div>
       <ul id="sidebar_menu">
+        {% if request.user.is_superuser or request.user.employee.isStockManager %}
         <li>
           <a href="{% url 'dashboard' %}" aria-expanded="false" class="{% block dashboard_classes %}{% endblock %}">
             <div class="nav_icon_small">
               <img src="{% static 'img/menu-icon/dashboard.svg' %}" alt="" />
             </div>
             <div class="nav_title">
-              <span>Dashboard</span>
+              <span>Tableau de bord</span>
             </div>
           </a>
         </li>
+        {% endif %}
         <!-- <h4 class="menu-text">
           <span>CUSTOM</span> <i class="fas fa-ellipsis-h"></i>
         </h4> -->

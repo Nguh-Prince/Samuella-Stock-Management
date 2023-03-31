@@ -174,7 +174,11 @@
                 <table id="discharges-table" class="table table-striped lms_table_active">
                   <thead>
                     <tr>
-                      <th scope="col"><input class="select-all-rows" type="checkbox"></th>
+                      <th scope="col">
+                        {% if request.user.is_superuser or request.user.employee.isStockManager %}
+                        <input class="select-all-rows" type="checkbox">
+                        {% endif %}
+                      </th>
                       <th scope="col">Structure</th>
                       <th scope="col">Date sortie</th>
                       <th scope="col">Equipements</th>

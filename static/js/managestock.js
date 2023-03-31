@@ -57,7 +57,7 @@ var dischargesTable = $("#discharges-table").DataTable({
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     try {
-                        return `<input type='checkbox' class='select-row' value=${row['dischargeId']}>`
+                        return IS_STOCK_MANAGER ? `<input type='checkbox' class='select-row' value=${row['dischargeId']}>` : ''
                     } catch (error) {
                         
                     }

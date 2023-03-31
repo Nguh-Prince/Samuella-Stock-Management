@@ -10,7 +10,7 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     try {
-                        return `<input type='checkbox' class='select-row' value=${row['purchaseorderId']}>`
+                        return IS_STRUCTURE_HEAD ? `<input type='checkbox' class='select-row' value=${row['purchaseorderId']}>` : ''
                     } catch (error) {
                         
                     }

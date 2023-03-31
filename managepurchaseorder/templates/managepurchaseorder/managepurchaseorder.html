@@ -23,18 +23,32 @@
     {% endfor %}
 </datalist>
 
-<div class="box_right d-flex lms_block justify-content-end my-3">
-    <div class="add_button ms-2">
-      <a
-        href="#"
-        data-bs-toggle="modal"
-        data-bs-target="#new-purchase-order-modal"
-        class="btn_1"
-        id="new-purchase-order-modal-toggle"
-        >Ajouter un nouveau</a>
+<div class="row justify-content-center align-items-center">
+    {% if user.is_superuser or user.employee.is_structure_head %}
+    <div class="col box_right d-flex lms_block justify-content-start my-3">
+        <div class="add_button ms-2">
+            <a
+              href="#"
+              class="btn btn-danger"
+              id="delete-many-button"
+              ><i class="fas fa-trash mx-2"></i>Supprimer (2)</a>
+        </div>
     </div>
-  </div>
+    {% endif %}
 
+    <div class="col box_right d-flex lms_block justify-content-end my-3">
+        <div class="add_button ms-2">
+          <a
+            href="#"
+            data-bs-toggle="modal"
+            data-bs-target="#new-purchase-order-modal"
+            class="btn_1"
+            id="new-purchase-order-modal-toggle"
+            ><i class="fas fa-plus mx-2"></i>Ajouter un nouveau</a>
+        </div>
+    </div>
+    
+</div>
 <div class="row justify-content-center">
     <div class="col-lg-12">
       <div class="white_card card_height_100 mb_30">

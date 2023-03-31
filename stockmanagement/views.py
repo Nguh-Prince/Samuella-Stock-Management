@@ -42,12 +42,23 @@ def login_view(request):
                     context={"errors": [{"message": "Votre compte n'est pas active. Contactez un admin pour l'activer"}]}
                 )
 
+            # the site is only available to super users, stock managers or department heads
+            if not user.is_superuser and not (user.employee and (user.employee.isStockManager or user.employee.is_structure_head)):
+                return render(
+                    request, "login.html",
+                    context={"errors": [{"message": "Vous n'êtes pas autorisé à accéder"}]}
+                )
+
+
             login(request, user)
 
             # if 'next' in request.GET:
             #     return redirect(request.GET['next'])
 
-            return redirect("dashboard")
+            if user.is_superuser or (user.employee and user.employee.isStockManager):
+                return redirect("dashboard")
+            else:
+                return redirect("managepurchaseorder:managepurchaseorder_home")
 
         except User.DoesNotExist as e:
             context = {
