@@ -25,12 +25,16 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
         {
             "data": "dateCreated",
             render: function(data, type, row, meta) {
-                try {
-                    return getLocaleTime(data, true)   
-                } catch (error) {
-                    console.error(error)
-                    return data
-                }
+                if (type === 'display') {
+                    try {
+                        return getLocaleTime(data, true)   
+                    } catch (error) {
+                        console.error(error)
+                        return data
+                    }
+                } 
+                
+                return data
             }
         },
         {
@@ -60,7 +64,8 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
                 }
             }
         }
-    ]
+    ],
+    order: [ ["2", "desc"] ]
 })
 
 function deleteRow(e) {
@@ -484,11 +489,15 @@ function multiplePurchaseOrdersDeleteButtonClick(displayModal=true) {
             headers: {
                 "X-CSRFTOKEN": getCookie("csrftoken")
             },
+            data: JSON.stringify({
+                data: selectedPurchaseOrders
+            }),
+            contentType: "application/json",
             success: function(data) {
                 displayMessage("Les commandes ont ete supprimees avec succes", ['alert-success', 'alert-dismissible'])
 
                 for (let deletedPurchaseOrder of data) {
-                    state.purchaseOrders = sta.purchaseOrders.filter( (item) => {
+                    state.purchaseOrders = state.purchaseOrders.filter( (item) => {
                         return item.purchaseorderId != deletedPurchaseOrder.purchaseorderId
                     } )
                 }
@@ -499,6 +508,7 @@ function multiplePurchaseOrdersDeleteButtonClick(displayModal=true) {
             },
             error: function(data) {
                 displayMessage("Les commandes n'ont pas etees supprimes avec succes")
+                console.log(data.responseText)
             }
         })
     }

@@ -25,13 +25,13 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, Dep
 
     serializer_classes = {
         'list': serializers.PurchaseOrderListSerializer,
-        'destroy': serializers.ListOfPurchaseOrderIdsSerializer
+        'delete_many': serializers.ListOfPurchaseOrderIdsSerializer
     }
 
     STRUCTURE_LOOKUP_KWARG = "parent_lookup_structure"
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = self.queryset#.order_by('-dateCreated')
 
         if not self.request.user.is_superuser and not self.request.user.employee.isStockManager and self.request.user.employee.is_structure_head():
             queryset = queryset.filter(structureId=self.request.user.employee.structureId)
@@ -54,7 +54,9 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, Dep
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        for purchaseOrder in serializer.validated_data:
+        dataToReturn = self.serializer_class(serializer.validated_data['data'], many=True).data
+
+        for purchaseOrder in serializer.validated_data['data']:
             purchaseOrder.delete()
 
-        return Response(serializer.validated_data)
+        return Response(dataToReturn)

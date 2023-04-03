@@ -116,7 +116,7 @@ function padStart(number, length=2, padString='0') {
 }
 
 function isoDateString(dateObject) {
-    return `${dateObject.getFullYear()}-${padStart(dateObject.getMonth())}-${padStart(dateObject.getDate())}`
+    return `${dateObject.getFullYear()}-${padStart(dateObject.getMonth() + 1)}-${padStart(dateObject.getDate())}`
 }
 
 function updateCurrentDateAndTimeInputs() {

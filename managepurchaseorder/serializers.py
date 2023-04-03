@@ -125,7 +125,7 @@ class ListOfPurchaseOrderIdsSerializer(serializers.Serializer):
 
         validationErrors = []
 
-        for index, item in data:
+        for index, item in enumerate(data):
             try:
                 purchaseOrder = models.PurchaseOrder.objects.get(purchaseorderId=item)
                 
