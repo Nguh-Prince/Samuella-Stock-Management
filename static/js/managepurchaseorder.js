@@ -1,4 +1,5 @@
 var purchaseOrderSelectedForEditing = null
+var selectedPurchaseOrders = []
 
 var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
     columnDefs: [{
@@ -10,7 +11,8 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     try {
-                        return IS_STRUCTURE_HEAD ? `<input type='checkbox' class='select-row' value=${row['purchaseorderId']}>` : ''
+                        let checkboxId = generateRandomId()
+                        return IS_STRUCTURE_HEAD ? `<input type='checkbox' class='select-row' value=${row['purchaseorderId']} id='${checkboxId}' onchange=selectPurchaseOrdersTableRow('${checkboxId}')>` : ''
                     } catch (error) {
                         
                     }
@@ -23,7 +25,12 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
         {
             "data": "dateCreated",
             render: function(data, type, row, meta) {
-                return getLocaleTime(data, true)
+                try {
+                    return getLocaleTime(data, true)   
+                } catch (error) {
+                    console.error(error)
+                    return data
+                }
             }
         },
         {
@@ -164,6 +171,7 @@ $.ajax({
     }
 })
 
+/* ------------------------ EVENT LISTENERS SECTION ------------------------ */
 $("#new-purchase-order-modal-toggle").click( function() {
     console.log("Clicked the add new purchase order button")
     // add 3 rows to the new purchase order modal if the table is empty
@@ -175,8 +183,6 @@ $("#new-purchase-order-modal-toggle").click( function() {
         addRowsToNewPurchaseOrderTable()
     }
 } )
-
-/* ------------------------ EVENT LISTENERS SECTION ------------------------ */
 
 $("#add-rows-to-new-purchase-order-table").click( function() {
     console.log("Clicked the 'Ajouter des lignes' button")
@@ -237,12 +243,31 @@ $("#confirm-purchase-order-deletion-no").click( function() {
     $("#confirm-purchase-order-deletion-modal-close").click()
 } )
 
-$("#confirm-purchase-order-deletion-no").click( function() {
+$("#confirm-purchase-order-deletion-yes").click( function() {
     try {
         let purchaseOrderId = parseInt($("#confirm-purchase-order-deletion-purchase-order-id").val())
         purchaseOrderDeleteButtonClick(purchaseOrderId, false)
 
         $("#confirm-purchase-order-deletion-modal-close").click()
+    } catch (error) {
+        throw error
+    }
+} )
+
+$("#delete-many").click(function() {
+    console.log("Clicked the delete many button in the purchase orders page")
+    multiplePurchaseOrdersDeleteButtonClick(true)
+})
+
+$("#confirm-multiple-purchase-orders-deletion-no").click( function() {
+    $("#confirm-multiple-purchase-orders-deletion-modal-close").click()
+} )
+
+$("#confirm-multiple-purchase-orders-deletion-yes").click( function() {
+    try {
+        multiplePurchaseOrdersDeleteButtonClick(false)
+
+        $("#confirm-multiple-purchase-orders-deletion-modal-close").click()
     } catch (error) {
         throw error
     }
@@ -272,6 +297,29 @@ $("#purchase-order-detail-save").click(function() {
             console.log(data.responseText)
         }
     })
+})
+
+$(".select-all").change(function() {
+    let checked = $(this).prop('checked')
+
+    let rowCheckButtons = $(this).parent().parent().parent().parent().children('tbody').first().find('.select-row')
+    rowCheckButtons.prop('checked', checked)
+
+    rowCheckButtons.each( function() {
+        if (checked) {
+            // add this item's value to the list of selected purchase orders
+            selectedPurchaseOrders.push( $(this).val() )
+        } else {
+            // remove this item's value from the list of selected purchase orders
+            selectedPurchaseOrders.filter( (item) => {
+                return item != $(this).val()
+            } )
+        }
+    } )
+
+    let numberOfRowsSelected = rowCheckButtons.length
+
+    deleteMultipleButton(checked ? numberOfRowsSelected : 0, true)
 })
 
 /* ------------------------ END EVENT LISTENERS SECTION ------------------------ */
@@ -423,4 +471,82 @@ function purchaseOrderDeleteButtonClick(purchaseOrderId, displayModal=true) {
             }
         })
     }
+}
+
+function multiplePurchaseOrdersDeleteButtonClick(displayModal=true) {
+    if (displayModal) {
+        $("#confirm-multiple-purchase-orders-deletion-modal-open").click()
+    } else {
+        // perform deletion
+        $.ajax({
+            type: "DELETE",
+            url: `/managepurchaseorder/purchaseorders/delete_many`,
+            headers: {
+                "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function(data) {
+                displayMessage("Les commandes ont ete supprimees avec succes", ['alert-success', 'alert-dismissible'])
+
+                for (let deletedPurchaseOrder of data) {
+                    state.purchaseOrders = sta.purchaseOrders.filter( (item) => {
+                        return item.purchaseorderId != deletedPurchaseOrder.purchaseorderId
+                    } )
+                }
+
+                purchaseOrdersTable.clear()
+                purchaseOrdersTable.rows.add(state.purchaseOrders)
+                purchaseOrdersTable.draw()  
+            },
+            error: function(data) {
+                displayMessage("Les commandes n'ont pas etees supprimes avec succes")
+            }
+        })
+    }
+}
+
+function deleteMultipleButton(numberOfItemsToDelete, isAll=false) {
+    // isAll is true if the numberOfItemsToDelete is the total number of items in the table
+    let deleteManyButton = $("#delete-many-button")
+
+    if (numberOfItemsToDelete >= 1) {
+        deleteManyButton.prop('disabled', false)
+        deleteManyButton.removeClass('d-none')
+
+        if (numberOfItemsToDelete == 1) {
+            deleteManyButton.text("Supprimer la commande")
+        } else {
+            deleteManyButton.text(`Supprimer ${ isAll ? `toutes (${numberOfItemsToDelete})` : `(${numberOfItemsToDelete}) commandes` }`)
+        }
+    } else {
+        deleteManyButton.prop('disabled', true)
+        deleteManyButton.addClass('d-none')
+    }
+}
+
+function selectPurchaseOrdersTableRow(checkboxId) {
+    let checked = $(`#${checkboxId}`).prop('checked')
+
+    if (checked) {
+        selectedPurchaseOrders.push( $(`#${checkboxId}`).val() )
+    } else {
+        selectedPurchaseOrders.filter( (item) => {
+            return item != $(`#${checkboxId}`).val()
+        } )
+    }
+    
+    let tbody = $(`#${checkboxId}`).parent().parent().parent()
+
+    let rowCheckButtons = tbody.find('.select-row')
+    let numberOfRows = rowCheckButtons.length
+    let numberOfRowsSelected = 0
+
+    rowCheckButtons.each(function() {
+        numberOfRowsSelected += $(this).prop("checked") ? 1 : 0
+    })
+
+    console.log(`A row has been (de)selected. The number of rows selected is: ${numberOfRowsSelected}, number of rows: ${numberOfRows}`)
+
+    tbody.parent().children('thead').find('.select-all').prop('checked', numberOfRows == numberOfRowsSelected)
+
+    deleteMultipleButton(numberOfRowsSelected, numberOfRows == numberOfRowsSelected)   
 }

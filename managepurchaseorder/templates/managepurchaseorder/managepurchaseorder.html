@@ -29,7 +29,7 @@
         <div class="add_button ms-2">
             <a
               href="#"
-              class="btn btn-danger"
+              class="btn btn-danger d-none"
               id="delete-many-button"
               ><i class="fas fa-trash mx-2"></i>Supprimer (2)</a>
         </div>
@@ -65,7 +65,7 @@
               <table id="purchase-orders-table" class="table table-striped lms_table_active">
                 <thead>
                   <tr>
-                    <th scope="col"><input type="checkbox"></th>
+                    <th scope="col"><input type="checkbox" class="select-all"></th>
                     <th scope="col">Structure</th>
                     <th scope="col">Date</th>
                     <th scope="col">Equipements commandes</th>
@@ -272,6 +272,45 @@ data-bs-target="#purchase-order-detail-modal" data-bs-toggle="modal">
 
                 <button type="button" id="confirm-purchase-order-deletion-no" class="btn btn-secondary">Non</button>
                 <button type="button" id="confirm-purchase-order-deletion-yes" class="btn btn-danger">Oui, je suis sur</button>
+            </div>
+        </div>
+        </div>
+</div>
+
+<div
+    class="modal fade"
+    id="confirm-multiple-purchase-orders-deletion-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="confirm-multiple-purchase-orders-deletion-modal-title">Confirmer la suppression</h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <h2 class="text-danger">Êtes-vous sûr de bien vouloir supprimer ces éléments?</h2>
+            </div>
+            <input type="hidden" id="confirm-multiple-purchase-orders-deletion-multiple-purchase-orders-id">
+            <div class="modal-footer">
+                <input type="hidden" data-bs-dismiss="modal" id="confirm-multiple-purchase-orders-deletion-modal-close">
+                
+                <input type="hidden" data-bs-toggle="modal" 
+                data-bs-target="#confirm-multiple-purchase-orders-deletion-modal" 
+                id="confirm-multiple-purchase-orders-deletion-modal-open">
+
+                <button type="button" id="confirm-multiple-purchase-orders-deletion-no" class="btn btn-secondary">Non</button>
+                <button type="button" id="confirm-multiple-purchase-orders-deletion-yes" class="btn btn-danger">Oui, je suis sur</button>
             </div>
         </div>
         </div>

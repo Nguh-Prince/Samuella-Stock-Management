@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from common.permissions import IsHeadOfDepartmentOrIsStockManagerOrNotAllowed
@@ -23,7 +24,8 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, Dep
     permission_classes = [IsHeadOfDepartmentOrIsStockManagerOrNotAllowed,]
 
     serializer_classes = {
-        'list': serializers.PurchaseOrderListSerializer
+        'list': serializers.PurchaseOrderListSerializer,
+        'destroy': serializers.ListOfPurchaseOrderIdsSerializer
     }
 
     STRUCTURE_LOOKUP_KWARG = "parent_lookup_structure"
@@ -43,3 +45,16 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, Dep
         purchase_order = serializer.create(serializer.validated_data)
 
         return Response( serializers.PurchaseOrderListSerializer(purchase_order).data, status=status.HTTP_201_CREATED )
+
+    @action(
+        methods=['DELETE'],
+        detail=False
+    )
+    def delete_many(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        for purchaseOrder in serializer.validated_data:
+            purchaseOrder.delete()
+
+        return Response(serializer.validated_data)

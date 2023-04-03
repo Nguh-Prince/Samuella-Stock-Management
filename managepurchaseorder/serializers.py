@@ -1,3 +1,4 @@
+import logging
 from django.utils import timezone
 
 from rest_framework import serializers
@@ -113,3 +114,29 @@ class PurchaseOrderListSerializer(PurchaseOrderSerializer):
         extra_kwargs = {
             "dateCreated": { "allow_null": True, "required": False }
         }
+
+class ListOfPurchaseOrderIdsSerializer(serializers.Serializer):
+    data = serializers.ListField(child=serializers.IntegerField())
+
+    def validate_data(self, data):
+        user = self.context['request'].user
+
+        purchaseOrdersList = []
+
+        validationErrors = []
+
+        for index, item in data:
+            try:
+                purchaseOrder = models.PurchaseOrder.objects.get(purchaseorderId=item)
+                
+                if user.is_superuser or (user.employee and user.employee.is_structure_head() and user.employee.structureId == purchaseOrder.structureId):
+                    purchaseOrdersList.append(purchaseOrder)
+                else:
+                    validationErrors.append(serializers.ValidationError(f"Erreur dans le position {index+1} de la liste. Vous n'etes pas autorises a supprimer cette commande"))
+            except models.PurchaseOrder.DoesNotExist as e:
+                logging.error(f"Error getting purchase order with purchaseorderId {item}. No purchase order exists with purchaseorderId: {item}.")
+        
+        if validationErrors:
+            raise serializers.ValidationError(validationErrors)
+
+        return purchaseOrdersList
