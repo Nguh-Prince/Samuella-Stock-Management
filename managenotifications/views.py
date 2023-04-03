@@ -13,7 +13,7 @@ from .permissions import IsAuthenticatedAndReadOnly
 class NotificationViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     serializer_class = serializers.NotificationRecipientSerializer
     permission_classes = [IsAuthenticatedAndReadOnly, ]
-    queryset = models.NotificationRecipient.objects.all()
+    queryset = models.NotificationRecipient.objects.all().order_by('-notificationId__notificationTimeCreated')
     serializer_classes = {
         "mark_as_read": serializers.ListOfNotificationIdsSerializer,
         "mark_as_received": serializers.ListOfNotificationIdsSerializer

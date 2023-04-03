@@ -59,7 +59,7 @@ class NotificationRecipient(models.Model):
 def notify_stock_managers_of_new_purchase_orders(sender, instance: PurchaseOrder, *args, **kwargs):
     logging.info("Notifying stock managers of newly created purchase order")
 
-    notification = Notification.objects.create(notificationMessage=f"New purchase order: {instance.__str__()}", notificationModel="managepurchaseorder.PurchaseOrder", notificationModelId=instance.purchaseorderId)
+    notification = Notification.objects.create(notificationMessage=f"Nouvelle commande d'un structure: {instance.__str__()}", notificationModel="managepurchaseorder.PurchaseOrder", notificationModelId=instance.purchaseorderId)
 
     for user in User.objects.filter(Q(employee__isStockManager=True) | Q(is_superuser=True)):
         NotificationRecipient.objects.create(notificationId=notification, recipientId=user)
