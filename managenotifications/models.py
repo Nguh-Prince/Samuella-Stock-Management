@@ -21,7 +21,7 @@ class Notification(models.Model):
     @property
     def model(self) -> str:
         if self.notificationModel.lower() == "managepurchaseorder.purchaseorder":
-            return "Commande d'un structure"
+            return "Commande d'une structure"
 
 class NotificationRecipient(models.Model):
     notificationRecipientId = models.AutoField(primary_key=True)

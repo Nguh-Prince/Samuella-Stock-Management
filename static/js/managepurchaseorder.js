@@ -423,10 +423,10 @@ function getPurchaseOrderDetailsFromForm() {
 }
 
 function displayPurchaseOrderDetailModal(purchaseOrder=purchaseOrderSelectedForEditing) {
-    $("#purchase-order-detail-modal-title").text(`${purchaseOrder.structureId}: ${purchaseOrder.dateCreated}`)
+    $("#purchase-order-detail-modal-title").text(`${purchaseOrder.structureId.structureName}: ${purchaseOrder.dateCreated}`)
 
     $("#purchase-order-detail-purchaseorder-id").val(purchaseOrderSelectedForEditing)
-    $("#purchase-order-detail-structure").val(purchaseOrder.structureId)
+    $("#purchase-order-detail-structure").val(purchaseOrder.structureId.structureId)
     $("#purchase-order-detail-date").val(purchaseOrder.dateCreated)
 
     purchaseOrderDetailsTable.clear()

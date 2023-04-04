@@ -55,7 +55,7 @@ class StockEquipment(models.Model):
 class Discharge(models.Model):
     dischargeId = models.AutoField(primary_key=True)
     structureId = models.ForeignKey(Structure, on_delete=models.PROTECT, related_name="discharges")
-    dateCreated = models.DateField(auto_created=True)
+    dateCreated = models.DateTimeField(auto_created=True)
 
 class EquipmentDischarged(models.Model):
     equipmentDischargedId = models.AutoField(primary_key=True)
