@@ -1,3 +1,43 @@
+var purchaseOrderDetailsViewTable = $("#purchase-order-detail-view-table").DataTable({
+    columnDefs: [{
+        "defaultContent": "-",
+        "targets": "_all"
+    }],
+    "columns": [
+        {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    try {
+                        return ``
+                    } catch (error) {
+                        
+                    }
+                }
+            }
+        },
+        {
+            "data": "equipmentId.equipmentName",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<input class="form-control" type="text" placeholder="Nom de l'equipement" list="equipments-list" readonly name="equipmentName" value=${data}>`
+                }
+                else 
+                    return data
+            }
+        },
+        {
+            "data": "quantity",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `<input class="form-control" type="number" readonly placeholder="Quantite" name="quantity" min=1 value=${data}>`
+                }
+                else
+                    return data
+            }
+        }
+    ]
+})
+
 $.ajax({
     type: 'GET',
     url: `/managenotifications/notifications/`,
@@ -57,7 +97,9 @@ function populateNotificationsMenu(notifications, limit=10) {
                 ]
             })
     
-            $(notificationDiv)
+            $(notificationDiv).click( function() {
+                displayPurchaseOrderDetailViewModal(item.instance)
+            } )
     
             console.log("Created notification div")
             console.log(notificationDiv)
@@ -77,4 +119,21 @@ function populateNotificationsMenu(notifications, limit=10) {
     } else {
         $('.bell_notification_clicker>span').remove()
     }
+}
+
+function displayPurchaseOrderDetailViewModal(purchaseOrder) {
+    console.log("Displaying purchase order details view modal")
+    console.log(purchaseOrder)
+
+    $("#purchase-order-detail-view-modal-title").text(`${purchaseOrder.structureId.structureName}: ${purchaseOrder.dateCreated}`)
+
+    $("#purchase-order-detail-view-purchaseorder-id").val(purchaseOrder.purchaseorderId)
+    $("#purchase-order-detail-view-structure").val(purchaseOrder.structureId.structureId)
+    $("#purchase-order-detail-view-date").val(purchaseOrder.dateCreated)
+
+    purchaseOrderDetailsViewTable.clear()
+    purchaseOrderDetailsViewTable.rows.add(purchaseOrder.equipments)
+    purchaseOrderDetailsViewTable.draw()
+
+    $("#purchase-order-detail-view-modal-toggle").click()
 }

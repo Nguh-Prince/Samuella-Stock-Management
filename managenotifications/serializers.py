@@ -3,6 +3,8 @@ from django.forms import ValidationError
 
 from rest_framework import serializers
 
+from managepurchaseorder.models import PurchaseOrder
+from managepurchaseorder.serializers import PurchaseOrderListSerializer
 from . import models
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -53,7 +55,18 @@ class ListOfNotificationIdsSerializer(serializers.Serializer):
 
 class NotificationRecipientSerializer(serializers.ModelSerializer):
     notificationTimeCreated = serializers.DateTimeField(source="notificationId.notificationTimeCreated")
+    instance = serializers.SerializerMethodField(source="instance")
+
+    def get_instance(self, data):
+        try:
+            return PurchaseOrderListSerializer(PurchaseOrder.objects.get(purchaseorderId=data.instance)).data
+        except PurchaseOrder.DoesNotExist:
+            return None
+
     class Meta:
         model = models.NotificationRecipient
-        fields = ("notificationId", "notificationTimeCreated", "notificationMessage", 
-        "notificationSeen", "notificationTimeSeen", "notificationRead", "notificationTimeRead", "model", "instance")
+        fields = (
+            "notificationId", "notificationTimeCreated", "notificationMessage", 
+            "notificationSeen", "notificationTimeSeen", "notificationRead", 
+            "notificationTimeRead", "model", "instance"
+        )

@@ -214,7 +214,7 @@
           {% endif %}
 
           {% if request.user.is_superuser or request.user.employee.isStockManager %}
-          <li>
+          <!-- <li>
             <a href="{% url 'managestock:managestock_entries' %}" aria-expanded="false" class="{% block gestion_des_entrees_classes %}{% endblock %}">
               <div class="nav_icon_small">
                 <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
@@ -223,7 +223,7 @@
                 <span>Gestion des Entrees</span>
               </div>
             </a>
-          </li>
+          </li> -->
           {% endif %}
 
           <!-- <li>
@@ -349,6 +349,71 @@
         </div>
       </div>
     </div>
+
+    <div
+    class="modal fade"
+    id="purchase-order-detail-view-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="purchase-order-detail-view-modal-title"></h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="purchase-order-detail-view-purchaseorder-id">
+                <div class="row">
+                    <div class="col-md-7">
+                        <label for="purchase-order-detail-view-structure">Structure</label>
+                        <select id="purchase-order-detail-view-structure" class="form-select">
+                            {% for structure in structures %}
+                                <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="purchase-order-detail-view-date">Date</label>
+                        <input type="date" id="purchase-order-detail-view-date" class="form-control current">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row my-4">
+                            <table id="purchase-order-detail-view-table" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Equipement</th>
+                                        <th>Quantite</th>
+                                    </tr>
+                                </thead>
+            
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="purchase-order-detail-view-modal-toggle" data-bs-toggle="modal" data-bs-target="#purchase-order-detail-view-modal">
+            <div class="modal-footer">
+                <button type="button" id="purchase-order-detail-view-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+        </div>
+</div>
+
 
     {% block modals %}
     {% endblock %}
