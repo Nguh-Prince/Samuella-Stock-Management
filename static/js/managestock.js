@@ -32,13 +32,12 @@ var equipmentsTable = $("#equipments-table").DataTable({
             // delete and edit buttons
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    if (row['equipmentId'] !== null) 
-                        return `<button class="btn text-primary" onclick=equipmentEditButtonClick(${row['equipmentId']}) data-equipment-id=${row['equipmentId']}>
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn mx-1 text-danger" data-equipment-id=${row['equipmentId']}>
-                                    <i class="fas fa-trash"></i>
-                                </button>`
+                    if (row['equipmentId'] !== null) {
+                        let viewButtonClick = `equipmentEditButtonClick(${row['equipmentId']})`
+                        let deleteButtonClick = `equipmentDeleteButtonClick(${row['equipmentId']})`
+
+                        return renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)
+                    }
                     else 
                         return '---'
                 }
@@ -403,6 +402,17 @@ $("#confirm-discharge-deletion-yes").click(function() {
     }
 })
 
+$("#confirm-equipment-deletion-yes").click(function() {
+    try {
+        let equipmentId = parseInt($("#confirm-equipment-deletion-equipment-id").val())
+        equipmentDeleteButtonClick(equipmentId, false)
+
+        $("#confirm-equipment-deletion-modal-close").click()
+    } catch (error) {
+        throw error
+    }
+})
+
 function getNewEquipmentsFromForm() {
     // returns a list of equipments to be added based on the user's     input
     equipment = {
@@ -527,6 +537,46 @@ function dischargeDeleteButtonClick(dischargeId, displayModal=true) {
                 dischargesTable.clear()
                 dischargesTable.rows.add(state.discharges)
                 dischargesTable.draw()
+            },
+            error: function(data) {
+                displayMessage("Le decharge n'a pas ete supprime avec succes")
+                console.log(data.responseText)
+            }
+        })
+    }
+}
+
+function equipmentDeleteButtonClick(equipmentId, displayModal=true) {
+    if (displayModal) {
+        // display modal to confirm deletion
+        $("#confirm-equipment-deletion-modal-open").click()
+        $("#confirm-equipment-deletion-equipment-id").val(equipmentId)
+
+        for (let equipment of state.equipments) {
+            if (equipment.equipmentId == equipmentId) {
+                $("#confirm-equipment-deletion-modal .modal-body").find('h2.text-danger').text(`Êtes-vous sûr de bien vouloir supprimer l'equipement '${equipment.equipmentName}'`)
+                break
+            }
+        }
+    }
+    else {
+        // perform deletion
+        $.ajax({
+            type: "DELETE",
+            url: `/managestock/equipments/${equipmentId}/`,
+            headers: {
+                "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function(data) {
+                displayMessage("L'equipement a ete supprime avec succes", ["alert-success", "alert-dismissible"])
+    
+                state.equipments = state.equipments.filter( (item) => {
+                    return item.equipmentId != equipmentId
+                } )
+    
+                equipmentsTable.clear()
+                equipmentsTable.rows.add(state.equipments)
+                equipmentsTable.draw()
             },
             error: function(data) {
                 displayMessage("Le decharge n'a pas ete supprime avec succes")
