@@ -318,6 +318,23 @@ $("#add-rows-to-discharge-detail-table").click(function() {
     }
 })
 
+$("#add-rows-to-new-discharge-table").click(function() {
+    console.log("Clicked the add rows to new discharge table button")
+
+    try {
+        let numberOfRows = parseInt($("#number-of-rows-to-add-to-new-discharge-table").val())
+        
+        if (numberOfRows > 0) {
+            let listOfRows = getEmptyEquipments(numberOfRows, {equipmentId: {equipmentName: ""}, quantity: 1})
+            
+            console.log(`Adding ${numberOfRows} rows to discharge table`)
+            addRowsToDataTable(newDischargeEquipmentsTable, listOfRows)
+        }
+    } catch (error) {
+        throw error   
+    }
+})
+
 $("#new-discharge-modal-toggle").click(function() {
     console.log("Clicked the new-discharge-modal-toggle button")
     let numberOfRows = parseInt($("#new-discharge-table tbody tr i.fas.fa-trash").length)
