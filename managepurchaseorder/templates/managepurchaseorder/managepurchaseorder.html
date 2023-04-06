@@ -66,9 +66,7 @@
               <table id="purchase-orders-table" class="table table-striped lms_table_active">
                 <thead>
                   <tr>
-                    {% if request.user.is_superuser or request.user.is_structure_head %}
-                        <th scope="col"><input type="checkbox" class="select-all"></th>
-                    {% endif %}
+                    <th scope="col"><input type="checkbox" class="select-all"></th>
                     <th scope="col">Structure</th>
                     <th scope="col">Date</th>
                     <th scope="col">Equipements</th>

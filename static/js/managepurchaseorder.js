@@ -64,11 +64,11 @@ var purchaseOrdersTableColumns = [
         }
     }
 ]
-if (!IS_STRUCTURE_HEAD) {
-    purchaseOrdersTableColumns = purchaseOrdersTableColumns.filter( (item, index) => {
-        return index !== 0
-    } )
-}
+// if (!IS_STRUCTURE_HEAD) {
+//     purchaseOrdersTableColumns = purchaseOrdersTableColumns.filter( (item, index) => {
+//         return index !== 0
+//     } )
+// }
 
 var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
     columnDefs: [{
