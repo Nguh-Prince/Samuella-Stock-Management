@@ -134,7 +134,10 @@ var newDischargeEquipmentsTable = $("#new-discharge-table").DataTable({
                 }
             }
         }
-    ]
+    ],
+    searching: false,
+    ordering: false,
+    paging: false
 })
 
 function deleteRow(e) {

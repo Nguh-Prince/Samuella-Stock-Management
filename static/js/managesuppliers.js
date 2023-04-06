@@ -24,12 +24,13 @@ var suppliersTable = $("#suppliers-table").DataTable({
             render: function(data, type, row, meta) {
                 if (type === 'display') {
                     if (row['supplierId'] !== null) 
-                        return `<button class="btn text-primary" onclick=supplierEditButtonClick(${row['supplierId']}) data-supplier-id=${row['supplierId']}>
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn mx-1 text-danger" onclick=supplierDeleteButtonClick(${row['supplierId']}) data-supplier-id=${row['supplierId']}>
-                                    <i class="fas fa-trash"></i>
-                                </button>`
+                        return `<div class='d-flex'>${renderActionButtonsInDataTable(row, true, true, true, `supplierEditButtonClick(${row['supplierId']})`, `supplierDeleteButtonClick(${row['supplierId']})`)}</div>`
+                        // return `<button class="btn text-primary" onclick=supplierEditButtonClick(${row['supplierId']}) data-supplier-id=${row['supplierId']}>
+                        //             <i class="fas fa-pen"></i>
+                        //         </button>
+                        //         <button class="btn mx-1 text-danger" onclick=supplierDeleteButtonClick(${row['supplierId']}) data-supplier-id=${row['supplierId']}>
+                        //             <i class="fas fa-trash"></i>
+                        //         </button>`
                     else 
                         return '---'
                 }

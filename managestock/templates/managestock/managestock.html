@@ -528,7 +528,7 @@
         <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="new-discharge-modal-title">Nouveau decharge</h5>
+            <h5 class="modal-title" id="new-discharge-modal-title">Nouvelle décharge</h5>
             <button
                 type="button"
                 class="btn-close"
@@ -563,7 +563,8 @@
                     <div class="col-md-12">
                       {% if request.user.is_superuser or request.user.employee.isStockManager %}
                         <div class="row my-4">
-                            <div class="row col-md-8 ml-auto justify-content-end">
+                          <div class="col-md-4"></div>
+                            <div class="row col-md-8 ml-auto">
                                 <div class="col-md-4">
                                     <input type="number" class="form-control mx-1" id="number-of-rows-to-add-to-new-discharge-table" value="1" min="1">
                                 </div>

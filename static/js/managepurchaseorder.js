@@ -123,7 +123,10 @@ var newPurchaseOrderTable = $("#new-purchase-order-table").DataTable({
                     return data
             }
         }
-    ]
+    ],
+    searching: false,
+    ordering: false,
+    paging: false
 })
 
 var purchaseOrderDetailsTable = $("#purchase-order-detail-table").DataTable({

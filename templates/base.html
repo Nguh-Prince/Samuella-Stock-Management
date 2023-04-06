@@ -209,7 +209,7 @@
         </li>
         {% endif %}
 
-        {% if request.user.employee.isStockManager %}
+        {% if request.user.is_superuser or request.user.employee.isStockManager %}
         <li>
             <a href="{% url 'managestock:managestock_suppliers' %}" aria-expanded="false" class="{% block gestion_des_prestataires_classes %}{% endblock %}">
               <div class="nav_icon_small">
@@ -221,52 +221,6 @@
             </a>
           </li>
           {% endif %}
-
-          {% if request.user.is_superuser or request.user.employee.isStockManager %}
-          <!-- <li>
-            <a href="{% url 'managestock:managestock_entries' %}" aria-expanded="false" class="{% block gestion_des_entrees_classes %}{% endblock %}">
-              <div class="nav_icon_small">
-                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
-              </div>
-              <div class="nav_title">
-                <span>Gestion des Entrees</span>
-              </div>
-            </a>
-          </li> -->
-          {% endif %}
-
-          <!-- <li>
-            <a href="#" aria-expanded="false" class="{% block notifications_classes %}{% endblock %}">
-              <div class="nav_icon_small">
-                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
-              </div>
-              <div class="nav_title">
-                <span>Notifications</span>
-              </div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#" aria-expanded="false" class="{% block rapports_classes %}{% endblock %}">
-              <div class="nav_icon_small">
-                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
-              </div>
-              <div class="nav_title">
-                <span>Rapports</span>
-              </div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#" aria-expanded="false" class="{% block prevision_classes %}{% endblock %}">
-              <div class="nav_icon_small">
-                <img src="{% static 'img/menu-icon/2.svg' %}" alt="">
-              </div>
-              <div class="nav_title">
-                <span>Prevision</span>
-              </div>
-            </a>
-          </li> -->
       </ul>
     </nav>
 
@@ -334,7 +288,7 @@
       <div class="main_content_iner overly_inner">
         <div class="container-fluid p-0">
           {% block page_content %}
-          {%endblock%}
+          {% endblock %}
         </div>
       </div>
     </section>
