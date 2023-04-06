@@ -1,73 +1,81 @@
 var purchaseOrderSelectedForEditing = null
 var selectedPurchaseOrders = []
 
+var purchaseOrdersTableColumns = [
+    {
+        render: function(data, type, row, meta) {
+            if (type === 'display') {
+                try {
+                    let checkboxId = generateRandomId()
+                    return IS_STRUCTURE_HEAD ? `<input type='checkbox' class='select-row' value=${row['purchaseorderId']} id='${checkboxId}' onchange=selectPurchaseOrdersTableRow('${checkboxId}')>` : ''
+                } catch (error) {
+                    // throw error  
+                    console.error(error) 
+                }
+            }
+        }
+    },
+    {
+        "data": "structureId.structureName"
+    },
+    {
+        "data": "dateCreated",
+        render: function(data, type, row, meta) {
+            if (type === 'display') {
+                try {
+                    return getLocaleTime(data, true)   
+                } catch (error) {
+                    console.error(error)
+                    return data
+                }
+            } 
+            
+            return data
+        }
+    },
+    {
+        render: function(data, type, row, meta) {
+            if (type === 'display') {
+                let equipmentsNameAndQuantities = []
+
+                for ( let equipment of row['equipments'] ) {
+                    equipmentsNameAndQuantities.push(`${equipment.quantity} ${equipment.equipmentId.equipmentName}`)
+                }
+
+                return equipmentsNameAndQuantities.join(', ')
+            }
+        }
+    },
+    {
+        render: function(data, type, row, meta) {
+            if (type === 'display') {
+                let viewButtonClick = `purchaseOrderEditButtonClick(${row['purchaseorderId']})`
+                let deleteButtonClick = `purchaseOrderDeleteButtonClick(${row['purchaseorderId']})`
+
+                return `<div class="d-flex">${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)}</div>`
+
+                return `<button class="btn text-primary" onclick=purchaseOrderEditButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['equipmentId']}>
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            <button class="btn mx-1 text-danger" onclick=purchaseOrderDeleteButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['purchaseorderId']}>
+                                <i class="fas fa-trash"></i>
+                            </button>`
+            }
+        }
+    }
+]
+if (!IS_STRUCTURE_HEAD) {
+    purchaseOrdersTableColumns = purchaseOrdersTableColumns.filter( (item, index) => {
+        return index !== 0
+    } )
+}
+
 var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
     columnDefs: [{
         "defaultContent": "-",
         "targets": "_all"
     }],
-    "columns": [
-        {
-            render: function(data, type, row, meta) {
-                if (type === 'display') {
-                    try {
-                        let checkboxId = generateRandomId()
-                        return IS_STRUCTURE_HEAD ? `<input type='checkbox' class='select-row' value=${row['purchaseorderId']} id='${checkboxId}' onchange=selectPurchaseOrdersTableRow('${checkboxId}')>` : ''
-                    } catch (error) {
-                        
-                    }
-                }
-            }
-        },
-        {
-            "data": "structureId.structureName"
-        },
-        {
-            "data": "dateCreated",
-            render: function(data, type, row, meta) {
-                if (type === 'display') {
-                    try {
-                        return getLocaleTime(data, true)   
-                    } catch (error) {
-                        console.error(error)
-                        return data
-                    }
-                } 
-                
-                return data
-            }
-        },
-        {
-            render: function(data, type, row, meta) {
-                if (type === 'display') {
-                    let equipmentsNameAndQuantities = []
-
-                    for ( let equipment of row['equipments'] ) {
-                        equipmentsNameAndQuantities.push(`${equipment.quantity} ${equipment.equipmentId.equipmentName}`)
-                    }
-
-                    return equipmentsNameAndQuantities.join(', ')
-                }
-            }
-        },
-        {
-            render: function(data, type, row, meta) {
-                if (type === 'display') {
-                    let viewButtonClick = `purchaseOrderEditButtonClick(${row['purchaseorderId']})`
-                    let deleteButtonClick = `purchaseOrderDeleteButtonClick(${row['purchaseorderId']})`
-
-                    return `<div class="d-flex">${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)}</div>`
-
-                    return `<button class="btn text-primary" onclick=purchaseOrderEditButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['equipmentId']}>
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn mx-1 text-danger" onclick=purchaseOrderDeleteButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['purchaseorderId']}>
-                                    <i class="fas fa-trash"></i>
-                                </button>`
-                }
-            }
-        }
-    ],
+    "columns": purchaseOrdersTableColumns,
     order: [ ["2", "desc"] ]
 })
 
@@ -262,7 +270,7 @@ $("#confirm-purchase-order-deletion-yes").click( function() {
     }
 } )
 
-$("#delete-many").click(function() {
+$("#delete-many-button").click(function() {
     console.log("Clicked the delete many button in the purchase orders page")
     multiplePurchaseOrdersDeleteButtonClick(true)
 })

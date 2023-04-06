@@ -43,9 +43,6 @@ $.ajax({
     url: `/managenotifications/notifications/`,
     success: function(data) {
         state.notifications = data
-        console.log("Notifications gotten from the API")
-        console.log(data)
-
         populateNotificationsMenu(state.notifications)
     }
 })
@@ -101,16 +98,11 @@ function populateNotificationsMenu(notifications, limit=10) {
                 displayPurchaseOrderDetailViewModal(item.instance)
             } )
     
-            console.log("Created notification div")
-            console.log(notificationDiv)
-    
             $('.Menu_NOtification_Wrap .Notification_body').append(notificationDiv)
         }
 
         numberOfUnseenNotifications += item.notificationSeen ? 0 : 1
     } )
-
-    console.log(`The number of unseen notifications are: ${numberOfUnseenNotifications}`)
 
     if (numberOfUnseenNotifications >= 1) {
         let span = createElement('span', [], {textContent: numberOfUnseenNotifications})
@@ -122,9 +114,6 @@ function populateNotificationsMenu(notifications, limit=10) {
 }
 
 function displayPurchaseOrderDetailViewModal(purchaseOrder) {
-    console.log("Displaying purchase order details view modal")
-    console.log(purchaseOrder)
-
     $("#purchase-order-detail-view-modal-title").text(`${purchaseOrder.structureId.structureName}: ${purchaseOrder.dateCreated}`)
 
     $("#purchase-order-detail-view-purchaseorder-id").val(purchaseOrder.purchaseorderId)

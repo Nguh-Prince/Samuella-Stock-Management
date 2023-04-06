@@ -30,8 +30,8 @@
             <a
               class="btn btn-danger d-none"
               id="delete-many-button"
-              data-bs-target="#confirm-multiple-purchase-orders-deletion-modal"
-              data-bs-toggle="modal"
+              <!-- data-bs-target="#confirm-multiple-purchase-orders-deletion-modal"
+              data-bs-toggle="modal" -->
               ><i class="fas fa-trash mx-2"></i>Supprimer (2)</a>
         </div>
     </div>
@@ -66,10 +66,12 @@
               <table id="purchase-orders-table" class="table table-striped lms_table_active">
                 <thead>
                   <tr>
-                    <th scope="col"><input type="checkbox" class="select-all"></th>
+                    {% if request.user.is_superuser or request.user.is_structure_head %}
+                        <th scope="col"><input type="checkbox" class="select-all"></th>
+                    {% endif %}
                     <th scope="col">Structure</th>
                     <th scope="col">Date</th>
-                    <th scope="col">Equipements commandes</th>
+                    <th scope="col">Equipements</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
