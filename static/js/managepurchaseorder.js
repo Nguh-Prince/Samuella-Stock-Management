@@ -53,14 +53,17 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
         {
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    return `<div class="row">
-                                <button class="btn text-primary" onclick=purchaseOrderEditButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['equipmentId']}>
+                    let viewButtonClick = `purchaseOrderEditButtonClick(${row['purchaseorderId']})`
+                    let deleteButtonClick = `purchaseOrderDeleteButtonClick(${row['purchaseorderId']})`
+
+                    return `<div class="d-flex">${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)}</div>`
+
+                    return `<button class="btn text-primary" onclick=purchaseOrderEditButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['equipmentId']}>
                                     <i class="fas fa-pen"></i>
                                 </button>
                                 <button class="btn mx-1 text-danger" onclick=purchaseOrderDeleteButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['purchaseorderId']}>
                                     <i class="fas fa-trash"></i>
-                                </button>
-                            </div>`
+                                </button>`
                 }
             }
         }

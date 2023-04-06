@@ -36,7 +36,7 @@ var equipmentsTable = $("#equipments-table").DataTable({
                         let viewButtonClick = `equipmentEditButtonClick(${row['equipmentId']})`
                         let deleteButtonClick = `equipmentDeleteButtonClick(${row['equipmentId']})`
 
-                        return renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)
+                        return `<div class="d-flex">${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)}</div>`
                     }
                     else 
                         return '---'
@@ -89,7 +89,7 @@ var dischargesTable = $("#discharges-table").DataTable({
                     let viewButtonClick = `dischargeEditButtonClick(${row['dischargeId']})`
                     let deleteButtonClick = `dischargeDeleteButtonClick(${row['dischargeId']})`
 
-                    return renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)
+                    return `<div class='d-flex'>${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)}</div>`
                 }
             }
         }
