@@ -483,7 +483,7 @@ function displayEquipmentDetailModal(equipment=equipmentSelectedForEditing) {
 function displayDischargeDetailModal(discharge=dischargeSelectedForEditing) {
     $("#discharge-detail-modal-title").text(`${discharge.structureId.structureName}: ${getLocaleTime(discharge.dateCreated, true)}`)
 
-    $("#discharge-detail-structure").val(discharge.structureId)
+    $("#discharge-detail-structure").val(discharge.structureId.structureId)
     $("#discharge-detail-date").val(discharge.dateCreated)
 
     dischargeDetailEquipmentsTable.clear()

@@ -80,14 +80,6 @@ var stocksTable = $("#entries-table").DataTable({
                     let deleteButtonClick = `stockDeleteButtonClick(${row['stockId']})`
 
                     return `<div class='d-flex'>${renderActionButtonsInDataTable(row, IS_STOCK_MANAGER, IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)}</div>`
-                    return `<div class="row">
-                                <button class="btn text-primary" onclick=stockEditButtonClick(${row['stockId']}) data-stock-id=${row['equipmentId']}>
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn mx-1 text-danger" onclick=stockDeleteButtonClick(${row['stockId']}) data-stock-id=${row['purchaseorderId']}>
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>`
                 }
             }
         }
