@@ -43,7 +43,7 @@ def login_view(request):
                 )
 
             # the site is only available to super users, stock managers or department heads
-            if not user.is_superuser and not (user.employee and (user.employee.isStockManager or user.employee.is_structure_head)):
+            if not user.is_superuser and not (user.employee and (user.employee.isStockManager or user.employee.is_structure_head())):
                 return render(
                     request, "login.html",
                     context={"errors": [{"message": "Vous n'êtes pas autorisé à accéder"}]}

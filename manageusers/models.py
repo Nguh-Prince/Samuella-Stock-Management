@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 
 class Employee(models.Model):
     structureId = models.ForeignKey("manageusers.Structure", on_delete=models.PROTECT, related_name="employees", null=True)
@@ -8,12 +9,22 @@ class Employee(models.Model):
     matricleNumber = models.CharField(max_length=100, unique=True)
     isStockManager = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
+    structure_head = models.BooleanField(default=False, verbose_name="Chef de structure?")
 
     def is_structure_head(self) -> bool:
         return self.structureId.head == self
 
     def __str__(self) -> str:
         return f"{self.employeeFirstName} {self.employeeLastName}"
+
+    def save(self, *args, **kwargs) -> None:
+        if self.structure_head:
+            self.structureId.employees.filter( Q(structure_head=True) & ~Q(id=self.id) ).update(structure_head=False)
+            
+            self.structureId.head = self
+            self.structureId.save()
+            
+        return super().save(*args, **kwargs)
 
 class Structure(models.Model):
     structureId=models.IntegerField(primary_key=True, blank=True)

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -13,7 +14,7 @@ from common.viewsets import DepartmentSpecificViewSet, MultipleSerializerViewSet
 
 from . import models, serializers
 
-# Create your views here.
+@login_required
 def home(request):
     context = {'structures': Structure.objects.all(), 'equipments': Equipment.objects.all()}
     return render(request, "managepurchaseorder/managepurchaseorder.html", context=context)
