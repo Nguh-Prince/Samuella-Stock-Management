@@ -95,6 +95,9 @@
         width: 100%;
         z-index: 5000;
       }
+      .has-error input {
+        border: 1px solid #DC354;
+      }
       .btn-primary {
         background-color: var(--accent-color);
         border-color: var(--accent-color);
@@ -187,7 +190,7 @@
         top: -12px;
         background: #f64e60;
         line-height: 22px;
-    }
+      }
     </style>
 
     {% block styles %}{% endblock %}
@@ -583,7 +586,6 @@
 
       $('.sidebar_icon').click(function() {
         console.log("Clicked sidebar icon")
-
         $('.sidebar').addClass('active_sidebar')
       })
 

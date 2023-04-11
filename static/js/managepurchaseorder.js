@@ -232,30 +232,33 @@ $("#new-purchase-order-save").click(function() {
 
     let formData = getNewPurchaseOrderFromForm()
 
-    $.ajax({
-        type: "POST",
-        url: "/managepurchaseorder/purchaseorders/",
-        contentType: "application/json",
-        data: JSON.stringify(formData),
-        headers: {
-            "X-CSRFTOKEN": getCookie("csrftoken")
-        },
-        success: function(data) {
-            state.purchaseOrders.push(data)
-
-            purchaseOrdersTable.rows.add([data])
-            purchaseOrdersTable.draw()
-
-            displayMessage("Purchase order saved successfully", ["alert-success", "alert-dismissible"])
-
-            $("#new-purchase-order-modal-close").click()
-        },
-        error: function(data) {
-            displayMessage("Error saving the new purchase order")
-            console.log(formData)
-            console.log(data.responseText)
-        }
-    })
+    // all data is valid
+    if (formData !== null) {
+        $.ajax({
+            type: "POST",
+            url: "/managepurchaseorder/purchaseorders/",
+            contentType: "application/json",
+            data: JSON.stringify(formData),
+            headers: {
+                "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function(data) {
+                state.purchaseOrders.push(data)
+    
+                purchaseOrdersTable.rows.add([data])
+                purchaseOrdersTable.draw()
+    
+                displayMessage("Purchase order saved successfully", ["alert-success", "alert-dismissible"])
+    
+                $("#new-purchase-order-modal-close").click()
+            },
+            error: function(data) {
+                displayMessage("Error saving the new purchase order")
+                console.log(formData)
+                console.log(data.responseText)
+            }
+        })
+    }
 })
 
 $("#confirm-purchase-order-deletion-no").click( function() {
@@ -389,13 +392,41 @@ function getNewPurchaseOrderFromForm() {
         equipments: []
     }
 
+    errors = false
+
     // validate the structureId and dateCreated fields
 
+    console.log("Getting the different equipments from the purchase order. ")
+
     $("#new-purchase-order-table tbody tr").each(function() {
+        let equipmentNameSelector = $(this).find("input[name='equipmentName']").first()
+        let quantitySelector = $(this).find("input[name='quantity']").first()
+
         let equipmentName = $(this).find("input[name='equipmentName']").first().val()
         let quantity = $(this).find("input[name='quantity']").first().val()
 
+        function appendErrorMessage(message, jqueryNode) {
+            let helpBlock = createElement("span", ["help-block"])
+            helpBlock.textContent = `${message}`
+
+            jqueryNode.addClass('has-error').addClass('text-danger')
+            jqueryNode.append(helpBlock)
+
+            errors = true
+        }
+
         // validate the equipmentName and quantity
+        if (!equipmentName) {
+            appendErrorMessage(`Ce champ est obligatoire`, equipmentNameSelector.parent())
+        } 
+
+        if (!quantity) {
+            appendErrorMessage(`Ce champ est obligatoire`, quantitySelector.parent())
+        } 
+
+        if (isNaN(parseFloat(quantity))) {
+            appendErrorMessage('ce champ doit être un entier', quantitySelector.parent())
+        }
 
         let purchaseOrderEquipment = {
             equipmentId: {
@@ -407,7 +438,7 @@ function getNewPurchaseOrderFromForm() {
         purchaseOrder.equipments.push(purchaseOrderEquipment)
     })
 
-    return purchaseOrder
+    return errors ? null: purchaseOrder
 }
 
 function getPurchaseOrderDetailsFromForm() {
