@@ -8,8 +8,8 @@ class Employee(models.Model):
     employeeLastName = models.CharField(max_length=50)
     matricleNumber = models.CharField(max_length=100, unique=True)
     isStockManager = models.BooleanField(default=False)
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
     structure_head = models.BooleanField(default=False, verbose_name="Chef de structure?")
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
 
     def is_structure_head(self) -> bool:
         return self.structureId.head == self
@@ -18,13 +18,13 @@ class Employee(models.Model):
         return f"{self.employeeFirstName} {self.employeeLastName}"
 
     def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
+        
         if self.structure_head:
             self.structureId.employees.filter( Q(structure_head=True) & ~Q(id=self.id) ).update(structure_head=False)
             
             self.structureId.head = self
             self.structureId.save()
-            
-        return super().save(*args, **kwargs)
 
 class Structure(models.Model):
     structureId=models.IntegerField(primary_key=True, blank=True)
