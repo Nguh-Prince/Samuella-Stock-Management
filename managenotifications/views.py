@@ -15,7 +15,7 @@ class NotificationViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     permission_classes = [IsAuthenticatedAndReadOnly, ]
     queryset = models.NotificationRecipient.objects.all().order_by('-notificationId__notificationTimeCreated')
     serializer_classes = {
-        "mark_as_read": serializers.ListOfNotificationIdsSerializer,
+        "mark_as_read": serializers.ListOfNotificationRecipientIdsSerializer,
         "mark_as_received": serializers.ListOfNotificationIdsSerializer
     }
 
@@ -51,15 +51,20 @@ class NotificationViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        for notification in serializer.validated_data:
+        for notification in serializer.validated_data['notifications']:
             now = timezone.now()
-            un_read_notifications = notification.recipients.filter(notificationRecipientId=request.user.id, notificationRead=False)
-            un_read_and_un_seen_notifications = un_read_notifications.filter(notificationSeen=False)
+            notification.notificationRead = True
+            notification.notificationTimeRead = now
             
-            un_read_notifications.update(notificationRead=True, notificationTimeRead=now)
-            un_read_and_un_seen_notifications.update(notificationSeen=True, notificationTimeSeen=now)
+            if not notification.notificationSeen:
+                notification.notificationSeen = True
+                notification.notificationTimeSeen = now
 
-        return Response({"message": "Notifications successfully marked as read"})
+            notification.save()
+        
+        data = self.serializer_class(serializer.validated_data['notifications'], many=True).data
+
+        return Response({"message": "Notifications successfully marked as read", "data": data})
 
     @action(
         methods=["POST"],

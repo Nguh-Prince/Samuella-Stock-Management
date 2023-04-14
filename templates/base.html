@@ -596,7 +596,45 @@
       $(".bell_notification_clicker").click(function() {
         let notificationMenu = $('.Menu_NOtification_Wrap')
 
-        notificationMenu.hasClass('active') ? notificationMenu.removeClass('active') : notificationMenu.addClass('active')
+        if (notificationMenu.hasClass('active')) {
+          // hide notifications menu and mark notifications as read
+          notificationMenu.removeClass('active')
+
+          let unreadNotifications = state.notifications.filter( (item) => {
+            return !item.notificationRead
+          } ).map( (item) => {
+            return item.notificationRecipientId
+          } )
+
+          $.ajax({
+            type: 'POST',
+            url: `/managenotifications/notifications/mark_as_read/`,
+            data: JSON.stringify({
+              notifications: unreadNotifications
+            }),
+            contentType: 'application/json',
+            headers: {
+              "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function(data) {
+              console.log("Notifications marked as read successfully")
+
+              state.notifications = data.data
+              populateNotificationsMenu(state.notifications)
+            },
+            error: function(data) {
+              console.error("Error marking notifications as read")
+              console.log(`Data: ${JSON.stringify({
+                notifications: unreadNotifications
+              })}`)
+              console.error(`Response: `)
+              console.log(data.responseText)
+            }
+          })
+        } else {
+          // show notifications
+          notificationMenu.addClass('active')
+        }
       })
 
       $(".select-all-rows").change(function() {

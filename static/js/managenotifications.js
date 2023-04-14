@@ -40,7 +40,7 @@ var purchaseOrderDetailsViewTable = $("#purchase-order-detail-view-table").DataT
 
 $.ajax({
     type: 'GET',
-    url: `/managenotifications/notifications/`,
+    url: `/managenotifications/notifications/?unread=True`,
     success: function(data) {
         state.notifications = data
         populateNotificationsMenu(state.notifications)

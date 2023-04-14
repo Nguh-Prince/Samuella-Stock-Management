@@ -49,7 +49,34 @@ class ListOfNotificationIdsSerializer(serializers.Serializer):
                 validation_errors.append( ValidationError(f"Aucune notification n'existe avec notificationId 1") )
             
         if validation_errors:
-            raise serializers.ValidationError(ValidationError)
+            raise serializers.ValidationError(validation_errors)
+
+        return notifications
+
+class ListOfNotificationRecipientIdsSerializer(serializers.Serializer):
+    notifications = serializers.ListField(child=serializers.IntegerField())
+
+    class Meta:
+        fields = ("notifications")
+
+    def validate_notifications(self, data):
+        notifications = []
+        validation_errors = []
+
+        for index, notificationRecipientId in enumerate(data):
+            try:
+                notificationRecipient = models.NotificationRecipient.objects.get(notificationRecipientId=notificationRecipientId)
+                notifications.append(notificationRecipient)
+                
+                if not notificationRecipient.recipientId == self.context['request'].user:
+                    logging.error(f"Error on {index} of the notifications list. The user is not the recipient")
+                    validation_errors.append( ValidationError(f"Erreur sur l'indexe {index} de la liste. Vous n'etes pas un recipient du notification") )
+            except models.NotificationRecipient.DoesNotExist as e:
+                logging.error(f"Error on index {index} of the notifications list. Error getting a notification with id {notificationRecipientId}")
+                validation_errors.append( ValidationError(f"Aucune notification n'existe avec notificationId 1") )
+        
+        if validation_errors:
+            raise serializers.ValidationError(validation_errors)
 
         return notifications
 
@@ -66,7 +93,7 @@ class NotificationRecipientSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.NotificationRecipient
         fields = (
-            "notificationId", "notificationTimeCreated", "notificationMessage", 
+            "notificationId", "notificationRecipientId", "notificationTimeCreated", "notificationMessage", 
             "notificationSeen", "notificationTimeSeen", "notificationRead", 
             "notificationTimeRead", "model", "instance"
         )
