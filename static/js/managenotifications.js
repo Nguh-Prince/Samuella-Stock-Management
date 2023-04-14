@@ -53,7 +53,7 @@ function populateNotificationsMenu(notifications, limit=10) {
     numberOfUnseenNotifications = 0
 
     notifications.map( (item, i) => {
-        if (i < limit) {
+        if (i < limit || !limit) {
             let notificationDiv = createElementsRecursively({
                 tag: 'div',
                 classes: 'single_notify d-flex align-items-center'.split(' '),
