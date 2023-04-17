@@ -12,4 +12,5 @@ urlpatterns = [
     path('managestock/', include("managestock.urls")),
     path('manageusers/', include("manageusers.urls")),
     path('managenotifications/', include("managenotifications.urls")),
+    path('managemessages/', include("managemessages.urls")),
 ]
