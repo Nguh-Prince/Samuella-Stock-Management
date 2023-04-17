@@ -342,7 +342,7 @@
       </div>
     </section>
 
-    <div class="CHAT_MESSAGE_POPUPBOX">
+    <div class="CHAT_MESSAGE_POPUPBOX active">
       <div class="CHAT_POPUP_HEADER">
         <div class="MSEESAGE_CHATBOX_CLOSE">
           <svg
@@ -361,7 +361,7 @@
         <h3>Messagerie</h3>
       </div>
       <div class="CHAT_POPUP_BODY">
-        <div class="row justify-content-center" id="contacts">
+        <div class="row justify-content-center d-none" id="contacts">
           <div class="row col-md-12 contact justify-content-center">
             <div class="contact-image d-flex align-items-center justify-content-center">
               <img src="{% static 'img/blank-profile-picture.png' %}" alt="">
@@ -396,11 +396,11 @@
           </div>
         </div>
 
-        <div class="row d-none" id="messages">
+        <div class="row justify-content-center h-100" id="messages">
           <p class="mesaged_send_date">Sunday, 12 January</p>
           <div class="CHATING_SENDER">
             <div class="SMS_thumb">
-              <img src="img/staf/1.png" alt="" />
+              <img src="{% static 'img/blank-profile-picture.png' %}" alt="" />
             </div>
             <div class="SEND_SMS_VIEW">
               <p>Hi! Welcome . How can I help you?</p>
@@ -411,9 +411,27 @@
               <p>Hello</p>
             </div>
             <div class="SMS_thumb">
-              <img src="img/staf/1.png" alt="" />
+              <img src="{% static 'img/blank-profile-picture.png' %}" alt="" />
             </div>
           </div>
+
+          <div class="CHATING_SENDER">
+            <div class="SMS_thumb">
+              <img src="{% static 'img/blank-profile-picture.png' %}" alt="" />
+            </div>
+            <div class="SEND_SMS_VIEW">
+              <p>Hi! Welcome . How can I help you?</p>
+            </div>
+          </div>
+          <div class="CHATING_SENDER CHATING_RECEIVEr">
+            <div class="SEND_SMS_VIEW">
+              <p>Hello</p>
+            </div>
+            <div class="SMS_thumb">
+              <img src="{% static 'img/blank-profile-picture.png' %}" alt="" />
+            </div>
+          </div>
+          
 
           <div class="CHAT_POPUP_BOTTOM">
             <div class="chat_input_box d-flex align-items-center">
