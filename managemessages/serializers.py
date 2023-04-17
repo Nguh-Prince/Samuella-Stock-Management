@@ -1,27 +1,10 @@
+import logging
 from django.contrib.auth.models import User
+from django.db import transaction
 
 from rest_framework import serializers
 
 from . import models
-
-class SendMessageSerializer(serializers.Serializer):
-    message = serializers.CharField()
-    recipients = serializers.ListField(child=serializers.IntegerField())
-
-    def validate_recipients(self, data):
-        items = []
-        errors = []
-
-        for index, item in enumerate(data):
-            try:
-                items.append(User.objects.get(id=item))
-            except User.DoesNotExist as e:
-                errors.append(serializers.ValidationError(f"Erreur sur l'index {index+1}, aucun utilisateur n'existe avec l'identifiant {item}"))
-
-        if errors:
-            raise serializers.ValidationError(errors)
-
-        return items
 
 class ChatSerializer(serializers.ModelSerializer):
     class ChatParticipantSerializer(serializers.ModelSerializer):
@@ -42,18 +25,67 @@ class ChatSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         participants = validated_data.pop("participants")
+
+        with transaction.atomic():
+            chat = self.Meta.model.objects.create(**validated_data)
+            for participant in participants:
+                models.ChatParticipant.objects.create(participantId=participant, chatId=chat)
+
+            breakpoint()
+            return chat
+
+class CreateChatSerializer(serializers.ModelSerializer):
+    participants = serializers.ListField(child=serializers.CharField())
+
+    def validate_participants(self, data):
+        if len(data) < 2:
+            raise serializers.ValidationError( "Une discussion doit avoir au moins 2 participants" )
         
-        chat = self.Meta.model.objects.create(**validated_data)
+        participants = []
+        errors = []
 
-        for participant in participants:
-            user = User.objects.filter(username=participant['username'])
+        user_found = False
 
-            models.ChatParticipant.objects.create(participantId=user, chatId=chat)
+        for index, item in enumerate(data):
+            try:
+                user = User.objects.get(username=item)
+                participants.append(user)
 
-        return chat
-    
+                if user == self.context['request'].user:
+                    user_found = True
+
+            except User.DoesNotExist as e:
+                logging.error(f"Error getting user with username {item}")
+                errors.append( serializers.ValidationError( f"Erreur sur l'index {index}, aucun utilisateur n'existe avec le nom d'utilisateur: {item}" ) )
+
+        if not user_found:
+            errors.append(serializers.ValidationError("Vous devez participer aux discussions que vous créez"))
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return participants
+
+    class Meta:
+        model = models.Chat
+        fields = ("chatId", "chatTimeCreated", "chatEncryptionKey", "participants")
+        extra_kwargs = {
+            "chatEncryptionKey": {"read_only": True}
+        }
+
+    def create(self, validated_data):
+        participants = validated_data.pop("participants")
+
+        with transaction.atomic():
+            chat = self.Meta.model.objects.create(**validated_data)
+            for participant in participants:
+                models.ChatParticipant.objects.create(participantId=participant, chatId=chat)
+
+            return chat
+
 class MessageSerializer(serializers.ModelSerializer):
-    sender = serializers.CharField(source="sender.participantId.username")
+    sender = serializers.CharField(source="sender.participantId.username", read_only=True)
+
     class Meta:
         model = models.Message
         fields = ("sender", "time_sent", "messageContent")

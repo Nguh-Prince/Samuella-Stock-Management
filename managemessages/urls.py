@@ -9,7 +9,8 @@ class NestedDefaultRouter(NestedRouterMixin, routers.DefaultRouter):
 
 router = NestedDefaultRouter()
 
-notification_routes = router.register("chats", views.ChatViewSet)
+chat_routes = router.register("chats", views.ChatViewSet)
+chat_routes.register("messages", views.MessageViewSet, basename='chat-messages', parents_query_lookups=["chat"])
 
 app_name = "managemessages"
 
