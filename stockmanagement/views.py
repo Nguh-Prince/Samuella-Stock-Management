@@ -82,8 +82,8 @@ def logout_view(request):
 def statistics(request):
     equipments = Equipment.objects.all()
     departments = Structure.objects.all()
-    purchase_orders = PurchaseOrder.objects.all()
-    discharges = Discharge.objects.all()
+    purchase_orders = PurchaseOrder.objects.all()[:10]
+    discharges = Discharge.objects.all()[:10]
 
     stats_dictionary = {
         "number_of_equipments": equipments.count(),
