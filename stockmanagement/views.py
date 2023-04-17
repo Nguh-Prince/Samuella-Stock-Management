@@ -43,7 +43,7 @@ def login_view(request):
                 )
 
             # the site is only available to super users, stock managers or department heads
-            if not user.is_superuser and not (user.employee and (user.employee.isStockManager or user.employee.is_structure_head())):
+            if not user.is_superuser and not (user.employee and (user.employee.is_stock_manager() or user.employee.is_structure_head())):
                 return render(
                     request, "login.html",
                     context={"errors": [{"message": "Vous n'êtes pas autorisé à accéder"}]}
@@ -82,8 +82,8 @@ def logout_view(request):
 def statistics(request):
     equipments = Equipment.objects.all()
     departments = Structure.objects.all()
-    purchase_orders = PurchaseOrder.objects.all()[:10]
-    discharges = Discharge.objects.all()[:10]
+    purchase_orders = PurchaseOrder.objects.all()
+    discharges = Discharge.objects.all()
 
     stats_dictionary = {
         "number_of_equipments": equipments.count(),
@@ -91,7 +91,7 @@ def statistics(request):
         "number_of_purchase_orders": purchase_orders.count(),
         "number_of_discharges": discharges.count(),
         "recent_discharges": DischargeListSerializer(discharges.order_by("-dateCreated", "-dischargeId")[:5], many=True).data,
-        "recent_purchase_orders": PurchaseOrderListSerializer(purchase_orders.order_by("-dateCreated", 'purchaseorderId'), many=True).data,
+        "recent_purchase_orders": PurchaseOrderListSerializer(purchase_orders.order_by("-dateCreated", 'purchaseorderId')[:5], many=True).data,
         "departments": {}
     }
 

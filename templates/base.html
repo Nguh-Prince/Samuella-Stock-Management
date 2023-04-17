@@ -55,7 +55,7 @@
     <script>
       LOCALE = "fr"
 
-      {% if request.user.employee.isStockManager or request.user.is_superuser %}
+      {% if request.user.employee.is_stock_manager or request.user.is_superuser %}
         IS_STOCK_MANAGER = true
       {% else %}
         IS_STOCK_MANAGER = false
@@ -212,7 +212,7 @@
         </div>
       </div>
       <ul id="sidebar_menu">
-        {% if request.user.is_superuser or request.user.employee.isStockManager %}
+        {% if request.user.is_superuser or request.user.employee.is_stock_manager %}
         <li>
           <a href="{% url 'dashboard' %}" aria-expanded="false" class="{% block dashboard_classes %}{% endblock %}">
             <div class="nav_icon_small">
@@ -227,7 +227,7 @@
         <!-- <h4 class="menu-text">
           <span>CUSTOM</span> <i class="fas fa-ellipsis-h"></i>
         </h4> -->
-        {% if request.user.is_superuser or request.user.employee.isStockManager  %}
+        {% if request.user.is_superuser or request.user.employee.is_stock_manager  %}
         <li>
           <a href="{% url 'managestock:managestock_home' %}" aria-expanded="false" class="{% block gestion_des_stock_classes %}{% endblock %}">
             <div class="nav_icon_small">
@@ -240,7 +240,7 @@
         </li>
         {% endif %}
 
-        {% if request.user.is_superuser or request.user.employee.isStockManager or request.user.employee.is_structure_head %}
+        {% if request.user.is_superuser or request.user.employee.is_stock_manager or request.user.employee.is_structure_head %}
         <li>
           <a href="{% url 'managepurchaseorder:managepurchaseorder_home' %}" aria-expanded="false" class="{% block gestion_des_commandes_classes %}{% endblock %}">
             <div class="nav_icon_small">
@@ -253,7 +253,7 @@
         </li>
         {% endif %}
 
-        {% if request.user.is_superuser or request.user.employee.isStockManager %}
+        {% if request.user.is_superuser or request.user.employee.is_stock_manager %}
         <li>
             <a href="{% url 'managestock:managestock_suppliers' %}" aria-expanded="false" class="{% block gestion_des_prestataires_classes %}{% endblock %}">
               <div class="nav_icon_small">

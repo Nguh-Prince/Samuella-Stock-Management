@@ -116,7 +116,7 @@
                             {% for structure in structures %}
                                 {% if request.user.employee.is_structure_head and request.user.employee.structureId == structure %}
                                     <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
-                                {% elif request.user.employee.isStockManager or request.user.is_superuser %}
+                                {% elif request.user.employee.is_stock_manager or request.user.is_superuser %}
                                     <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
                                 {% endif %}
                             {% endfor %}
