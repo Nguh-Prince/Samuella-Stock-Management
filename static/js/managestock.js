@@ -344,29 +344,31 @@ $("#new-discharge-save").click(function() {
     console.log("Clicked the new-discharge-save button")
     let formData = getNewDischargeFromForm()
 
-    $.ajax({
-        type: 'POST',
-        url: '/managestock/discharges/',
-        contentType: 'application/json',
-        data: JSON.stringify(formData),
-        headers: {
-            "X-CSRFTOKEN": getCookie("csrftoken")
-        },
-        success: function(data) {
-            state.discharges.push(data)
-            
-            dischargesTable.rows.add([data])
-            dischargesTable.draw()
-
-            displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
-        },
-        error: function(data) {
-            console.error("Error adding the new entry")
-            console.log(formData)
-            console.log(JSON.stringify(formData))
-            console.log(data.responseText)
-        }
-    })
+    if (formData) {
+        $.ajax({
+            type: 'POST',
+            url: '/managestock/discharges/',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            headers: {
+                "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function(data) {
+                state.discharges.push(data)
+                
+                dischargesTable.rows.add([data])
+                dischargesTable.draw()
+    
+                displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
+            },
+            error: function(data) {
+                console.error("Error adding the new entry")
+                console.log(formData)
+                console.log(JSON.stringify(formData))
+                console.log(data.responseText)
+            }
+        })
+    }
 })
 
 $("#discharge-detail-save").click(function() {
@@ -445,9 +447,34 @@ function getNewDischargeFromForm() {
         equipments: []
     }
 
+    let errors = false
+
     $("#new-discharge-table tbody tr").each(function() {
+        let equipmentNameSelector = $(this).find("input[name='equipmentName']").first()
+        let quantitySelector = $(this).find("input[name='quantity']").first()
+
         let equipmentName = $(this).find("select[name='equipmentName']").first().val()
         let quantity = $(this).find("input[name='quantity']").first().val()
+
+        _appendErrorMessage = function(message, jqueryNode) {
+            appendErrorMessage(message, jqueryNode)
+            errors = true
+        }
+
+        // validate the equipmentName and quantity
+        if (!equipmentName) {
+            _appendErrorMessage(`Ce champ est obligatoire`, equipmentNameSelector.parent())
+        } else {
+            removeErrorMessages(equipmentNameSelector)
+        }
+
+        if (!quantity) {
+            _appendErrorMessage(`Ce champ est obligatoire`, quantitySelector.parent())
+        } else if (isNaN(parseFloat(quantity))) {
+            _appendErrorMessage('ce champ doit être un entier', quantitySelector.parent())
+        } else {
+            removeErrorMessages(quantitySelector)
+        }
 
         let dischargedEquipment = {
             equipmentId: {
@@ -459,7 +486,7 @@ function getNewDischargeFromForm() {
         discharge.equipments.push(dischargedEquipment)
     })
 
-    return discharge
+    return errors ? null : discharge
 }
 
 function getDischargeDetailFromForm() {

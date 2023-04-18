@@ -389,9 +389,6 @@ function getNewPurchaseOrderFromForm() {
     errors = false
 
     // validate the structureId and dateCreated fields
-
-    console.log("Getting the different equipments from the purchase order. ")
-
     $("#new-purchase-order-table tbody tr").each(function() {
         let equipmentNameSelector = $(this).find("input[name='equipmentName']").first()
         let quantitySelector = $(this).find("input[name='quantity']").first()
@@ -399,27 +396,24 @@ function getNewPurchaseOrderFromForm() {
         let equipmentName = $(this).find("input[name='equipmentName']").first().val()
         let quantity = $(this).find("input[name='quantity']").first().val()
 
-        function appendErrorMessage(message, jqueryNode) {
-            let helpBlock = createElement("span", ["help-block"])
-            helpBlock.textContent = `${message}`
-
-            jqueryNode.addClass('has-error').addClass('text-danger')
-            jqueryNode.append(helpBlock)
-
+        _appendErrorMessage = function(message, jqueryNode) {
+            appendErrorMessage(message, jqueryNode)
             errors = true
         }
 
         // validate the equipmentName and quantity
         if (!equipmentName) {
-            appendErrorMessage(`Ce champ est obligatoire`, equipmentNameSelector.parent())
-        } 
+            _appendErrorMessage(`Ce champ est obligatoire`, equipmentNameSelector.parent())
+        } else {
+            removeErrorMessages(equipmentNameSelector)
+        }
 
         if (!quantity) {
-            appendErrorMessage(`Ce champ est obligatoire`, quantitySelector.parent())
-        } 
-
-        if (isNaN(parseFloat(quantity))) {
-            appendErrorMessage('ce champ doit être un entier', quantitySelector.parent())
+            _appendErrorMessage(`Ce champ est obligatoire`, quantitySelector.parent())
+        } else if (isNaN(parseFloat(quantity))) {
+            _appendErrorMessage('ce champ doit être un entier', quantitySelector.parent())
+        } else {
+            removeErrorMessages(quantitySelector)
         }
 
         let purchaseOrderEquipment = {

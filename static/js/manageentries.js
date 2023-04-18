@@ -180,29 +180,31 @@ $("#new-entry-modal-toggle").click(function() {
 $("#new-entry-save").click(function() {
     let formData = getNewEntryFromForm()
 
-    $.ajax({
-        type: 'POST',
-        url: '/managestock/stocks/',
-        contentType: 'application/json',
-        data: JSON.stringify(formData),
-        headers: {
-            "X-CSRFTOKEN": getCookie("csrftoken")
-        },
-        success: function(data) {
-            state.stocks.push(data)
-            
-            stocksTable.rows.add([data])
-            stocksTable.draw()
-
-            displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
-        },
-        error: function(data) {
-            console.error("Error adding the new entry")
-            console.log(formData)
-            console.log(JSON.stringify(formData))
-            console.log(data.responseText)
-        }
-    })
+    if (formData) {
+        $.ajax({
+            type: 'POST',
+            url: '/managestock/stocks/',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            headers: {
+                "X-CSRFTOKEN": getCookie("csrftoken")
+            },
+            success: function(data) {
+                state.stocks.push(data)
+                
+                stocksTable.rows.add([data])
+                stocksTable.draw()
+    
+                displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
+            },
+            error: function(data) {
+                console.error("Error adding the new entry")
+                console.log(formData)
+                console.log(JSON.stringify(formData))
+                console.log(data.responseText)
+            }
+        })
+    }
 })
 
 $("#stock-detail-save").click(function() {
@@ -261,11 +263,34 @@ function getNewEntryFromForm() {
         equipments: []
     }
 
+    errors = false
+
     $("#new-entry-table tbody tr").each(function() {
+        let equipmentNameSelector = $(this).find("input[name='equipmentName']").first()
+        let quantitySelector = $(this).find("input[name='quantity']").first()
+
         let equipmentName = $(this).find("input[name='equipmentName']").first().val()
         let quantity = $(this).find("input[name='quantity']").first().val()
 
+        _appendErrorMessage = function(message, jqueryNode) {
+            appendErrorMessage(message, jqueryNode)
+            errors = true
+        }
+
         // validate the equipmentName and quantity
+        if (!equipmentName) {
+            _appendErrorMessage(`Ce champ est obligatoire`, equipmentNameSelector.parent())
+        } else {
+            removeErrorMessages(equipmentNameSelector)
+        }
+
+        if (!quantity) {
+            _appendErrorMessage(`Ce champ est obligatoire`, quantitySelector.parent())
+        } else if (isNaN(parseFloat(quantity))) {
+            _appendErrorMessage('ce champ doit être un entier', quantitySelector.parent())
+        } else {
+            removeErrorMessages(quantitySelector)
+        }
 
         let entryEquipment = {
             equipmentId: {
@@ -277,7 +302,7 @@ function getNewEntryFromForm() {
         entry.equipments.push(entryEquipment)
     })
 
-    return entry
+    return errors ? null : entry
 }
 
 function getEntryDetailFromForm() {

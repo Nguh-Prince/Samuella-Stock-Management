@@ -28,6 +28,20 @@ function returnDeleteButton() {
     }
 }
 
+function appendErrorMessage(message, jqueryNode) {
+    let helpBlock = createElement("div", ["help-block"])
+    helpBlock.textContent = `${message}`
+
+    jqueryNode.addClass('has-error').addClass('text-danger')
+    jqueryNode.append(helpBlock)
+}
+
+function removeErrorMessages(jqueryNode) {
+    jqueryNode.find('.help-block').remove()
+
+    jqueryNode.removeClass('has-error').removeClass('text-danger')
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
