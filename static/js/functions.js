@@ -15,6 +15,19 @@ function deleteTableRow(hiddenInputId) {
     $(`#${hiddenInputId}`).parent().parent().remove()
 }
 
+function returnDeleteButton() {
+    try {
+        let rowId = generateRandomId()
+
+        return `<i class="fas fa-trash text-danger" onclick=deleteTableRow('${rowId}')></i><input type='hidden' id='${rowId}'>`
+    } catch (error) {
+        console.log("Error getting delete button")
+        console.error(error)
+
+        return `---`
+    }
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

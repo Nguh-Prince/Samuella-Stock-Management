@@ -93,13 +93,7 @@ var newPurchaseOrderTable = $("#new-purchase-order-table").DataTable({
         {
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    try {
-                        let rowId = generateRandomId()
-                        
-                        return `<i class="delete-row fas fa-trash text-danger" onclick=deleteTableRow('${rowId}')></i><input type='hidden' id='${rowId}'>`
-                    } catch (error) {
-                        
-                    }
+                    return returnDeleteButton()
                 }
             }
         },

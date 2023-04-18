@@ -23,6 +23,10 @@ class HasChatLookupOrNotAllowed(IsAuthenticated):
     def has_object_permission(self, request, view, obj):
         return models.ChatParticipant.objects.filter(participantId=request.user, chatId=obj.chat).exists()
 
+class IsChatParticipant(IsAuthenticated):
+    def has_object_permission(self, request, view, obj):
+        return models.ChatParticipant.objects.filter(particpantId=request.user, chatId=obj)
+
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.MessageSerializer
     permission_classes = [HasChatLookupOrNotAllowed]
@@ -63,7 +67,7 @@ class ChatViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     serializer_classes = {
         'create': serializers.CreateChatSerializer
     }
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsChatParticipant, ]
     queryset = models.Chat.objects.all()
     
     def get_queryset(self):

@@ -105,7 +105,7 @@ var newDischargeEquipmentsTable = $("#new-discharge-table").DataTable({
         {
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    return `<i class="fas fa-trash text-danger"></i>`
+                    return returnDeleteButton()
                 }
             }
         },
@@ -139,11 +139,6 @@ var newDischargeEquipmentsTable = $("#new-discharge-table").DataTable({
     ordering: false,
     paging: false
 })
-
-function deleteRow(e) {
-    console.log("Clicked a delete-row button")
-    console.log(e.target)
-}
 
 var dischargeDetailEquipmentsTable = $("#discharge-detail-table").DataTable({
     columnDefs: [{

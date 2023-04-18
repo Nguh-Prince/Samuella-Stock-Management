@@ -9,7 +9,7 @@ var newEntryEquipmentsTable = $("#new-entry-table").DataTable({
         {
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    return `<i class="fas fa-trash text-danger"></i>`
+                    return returnDeleteButton()
                 }
             }
         },
@@ -95,7 +95,7 @@ var entryDetailEquipmentsTable = $("#stock-detail-table").DataTable({
         {
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    return `<i class="fas fa-trash text-danger"></i>`
+                    return returnDeleteButton()
                 }
             }
         },
