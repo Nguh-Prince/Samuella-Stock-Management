@@ -10,7 +10,7 @@ from . import models
 class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Equipment
-        fields = ("equipmentId", "equipmentName", "quantity")
+        fields = ("equipmentId", "equipmentName", "quantity", "stockSecurite", "stockAlerte")
         extra_kwargs = {
             "equipmentId": {"read_only": True}
         }

@@ -7,6 +7,8 @@ class Equipment(models.Model):
     equipmentId = models.AutoField(primary_key=True)
     equipmentName = models.CharField(max_length=100, unique=True)
     quantity = models.IntegerField(default=0)
+    stockSecurite = models.IntegerField(default=50)
+    stockAlerte = models.IntegerField(default=20)
 
     def __str__(self):
         return str(self.equipmentName)

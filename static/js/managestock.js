@@ -29,6 +29,26 @@ var equipmentsTable = $("#equipments-table").DataTable({
             "data": "quantity"
         },
         {
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    if (row['quantity'] > row['stockSecurite']) {
+                        return `Bon <input type='hidden' class='good-stock'>`
+                    } else if (row['quantity'] <= row['stockSecurite'] && row['quantity'] > row['stockAlerte']) {
+                        return `Normal <input type='hidden' class='normal-stock'>`
+                    } else {
+                        return `Critique <input type='hidden' class='critical-stock'>`
+                    }
+                } 
+                return ''
+            }
+        },
+        {
+            "data": "stockSecurite"
+        },
+        {
+            "data": "stockAlerte"
+        },
+        {
             // delete and edit buttons
             render: function(data, type, row, meta) {
                 if (type === 'display') {
@@ -45,6 +65,14 @@ var equipmentsTable = $("#equipments-table").DataTable({
         }
     ]
 })
+
+function highlightRows() {
+    $(".good-stock").each(function() {
+        let row = $(this).parent().parent()
+
+        $(row).attr('style', `border-color: #198754;`)
+    })
+}
 
 var dischargesTable = $("#discharges-table").DataTable({
     columnDefs: [{
