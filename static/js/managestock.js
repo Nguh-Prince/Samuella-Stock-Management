@@ -118,19 +118,19 @@ function highlightRows() {
         $(`.${className}`).each(function() {
             let cell = $(this).parent()
 
-            $(cell).attr('style', `border-bottom: 1px solid ${color}; background-color: ${backgroundColor}; color: ${textColor}`)
+            $(cell).attr('style', `border-bottom: 1px solid ${color}`)
         })
 
         $(`.${className}.first-cell`).each(function() {
             let cell = $(this).parent()
 
-            $(cell).attr('style', `border-bottom: 1px solid ${color}; background-color: ${backgroundColor}; color: ${textColor}; border-left: 1px solid ${color} !important;`)
+            $(cell).attr('style', `border-bottom: 1px solid ${color}; border-left: 1px solid ${color} !important;`)
         })
 
         $(`.${className}.last-cell`).each(function() {
             let cell = $(this).parent()
 
-            $(cell).attr('style', `border-bottom: 1px solid ${color}; background-color: ${backgroundColor}; color: ${textColor}; border-right: 1px solid ${color} !important;`)
+            $(cell).attr('style', `border-bottom: 1px solid ${color}; border-right: 1px solid ${color} !important;`)
         })
     }
 
