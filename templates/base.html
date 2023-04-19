@@ -196,9 +196,6 @@
     {% block styles %}{% endblock %}
   </head>
   <body class="crm_body_bg">
-    <div id="messages">
-    </div>
-
     <nav class="sidebar">
       <div class="logo d-flex justify-content-center">
         <a class="large_logo" href="{% url 'dashboard' %}"
@@ -269,6 +266,8 @@
     </nav>
 
     <section class="main_content dashboard_part large_header_bg">
+      <div id="messages" class="my-2 px-3">
+      </div>
       <div class="container-fluid g-0">
         <div class="row">
           <div class="col-lg-12 p-0">
