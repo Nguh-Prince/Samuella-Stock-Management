@@ -114,59 +114,83 @@ function highlightRows() {
         critical: "#dc3545"
     }
 
-    $(".good-stock").each(function() {
-        let cell = $(this).parent()
+    function highlightRowsOfType(className, color, backgroundColor, textColor="white") {
+        $(`.${className}`).each(function() {
+            let cell = $(this).parent()
 
-        $(cell).attr('style', `border-bottom: 1px solid ${colors.good};`)
-    })
+            $(cell).attr('style', `border-bottom: 1px solid ${color}; background-color: ${backgroundColor}; color: ${textColor}`)
+        })
 
-    $('.good-stock.first-cell').each(function() {
-        let cell = $(this).parent()
+        $(`.${className}.first-cell`).each(function() {
+            let cell = $(this).parent()
 
-        $(cell).attr('style', `border-bottom: 1px solid ${colors.good} !important; border-left: 1px solid ${colors.good} !important`)
-    })
+            $(cell).attr('style', `border-bottom: 1px solid ${color}; background-color: ${backgroundColor}; color: ${textColor}; border-left: 1px solid ${color} !important;`)
+        })
 
-    $('.good-stock.last-cell').each(function() {
-        let cell = $(this).parent()
+        $(`.${className}.last-cell`).each(function() {
+            let cell = $(this).parent()
 
-        $(cell).attr('style', `border-bottom: 1px solid ${colors.good} !important; border-right: 1px solid ${colors.good} !important`)
-    })
+            $(cell).attr('style', `border-bottom: 1px solid ${color}; background-color: ${backgroundColor}; color: ${textColor}; border-right: 1px solid ${color} !important;`)
+        })
+    }
 
-    $('.normal-stock').each(function() {
-        let cell = $(this).parent()
+    highlightRowsOfType('good-stock', colors.good, colors.good)
+    highlightRowsOfType('normal-stock', colors.normal, colors.normal)
+    highlightRowsOfType('critical-stock', colors.critical, colors.critical)
 
-        $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important`)
-    })
+    // $(".good-stock").each(function() {
+    //     let cell = $(this).parent()
 
-    $('.normal-stock.first-cell').each(function() {
-        let cell = $(this).parent()
+    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.good}; background-color: ${colors.good}`)
+    // })
 
-        $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important; border-left: 1px solid ${colors.normal} !important`)
-    })
+    // $('.good-stock.first-cell').each(function() {
+    //     let cell = $(this).parent()
 
-    $('.normal-stock.last-cell').each(function() {
-        let cell = $(this).parent()
+    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.good} !important; border-left: 1px solid ${colors.good} !important; background-color: ${colors.good}`)
+    // })
 
-        $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important; border-right: 1px solid ${colors.normal} !important`)
-    })
+    // $('.good-stock.last-cell').each(function() {
+    //     let cell = $(this).parent()
 
-    $('.critical-stock').each(function() {
-        let cell = $(this).parent()
+    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.good} !important; border-right: 1px solid ${colors.good} !important; background-color: ${colors.good}`)
+    // })
 
-        $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important`)
-    })
+    // $('.normal-stock').each(function() {
+    //     let cell = $(this).parent()
 
-    $('.critical-stock.first-cell').each(function() {
-        let cell = $(this).parent()
+    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important`)
+    // })
 
-        $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important; border-left: 1px solid ${colors.critical} !important`)
-    })
+    // $('.normal-stock.first-cell').each(function() {
+    //     let cell = $(this).parent()
 
-    $('.critical-stock.last-cell').each(function() {
-        let cell = $(this).parent()
+    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important; border-left: 1px solid ${colors.normal} !important`)
+    // })
 
-        $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important; border-right: 1px solid ${colors.critical} !important`)
-    })
+    // $('.normal-stock.last-cell').each(function() {
+    //     let cell = $(this).parent()
+
+    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important; border-right: 1px solid ${colors.normal} !important`)
+    // })
+
+    // $('.critical-stock').each(function() {
+    //     let cell = $(this).parent()
+
+    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important`)
+    // })
+
+    // $('.critical-stock.first-cell').each(function() {
+    //     let cell = $(this).parent()
+
+    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important; border-left: 1px solid ${colors.critical} !important`)
+    // })
+
+    // $('.critical-stock.last-cell').each(function() {
+    //     let cell = $(this).parent()
+
+    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important; border-right: 1px solid ${colors.critical} !important`)
+    // })
 }
 
 var dischargesTable = $("#discharges-table").DataTable({
@@ -403,6 +427,8 @@ $("#equipment-detail-modify").click(function() {
                 equipmentsTable.clear()
                 equipmentsTable.rows.add(state.equipments)
                 equipmentsTable.draw()
+
+                highlightRows()
                 
                 displayMessage("L'equipement a ete modifie avec succes", ['alert-success', 'alert-dismissible'])
 
