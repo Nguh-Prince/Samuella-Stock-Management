@@ -1,6 +1,25 @@
 var equipmentSelectedForEditing = null
 var dischargeSelectedForEditing = null
 
+const getStockType = function(quantity, stockSecurite, stockAlerte) {
+    if (quantity > stockSecurite) {
+        return {
+            label: 'Bon',
+            class: "good-stock"
+        }
+    } else if (quantity <= stockSecurite && quantity > stockAlerte) {
+        return {
+            label: 'Normal',
+            class: "normal-stock"
+        }
+    } else {
+        return {
+            label: 'Critique',
+            class: "critical-stock"
+        }
+    }
+}
+
 var equipmentsTable = $("#equipments-table").DataTable({
     columnDefs: [{
         "defaultContent": "-",
@@ -13,7 +32,7 @@ var equipmentsTable = $("#equipments-table").DataTable({
                 if (type === 'display') {
                     try {
                         if (row['equipmentId'] !== null) 
-                            return `<input type='checkbox' class='select-row' value=${row['equipmentId']}>`   
+                            return `<input type='checkbox' class='select-row' value=${row['equipmentId']}> <input type='hidden' class='${getStockType(row['quantity'], row['stockSecurite'], row['stockAlerte']).class} first-cell'>`   
                         else
                         return `---`   
                     } catch (error) {
@@ -23,30 +42,52 @@ var equipmentsTable = $("#equipments-table").DataTable({
             }
         },
         {
-            "data": "equipmentName"
+            "data": "equipmentName",
+            render: function(data, type, row, meta) {
+                if (type === 'display')
+                    return `${data} <input type='hidden' class='${getStockType(row['quantity'], row['stockSecurite'], row['stockAlerte']).class}'>`
+                
+                    return data
+            }
         },
         {
-            "data": "quantity"
+            "data": "quantity",
+            render: function(data, type, row, meta) {
+                if (type === 'display')
+                    return `${data} <input type='hidden' class='${getStockType(row['quantity'], row['stockSecurite'], row['stockAlerte']).class}'>`
+                
+                return data
+            }
         },
         {
             render: function(data, type, row, meta) {
                 if (type === 'display') {
-                    if (row['quantity'] > row['stockSecurite']) {
-                        return `Bon <input type='hidden' class='good-stock'>`
-                    } else if (row['quantity'] <= row['stockSecurite'] && row['quantity'] > row['stockAlerte']) {
-                        return `Normal <input type='hidden' class='normal-stock'>`
-                    } else {
-                        return `Critique <input type='hidden' class='critical-stock'>`
-                    }
+                    let stockType = getStockType(row['quantity'], row['stockSecurite'], row['stockAlerte'])
+
+                    return `${stockType.label} <input type='hidden' class='${getStockType(row['quantity'], row['stockSecurite'], row['stockAlerte']).class}'>`
                 } 
                 return ''
             }
         },
         {
-            "data": "stockSecurite"
+            "data": "stockSecurite",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `${data} <input type='hidden' class='${getStockType(row['quantity'], row['stockSecurite'], row['stockAlerte']).class}'>`
+                }
+
+                return data
+            }
         },
         {
-            "data": "stockAlerte"
+            "data": "stockAlerte",
+            render: function(data, type, row, meta) {
+                if (type === 'display') {
+                    return `${data} <input type='hidden' class='${getStockType(row['quantity'], row['stockSecurite'], row['stockAlerte']).class}'>`
+                }
+
+                return data
+            }
         },
         {
             // delete and edit buttons
@@ -56,7 +97,7 @@ var equipmentsTable = $("#equipments-table").DataTable({
                         let viewButtonClick = `equipmentEditButtonClick(${row['equipmentId']})`
                         let deleteButtonClick = `equipmentDeleteButtonClick(${row['equipmentId']})`
 
-                        return `<div class="d-flex">${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)}</div>`
+                        return `<div class="d-flex">${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)}</div><input type='hidden' class='${getStockType(row['quantity'], row['stockSecurite'], row['stockAlerte']).class} last-cell'>`
                     }
                     else 
                         return '---'
@@ -67,10 +108,64 @@ var equipmentsTable = $("#equipments-table").DataTable({
 })
 
 function highlightRows() {
-    $(".good-stock").each(function() {
-        let row = $(this).parent().parent()
+    let colors = {
+        good: "#198754",
+        normal: "#ffb822",
+        critical: "#dc3545"
+    }
 
-        $(row).attr('style', `border-color: #198754;`)
+    $(".good-stock").each(function() {
+        let cell = $(this).parent()
+
+        $(cell).attr('style', `border-bottom: 1px solid ${colors.good};`)
+    })
+
+    $('.good-stock.first-cell').each(function() {
+        let cell = $(this).parent()
+
+        $(cell).attr('style', `border-bottom: 1px solid ${colors.good} !important; border-left: 1px solid ${colors.good} !important`)
+    })
+
+    $('.good-stock.last-cell').each(function() {
+        let cell = $(this).parent()
+
+        $(cell).attr('style', `border-bottom: 1px solid ${colors.good} !important; border-right: 1px solid ${colors.good} !important`)
+    })
+
+    $('.normal-stock').each(function() {
+        let cell = $(this).parent()
+
+        $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important`)
+    })
+
+    $('.normal-stock.first-cell').each(function() {
+        let cell = $(this).parent()
+
+        $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important; border-left: 1px solid ${colors.normal} !important`)
+    })
+
+    $('.normal-stock.last-cell').each(function() {
+        let cell = $(this).parent()
+
+        $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important; border-right: 1px solid ${colors.normal} !important`)
+    })
+
+    $('.critical-stock').each(function() {
+        let cell = $(this).parent()
+
+        $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important`)
+    })
+
+    $('.critical-stock.first-cell').each(function() {
+        let cell = $(this).parent()
+
+        $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important; border-left: 1px solid ${colors.critical} !important`)
+    })
+
+    $('.critical-stock.last-cell').each(function() {
+        let cell = $(this).parent()
+
+        $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important; border-right: 1px solid ${colors.critical} !important`)
     })
 }
 
@@ -223,6 +318,8 @@ $.ajax({
         equipmentsTable.clear()
         equipmentsTable.rows.add(data)
         equipmentsTable.draw()
+
+        highlightRows()
     },
     error: function(data) {
         console.log("Error getting the equipments from the API")

@@ -31,16 +31,8 @@ class NotificationViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
 
             if 'unread' in self.request.GET:
                 queryset = queryset.filter(notificationRead=False)
-
         return queryset
-
-    def get_serializer_class(self):
-        user = self.request.user
-
-        if not user.is_superuser:
-            return super().get_serializer_class()
-        
-        
+                
 
     @action(
         methods=["POST", ],
