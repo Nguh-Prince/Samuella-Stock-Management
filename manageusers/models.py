@@ -11,7 +11,7 @@ class Employee(models.Model):
     structure_head = models.BooleanField(default=False, verbose_name="Chef de structure?")
     structure_subhead = models.BooleanField(default=False, verbose_name="Sous-chef de structure?")
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
-    supervisor = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, related_name="subordinates")
+    supervisor = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, related_name="subordinates", blank=True)
 
     def is_structure_head(self) -> bool:
         return self.structure_head or self.structure_subhead
