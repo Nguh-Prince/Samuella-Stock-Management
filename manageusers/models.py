@@ -47,7 +47,7 @@ class Structure(models.Model):
     structureName=models.CharField(max_length=8)
     structureAddress=models.IntegerField()
     structureNature=models.CharField(max_length=20)
-    head = models.ForeignKey("manageusers.Employee", on_delete=models.SET_NULL, null=True)
+    head = models.ForeignKey("manageusers.Employee", on_delete=models.SET_NULL, null=True, blank=True)
     # sub_heads = models.ManyToManyField(Employee)
     
     def __str__(self):
