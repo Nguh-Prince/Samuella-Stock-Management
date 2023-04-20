@@ -137,60 +137,6 @@ function highlightRows() {
     highlightRowsOfType('good-stock', colors.good, colors.good)
     highlightRowsOfType('normal-stock', colors.normal, colors.normal)
     highlightRowsOfType('critical-stock', colors.critical, colors.critical)
-
-    // $(".good-stock").each(function() {
-    //     let cell = $(this).parent()
-
-    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.good}; background-color: ${colors.good}`)
-    // })
-
-    // $('.good-stock.first-cell').each(function() {
-    //     let cell = $(this).parent()
-
-    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.good} !important; border-left: 1px solid ${colors.good} !important; background-color: ${colors.good}`)
-    // })
-
-    // $('.good-stock.last-cell').each(function() {
-    //     let cell = $(this).parent()
-
-    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.good} !important; border-right: 1px solid ${colors.good} !important; background-color: ${colors.good}`)
-    // })
-
-    // $('.normal-stock').each(function() {
-    //     let cell = $(this).parent()
-
-    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important`)
-    // })
-
-    // $('.normal-stock.first-cell').each(function() {
-    //     let cell = $(this).parent()
-
-    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important; border-left: 1px solid ${colors.normal} !important`)
-    // })
-
-    // $('.normal-stock.last-cell').each(function() {
-    //     let cell = $(this).parent()
-
-    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.normal} !important; border-right: 1px solid ${colors.normal} !important`)
-    // })
-
-    // $('.critical-stock').each(function() {
-    //     let cell = $(this).parent()
-
-    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important`)
-    // })
-
-    // $('.critical-stock.first-cell').each(function() {
-    //     let cell = $(this).parent()
-
-    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important; border-left: 1px solid ${colors.critical} !important`)
-    // })
-
-    // $('.critical-stock.last-cell').each(function() {
-    //     let cell = $(this).parent()
-
-    //     $(cell).attr('style', `border-bottom: 1px solid ${colors.critical} !important; border-right: 1px solid ${colors.critical} !important`)
-    // })
 }
 
 var dischargesTable = $("#discharges-table").DataTable({

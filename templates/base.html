@@ -623,31 +623,32 @@
             return item.notificationRecipientId
           } )
 
-          $.ajax({
-            type: 'POST',
-            url: `/managenotifications/notifications/mark_as_read/`,
-            data: JSON.stringify({
-              notifications: unreadNotifications
-            }),
-            contentType: 'application/json',
-            headers: {
-              "X-CSRFTOKEN": getCookie("csrftoken")
-            },
-            success: function(data) {
-              console.log("Notifications marked as read successfully")
+          // $.ajax({
+          //   type: 'POST',
+          //   url: `/managenotifications/notifications/mark_as_read/`,
+          //   data: JSON.stringify({
+          //     notifications: unreadNotifications
+          //   }),
+          //   contentType: 'application/json',
+          //   headers: {
+          //     "X-CSRFTOKEN": getCookie("csrftoken")
+          //   },
+          //   success: function(data) {
+          //     console.log("Notifications marked as read successfully")
 
-              state.notifications = data.data
-              populateNotificationsMenu(state.notifications)
-            },
-            error: function(data) {
-              console.error("Error marking notifications as read")
-              console.log(`Data: ${JSON.stringify({
-                notifications: unreadNotifications
-              })}`)
-              console.error(`Response: `)
-              console.log(data.responseText)
-            }
-          })
+          //     state.notifications = data.data
+          //     populateNotificationsMenu(state.notifications)
+          //   },
+          //   error: function(data) {
+          //     console.error("Error marking notifications as read")
+          //     console.log(`Data: ${JSON.stringify({
+          //       notifications: unreadNotifications
+          //     })}`)
+          //     console.error(`Response: `)
+          //     console.log(data.responseText)
+          //   }
+          // })
+        
         } else {
           // show notifications
           notificationMenu.addClass('active')

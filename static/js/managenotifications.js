@@ -52,8 +52,10 @@ function populateNotificationsMenu(notifications, limit=10) {
     // clicking the notification icon in the top menu
     numberOfUnseenNotifications = 0
 
+    $('.Menu_NOtification_Wrap .Notification_body').html('')
+
     notifications.map( (item, i) => {
-        if (i < limit || !limit) {
+        if ( (numberOfUnseenNotifications < limit || !limit) && !item.notificationSeen ) {
             let notificationDiv = createElementsRecursively({
                 tag: 'div',
                 classes: 'single_notify d-flex align-items-center'.split(' '),
@@ -95,7 +97,33 @@ function populateNotificationsMenu(notifications, limit=10) {
             })
     
             $(notificationDiv).click( function() {
-                displayPurchaseOrderDetailViewModal(item.instance)
+                displayPurchaseOrderDetailViewModal(item.instance)                
+                // mark this notification as read
+                $.ajax({
+                    type: 'POST',
+                    url: `/managenotifications/notifications/mark_as_read/`,
+                    data: JSON.stringify({
+                        notifications: [item.notificationRecipientId]
+                    }),
+                    contentType: "application/json",
+                    headers: {
+                        "X-CSRFTOKEN": getCookie("csrftoken")
+                    },
+                    success: function(data) {
+                        notifications[i] = data.data[0]
+                        populateNotificationsMenu(notifications, limit=limit)
+                    },
+                    error: function(data) {
+                        console.error("Error marking notifications as read")
+                        console.log(`Data: ${JSON.stringify({
+                            notifications: unreadNotifications
+                        })}`)
+                        console.error(`Response: `)
+                        console.log(data.responseText)
+
+                        displayMessage(`Erreur lors du marquage de la notification comme lue`, ['alert-dismissible', 'alert-danger'])
+                    }
+                })
             } )
     
             $('.Menu_NOtification_Wrap .Notification_body').append(notificationDiv)
