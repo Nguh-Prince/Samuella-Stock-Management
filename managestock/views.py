@@ -41,7 +41,7 @@ class EquipmentViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
 
 class StockViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
     serializer_class = serializers.StockSerializer
-    queryset = models.Stock.objects.all()
+    queryset = models.Stock.objects.all().order_by('-stockDate')
 
     serializer_classes = {
         'list': serializers.StockDetailSerializer
@@ -59,7 +59,7 @@ class StockViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
 
 class DischargeViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, DepartmentSpecificViewSet):
     serializer_class = serializers.DischargeSerializer
-    queryset = models.Discharge.objects.all()
+    queryset = models.Discharge.objects.all().order_by('-dateCreated')
     serializer_classes = {
         'list': serializers.DischargeListSerializer
     }
@@ -67,8 +67,12 @@ class DischargeViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, Departm
     permission_classes = [IsStockManagerOrIsHeadOfDepartmentReadOnlyOrNotAllowed, ]
 
     def get_queryset(self):
+        queryset = self.queryset
 
-        return super().get_queryset()
+        if self.request.user.is_superuser or (self.request.user.employee and self.request.user.employee.is_stock_manager()):
+            return queryset
+        elif self.request.user.employee and self.request.user.employee.is_structure_head():
+            return queryset.filter(structureId=self.request.user.employee.structureId)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
