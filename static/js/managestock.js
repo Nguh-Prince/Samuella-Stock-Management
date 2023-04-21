@@ -210,7 +210,7 @@ var newDischargeEquipmentsTable = $("#new-discharge-table").DataTable({
                     let options = []
 
                     state.equipments.map( (item, index) => {
-                        options.push(`<option ${item.equipmentName == data ? 'selected': ''} value=${item.equipmentName}>${item.equipmentName}</option>`)
+                        options.push(`<option ${item.equipmentName == data ? 'selected': ''} value='${item.equipmentName}'>${item.equipmentName}</option>`)
                     } )
                     return `<select name='equipmentName' class="form-select" value="${data}">${options.join('')}</select>`
                 } else {
@@ -570,12 +570,24 @@ function getNewDischargeFromForm() {
 
     let errors = false
 
+    function getEquipmentWithName(equipmentName) {
+        for (let equipment of state.equipments) {
+            if (equipment.equipmentName.toLowerCase() === equipmentName.toLowerCase()) {
+                return equipment
+            }
+        }
+
+        return null
+    }
+
     $("#new-discharge-table tbody tr").each(function() {
         let equipmentNameSelector = $(this).find("input[name='equipmentName']").first()
         let quantitySelector = $(this).find("input[name='quantity']").first()
 
         let equipmentName = $(this).find("select[name='equipmentName']").first().val()
         let quantity = $(this).find("input[name='quantity']").first().val()
+
+        let equipment = null
 
         _appendErrorMessage = function(message, jqueryNode) {
             appendErrorMessage(message, jqueryNode)
@@ -586,14 +598,23 @@ function getNewDischargeFromForm() {
         if (!equipmentName) {
             _appendErrorMessage(`Ce champ est obligatoire`, equipmentNameSelector.parent())
         } else {
-            removeErrorMessages(equipmentNameSelector)
+            equipment = getEquipmentWithName(equipmentName)
+
+            if (!equipment) {
+                _appendErrorMessage(`Aucun équipement n'existe avec le nom ${equipmentName}`, equipmentNameSelector.parent())
+            } else {
+                removeErrorMessages(equipmentNameSelector)
+            }
         }
 
         if (!quantity) {
             _appendErrorMessage(`Ce champ est obligatoire`, quantitySelector.parent())
         } else if (isNaN(parseFloat(quantity))) {
-            _appendErrorMessage('ce champ doit être un entier', quantitySelector.parent())
-        } else {
+            _appendErrorMessage('Ce champ doit être un entier', quantitySelector.parent())
+        } else if (equipment && equipment.quantity < parseFloat(quantity)) {
+            _appendErrorMessage(`Il ne reste que ${equipment.quantity} unités en stock`, quantitySelector.parent())
+        }
+        else {
             removeErrorMessages(quantitySelector)
         }
 
