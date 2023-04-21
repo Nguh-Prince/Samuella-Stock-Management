@@ -235,7 +235,9 @@ data-bs-target="#purchase-order-detail-modal" data-bs-toggle="modal">
             </div>
             <div class="modal-footer">
                 <button type="button" id="purchase-order-detail-modal-close" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                {% if request.user.is_superuser or request.user.employee and request.user.employee.is_structure_head %}
                 <button type="button" id="purchase-order-detail-save" class="btn btn-primary">Enregistrer</button>
+                {% endif %}
             </div>
         </div>
         </div>

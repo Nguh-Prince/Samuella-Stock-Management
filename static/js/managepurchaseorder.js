@@ -52,7 +52,7 @@ var purchaseOrdersTableColumns = [
                 let viewButtonClick = `purchaseOrderEditButtonClick(${row['purchaseorderId']})`
                 let deleteButtonClick = `purchaseOrderDeleteButtonClick(${row['purchaseorderId']})`
 
-                return `<div class="d-flex">${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STOCK_MANAGER, viewButtonClick, deleteButtonClick)}</div>`
+                return `<div class="d-flex">${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STRUCTURE_HEAD, IS_STRUCTURE_HEAD, viewButtonClick, deleteButtonClick)}</div>`
 
                 return `<button class="btn text-primary" onclick=purchaseOrderEditButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['equipmentId']}>
                                 <i class="fas fa-pen"></i>
