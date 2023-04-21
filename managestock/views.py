@@ -59,7 +59,7 @@ class StockViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet):
 
 class DischargeViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, DepartmentSpecificViewSet):
     serializer_class = serializers.DischargeSerializer
-    queryset = models.Discharge.objects.all().order_by('-dateCreated')
+    queryset = models.Discharge.objects.all()#.order_by('-dateCreated')
     serializer_classes = {
         'list': serializers.DischargeListSerializer
     }
@@ -73,6 +73,14 @@ class DischargeViewSet(viewsets.ModelViewSet, MultipleSerializerViewSet, Departm
             return queryset
         elif self.request.user.employee and self.request.user.employee.is_structure_head():
             return queryset.filter(structureId=self.request.user.employee.structureId)
+
+    def create(self, request, *args, **kwargs):
+        serializer: serializers.DischargeSerializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        instance = serializer.create(serializer.validated_data)
+
+        return Response(data=self.serializer_classes['list'](instance).data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

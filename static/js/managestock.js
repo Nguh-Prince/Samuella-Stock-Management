@@ -186,7 +186,8 @@ var dischargesTable = $("#discharges-table").DataTable({
                 }
             }
         }
-    ]
+    ],
+    order: [[2, "desc"]]
 })
 
 var newDischargeEquipmentsTable = $("#new-discharge-table").DataTable({
@@ -285,9 +286,10 @@ $.ajax({
     success: function(data) {
         state.equipments = data
         
-        equipmentsTable.clear()
-        equipmentsTable.rows.add(data)
-        equipmentsTable.draw()
+        drawDataTable(data, true, equipmentsTable)
+        // equipmentsTable.clear()
+        // equipmentsTable.rows.add(data)
+        // equipmentsTable.draw()
 
         highlightRows()
     },
@@ -303,15 +305,25 @@ $.ajax({
     success: function(data) {
         state.discharges = data
         
-        dischargesTable.clear()
-        dischargesTable.rows.add(data)
-        dischargesTable.draw()
+        drawDataTable(data, true, dischargesTable)
+        // dischargesTable.clear()
+        // dischargesTable.rows.add(data)
+        // dischargesTable.draw()
     },
     error: function(data) {
         console.log("Error getting the equipments from the API")
         console.log(data.responseText)
     }
 })
+
+function drawDataTable(data, clear=true, table) {
+    if (clear) {
+        table.clear()
+    }
+
+    table.rows.add(data)
+    table.draw()
+}
 
 $("#new-equipment-save").click( function() {
     console.log("Saving the new equipment")
@@ -331,8 +343,7 @@ $("#new-equipment-save").click( function() {
         success: function(data) {
             state.equipments = state.equipments.concat(data)
 
-            equipmentsTable.rows.add(data)
-            equipmentsTable.draw()
+            drawDataTable(data, false, equipmentsTable)
         },
         error: function(data) {
             console.log("Error adding new equipments")
@@ -455,8 +466,21 @@ $("#new-discharge-save").click(function() {
                 
                 dischargesTable.rows.add([data])
                 dischargesTable.draw()
+
+                // updating the quantity left of the equipments in the state
+                data.equipments.map( (item) => {
+                    for (let i=0; i<state.equipments.length; i++) {
+                        equipment = state.equipments[i]
+
+                        if (equipment.equipmentId == item.equipmentId.equipmentId) {
+                            state.equipments[i].quantity = item.equipmentId.quantity
+                            break
+                        }
+                    }
+                } )
+                drawDataTable(state.equipments, true, equipmentsTable)
     
-                displayMessage("Entry added successfully", ["alert-success", "alert-dismissible"])
+                displayMessage("Décharge enregistrée avec succès", ["alert-success", "alert-dismissible"])
             },
             error: function(data) {
                 console.error("Error adding the new entry")
