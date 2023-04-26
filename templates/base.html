@@ -127,6 +127,10 @@
         background-color: var(--accent-color) !important;
       }
 
+      .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background-color: var(--accent-color) !important;
+      }
+
       .nav-link, .nav-link:hover, .nav-link:focus, .nav-link:active {
         color: var(--link-color);
       }
@@ -527,10 +531,8 @@
                 <div class="row">
                     <div class="col-md-7">
                         <label for="purchase-order-detail-view-structure">Structure</label>
-                        <select id="purchase-order-detail-view-structure" class="form-select">
-                            {% for structure in structures %}
-                                <option value="{{ structure.structureId }}">{{ structure.structureName }}</option>
-                            {% endfor %}
+                        <select id="purchase-order-detail-view-structure" class="form-select" disabled>
+                            
                         </select>
                     </div>
 
@@ -596,6 +598,28 @@
     <script src="{% static 'vendors/chartjs/roundedBar.min.js'%}"></script>
 
     <script src="{% static 'js/managenotifications.js'%}"></script>
+
+    <script>
+      function setStateStructures(structures) {
+        state.structures = structures
+
+        // state.structures.map((structure) => {
+        //   // add an option for this structure to some select tags
+        // })
+      }
+
+      // get structures from DB
+      $.ajax({
+        type: "GET",
+        url: `/manageusers/structures/`,
+        success: function(data) {
+          setStateStructures(data)
+        },
+        error: function(data) {
+          displayMessages(`Erreur lors de l'obtention des structures à partir du serveur. Certaines fonctionnalités peuvent ne pas être disponibles`, ['alert-danger', 'alert-dismissible'], 20000)
+        }
+      })
+    </script>
     
     <script>
       updateCurrentDateAndTimeInputs()
@@ -622,32 +646,6 @@
           } ).map( (item) => {
             return item.notificationRecipientId
           } )
-
-          // $.ajax({
-          //   type: 'POST',
-          //   url: `/managenotifications/notifications/mark_as_read/`,
-          //   data: JSON.stringify({
-          //     notifications: unreadNotifications
-          //   }),
-          //   contentType: 'application/json',
-          //   headers: {
-          //     "X-CSRFTOKEN": getCookie("csrftoken")
-          //   },
-          //   success: function(data) {
-          //     console.log("Notifications marked as read successfully")
-
-          //     state.notifications = data.data
-          //     populateNotificationsMenu(state.notifications)
-          //   },
-          //   error: function(data) {
-          //     console.error("Error marking notifications as read")
-          //     console.log(`Data: ${JSON.stringify({
-          //       notifications: unreadNotifications
-          //     })}`)
-          //     console.error(`Response: `)
-          //     console.log(data.responseText)
-          //   }
-          // })
         
         } else {
           // show notifications

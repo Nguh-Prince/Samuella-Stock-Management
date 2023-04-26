@@ -53,13 +53,6 @@ var purchaseOrdersTableColumns = [
                 let deleteButtonClick = `purchaseOrderDeleteButtonClick(${row['purchaseorderId']})`
 
                 return `<div class="d-flex">${renderActionButtonsInDataTable(row, IS_STRUCTURE_HEAD || IS_STOCK_MANAGER, IS_STRUCTURE_HEAD, IS_STRUCTURE_HEAD, viewButtonClick, deleteButtonClick)}</div>`
-
-                return `<button class="btn text-primary" onclick=purchaseOrderEditButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['equipmentId']}>
-                                <i class="fas fa-pen"></i>
-                            </button>
-                            <button class="btn mx-1 text-danger" onclick=purchaseOrderDeleteButtonClick(${row['purchaseorderId']}) data-purchase-order-id=${row['purchaseorderId']}>
-                                <i class="fas fa-trash"></i>
-                            </button>`
             }
         }
     }
@@ -76,7 +69,7 @@ var purchaseOrdersTable = $("#purchase-orders-table").DataTable({
         "targets": "_all"
     }],
     "columns": purchaseOrdersTableColumns,
-    order: [ ["2", "desc"] ]
+    order: [ [ IS_STRUCTURE_HEAD ? "2" : "1", "desc"] ]
 })
 
 function deleteRow(e) {

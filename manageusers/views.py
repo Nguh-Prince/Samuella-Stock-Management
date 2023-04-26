@@ -2,8 +2,9 @@ import logging
 from django.shortcuts import render
 
 from rest_framework import viewsets
+from rest_framework import permissions as drf_permissions
 
-from common.permissions import IsEmployeeReadOnlyOrNotAllowed, ModelPermission
+from common.permissions import IsEmployeeReadOnlyOrNotAllowed, ModelPermission, IsAuthenticatedAndReadOnly
 
 from . import models, serializers
 
@@ -14,7 +15,7 @@ def home(request):
 class StructureViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.StructureSerializer
     queryset = models.Structure.objects.all()
-    permission_classes = [ModelPermission, ]
+    permission_classes = [IsAuthenticatedAndReadOnly, ]
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.EmployeeSerializer

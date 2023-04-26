@@ -145,8 +145,17 @@ function displayPurchaseOrderDetailViewModal(purchaseOrder) {
     $("#purchase-order-detail-view-modal-title").text(`${purchaseOrder.structureId.structureName}: ${purchaseOrder.dateCreated}`)
 
     $("#purchase-order-detail-view-purchaseorder-id").val(purchaseOrder.purchaseorderId)
-    $("#purchase-order-detail-view-structure").val(purchaseOrder.structureId.structureId)
     $("#purchase-order-detail-view-date").val(purchaseOrder.dateCreated)
+
+    let purchaseOrderStructureSelector = $("#purchase-order-detail-view-structure")
+
+    purchaseOrderStructureSelector.html('')
+    // creating a single option for this structure
+    let option = createElement('option', [], {value: purchaseOrder.structureId.structureId, selected: true})
+    $(option).text(purchaseOrder.structureId.structureName)
+
+    purchaseOrderStructureSelector.append(option)
+    purchaseOrderStructureSelector.val(purchaseOrder.structureId.structureId)
 
     purchaseOrderDetailsViewTable.clear()
     purchaseOrderDetailsViewTable.rows.add(purchaseOrder.equipments)

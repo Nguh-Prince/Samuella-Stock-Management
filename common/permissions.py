@@ -112,3 +112,4 @@ class IsStockManagerOrIsHeadOfDepartmentReadOnlyOrNotAllowed(IsEmployee):
             return employee.structureId == obj.structureId
 
         return False
+

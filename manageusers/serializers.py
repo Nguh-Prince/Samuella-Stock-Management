@@ -10,4 +10,4 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class StructureSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Structure
-        fields = "__all__"
+        fields = ("structureId", "structureName", "structureAddress", "structureNature", "head")

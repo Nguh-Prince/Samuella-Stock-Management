@@ -173,6 +173,13 @@ class DischargeSerializer(serializers.ModelSerializer):
 
             return query.first()
 
+        def validate(self, attrs):
+            # the discharged quantity cannot be greater than the equipment's quantity in the DB
+            if attrs['quantity'] > attrs['equipmentId'].quantity:
+                raise serializers.ValidationError(_("Il ne reste que %(quantity)d unités en stock" % { 'quantity': attrs['equipmentId'].quantity } ))
+
+            return attrs
+
     equipments = DischargeEquipmentSerializer(many=True)
 
     class Meta:
