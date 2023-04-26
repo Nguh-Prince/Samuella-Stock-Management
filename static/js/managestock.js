@@ -358,7 +358,9 @@ $("#equipment-detail-modify").click(function() {
     if (equipmentSelectedForEditing.equipmentId !== null) {
         let formData = {
             equipmentName: $("#equipment-detail-name").val(),
-            quantity: $("#equipment-detail-quantity").val()
+            quantity: $("#equipment-detail-quantity").val(),
+            stockAlerte: $("#equipment-detail-stock-alerte").val(),
+            stockSecurite: $("#equipment-detail-stock-securite").val(),
         }
 
         $.ajax({
@@ -370,12 +372,15 @@ $("#equipment-detail-modify").click(function() {
                 "X-CSRFTOKEN": getCookie("csrftoken")
             },
             success: function(data) {
-                console.log("Equipment modified successfully")
+                console.log("Equipment modified successfully. Data returned: ")
+                console.log(data)
 
                 for (let equipment of state.equipments) {
                     if (equipment.equipmentId == equipmentSelectedForEditing.equipmentId) {
                         equipment.equipmentName = data.equipmentName
                         equipment.quantity = data.quantity
+                        equipment.stockAlerte = data.stockAlerte
+                        equipment.stockSecurite = data.stockSecurite
 
                         break
                     }
@@ -660,6 +665,8 @@ function displayEquipmentDetailModal(equipment=equipmentSelectedForEditing) {
 
     $("#equipment-detail-name").val(equipment.equipmentName)
     $("#equipment-detail-quantity").val(equipment.quantity)
+    $("#equipment-detail-stock-securite").val(equipment.stockSecurite)
+    $("#equipment-detail-stock-alerte").val(equipment.stockAlerte)
 
     $("#equipment-detail-modal-toggle").click()
 }
